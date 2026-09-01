@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+<g transform="translate(256 158)">
+<path transform="rotate(52)" d="M0 -92C29 -86 46 -48 46 -14C46 2 26 16 0 16C-26 16 -46 2 -46 -14C-46 -48 -29 -86 0 -92Z"/>
+<path transform="rotate(-52)" d="M0 -92C29 -86 46 -48 46 -14C46 2 26 16 0 16C-26 16 -46 2 -46 -14C-46 -48 -29 -86 0 -92Z"/>
+<path d="M0 -112C35 -104 56 -58 56 -17C56 2 31 19 0 19C-31 19 -56 2 -56 -17C-56 -58 -35 -104 0 -112Z"/>
+</g>
+<g transform="translate(152 336) rotate(-26)">
+<rect x="-72" y="0" width="144" height="116" rx="44"/>
+<rect x="-68" y="-62" width="34" height="82" rx="17"/>
+<rect x="-28" y="-84" width="34" height="104" rx="17"/>
+<rect x="12" y="-86" width="34" height="106" rx="17"/>
+<rect x="52" y="-64" width="34" height="84" rx="17"/>
+<rect x="-118" y="8" width="86" height="32" rx="16" transform="rotate(40 -75 24)"/>
+</g>
+<g transform="translate(360 336) rotate(26) scale(-1 1)">
+<rect x="-72" y="0" width="144" height="116" rx="44"/>
+<rect x="-68" y="-62" width="34" height="82" rx="17"/>
+<rect x="-28" y="-84" width="34" height="104" rx="17"/>
+<rect x="12" y="-86" width="34" height="106" rx="17"/>
+<rect x="52" y="-64" width="34" height="84" rx="17"/>
+<rect x="-118" y="8" width="86" height="32" rx="16" transform="rotate(40 -75 24)"/>
+</g>
+</svg>

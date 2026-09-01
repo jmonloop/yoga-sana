@@ -9,6 +9,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "snapshot": "node --env-file-if-exists=.env scripts/fetch-snapshot.mjs",
+    "images": "node scripts/process-images.mjs",
+    "logo": "node scripts/trace-logo.mjs",
     "test": "vitest run"
   },
   "dependencies": {
@@ -21,6 +23,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/papaparse": "^5.5.2",
+    "sharp": "^0.35.4",
     "typescript": "^5.9.3",
     "vitest": "^4.1.11"
   }

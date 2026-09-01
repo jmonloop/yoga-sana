@@ -471,12 +471,14 @@ Open Graph URLs and Astro's `site` config. Redirect `www` → apex.
 ## 10. Imagery
 
 Source files live in `sources/images/`. **`nuestro-centro3.txt` and
-`nuestro-centro4.txt` are JPEGs with the wrong extension** (verified with `file`) —
-rename on import.
+`nuestro-centro4.txt` are JPEGs with the wrong extension** (re-verified with `file`).
+`sources/` is left as the untouched original archive: `scripts/process-images.mjs`
+reads them under their wrong names — sharp sniffs the format — and writes correctly
+typed derivatives, so nothing in `sources/` is renamed or edited.
 
 | File | px | Content | Use |
 |---|---|---|---|
-| `logo.jpeg` | 994² | Logo on pale-green ground | Header/footer — **needs background removal**, ideally an SVG trace |
+| `logo.jpeg` | 994×967 | Logo on pale-green ground | Header — **traced, see below** |
 | `yoga1.jpeg` | 501×716 | Woman meditating, cream romper, pampas | `/sobre-mi` portrait — **confirm this is Natalia** |
 | `yoga2.jpeg` | 1254² | Studio pose, sage kit, warm light | `/clases-de-yoga` hero |
 | `yoga3.jpeg` | 640² | Backbend by a river, golden hour | Landing mood band / `/online` |
@@ -496,6 +498,18 @@ rename on import.
    reshoot two of them in daylight with the curtains open.*
 2. **The lime table** in `nuestro-centro4` is a loud yellow-green clashing with sage.
    Crop tight to the bolster shelf; let the table be a corner, not the subject.
+**Applied (`scripts/process-images.mjs`, `pnpm images`).** One deterministic crop and
+grade per source, then avif + webp at every responsive width plus one jpeg fallback:
+62 files, 1.16 MB, all committed — no build-time or runtime image processing. The warm
+grade is a per-channel `linear` gain (R ×1.055, G ×1.012, B ×0.94 at full strength) plus
+a small saturation/brightness lift; the four centro shots take it at full strength, and
+`centro-camilla` takes it desaturated (0.9) to stop the lime table shouting.
+Ceiling tiles and fluorescent panels are cropped out of all four. `yoga3` is graded
+*cooler* (warm −0.3, saturation 0.88) — it is the one source with a magenta, not a cool,
+cast. Output names stay neutral about who is in frame while `yoga1` is
+unconfirmed. Caps respected: `meditacion-sentada` tops out at 501 px and `yoga-al-aire-libre` at
+640 px, never upscaled.
+
 3. **Mixed provenance.** `yoga2` and `consciencia-corporal` read as stock or AI;
    `yoga1`, `yoga3` and the centro shots read as genuinely hers. Put the authentic
    ones anywhere the page says "me" or "my space"; keep the polished ones for abstract
@@ -577,13 +591,65 @@ for Yoga para Niños, which is what the original infographic used.
 read smaller than the upright ones at the same box size. Normalising by rendered area
 rather than bounding box would even this out. Cosmetic, not blocking.
 
-**7 workshop marks** — Phosphor thin (MIT), restyled as olive strokes to match her
-weight. Generic enough that an open set matches closely.
+**8 workshop marks — drawn, not Phosphor (measured, supersedes the plan below).**
+Phosphor 2.1.1 was rendered side by side with the six silhouettes at thin, bold and
+fill weights before deciding. Thin failed exactly as predicted — two systems. Bold and
+fill matched the weight acceptably, but the set failed on substance: it has **no
+`lungs` icon at all** (0 of 1512), `hand-heart` is illegible at icon size and is not
+"loto-manos", `bed` reads as a hotel and `bowl-steam` as soup. Four of the eight would
+have had to be drawn anyway, so all eight are drawn instead, as solid fills in the
+silhouettes' own language — several are human figures, which is what actually makes the
+fourteen read as one set. Nothing third-party is vendored, so no attribution file.
 
-**Style note:** the six traced silhouettes are solid fills, whereas Phosphor thin is a
-stroke set. Match them by giving the workshop icons a heavier stroke weight and the
-same olive, or the two groups will read as different systems. Worth checking side by
-side before committing to Phosphor.
+| File | Bytes | Mark |
+|---|---|---|
+| `mente.svg` | 406 | bust with a heart in the head |
+| `cuencos.svg` | 455 | bowl radiating symmetric sound arcs |
+| `camilla.svg` | 463 | figure reclining on a treatment table |
+| `pulmones.svg` | 578 | lungs and trachea |
+| `familia.svg` | 620 | two adults and a child |
+| `loto.svg` | 836 | five-petal lotus on a water line |
+| `loto-manos.svg` | 1314 | two open palms under a lotus |
+| `espiral.svg` | 2202 | tapering spiral ribbon |
+| **Total** | **6874** | half the weight of the traced six |
+
+Ink coverage was measured at 256², to keep the two groups in one weight band: traced six
+9.5–29.9 %, drawn eight 18.3–31.8 % (`familia` was redrawn down from 44.9 %). All eight
+use `viewBox="0 0 512 512"`, `fill="currentColor"`, no fixed width/height.
+
+**Optical sizing nit — measured, not fixable by scaling.** Equalising *rendered area*
+would need `relajante` ~1.7× larger, but its bounding box already fills 94 % of the box
+width, so it would overflow. The wide, low poses reading smaller than the upright ones
+is inherent to putting a wide silhouette in a circle. Left as is.
+
+**Preamble stripped.** The six traced files still carried potrace's XML declaration and
+DOCTYPE; both are removed now, since `Icono.astro` inlines the markup into HTML.
+
+**Original plan, superseded:** 7 workshop marks from Phosphor thin (MIT), restyled as
+olive strokes, with a heavier stroke weight to match the solid silhouettes.
+
+### Logo
+
+**Traced cleanly — no raster fallback needed.** The logo is single-tone dark line art on
+a pale-green ground, so the same pipeline works on it: `scripts/trace-logo.mjs`
+(`pnpm logo`) thresholds it, finds its three ink bands (figure, wordmark, tagline),
+bounding-boxes each and runs the same potrace flags. Serif detail survives, checked by
+rendering the wordmark far above the size the header uses.
+
+| File | Bytes | viewBox |
+|---|---|---|
+| `assets/logo/logo-figura.svg` | 5969 | 390×362 |
+| `assets/logo/logo-texto.svg` | 5182 | 975×197 |
+
+The stacked original cannot work in a 78 px header — the wordmark would render at ~10 px
+— so the header uses a **horizontal lockup**: figure left, wordmark right, `Catarroja`
+kept as the sub-line. The tagline band ("Yoga, meditación y talleres") is deliberately
+not traced; nothing on the site uses it. Measured after the swap: header 78.09 px at
+≥480 px and 77 px below (both identical to before the swap, where the 44 px nav toggle
+is the tallest child), at nine viewport widths from 320 to 1440, with `scroll-padding-top`
+94 px still clearing it everywhere. The brand lockup is narrower than the text one it
+replaced only because it steps down at ≤479 px; at 320 px it leaves 11.5 px of slack
+against the CTA and burger.
 
 ### Botanical motifs
 

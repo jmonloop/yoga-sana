@@ -1,0 +1,49 @@
+---
+import { DEFAULT_ICONO, type Icono } from '../data/sheet';
+
+interface Props {
+  icono: Icono;
+  label?: string;
+  size?: number;
+}
+
+const { icono, label, size = 64 } = Astro.props;
+
+const MARKS = import.meta.glob<string>('../../assets/icons/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+function mark(name: string): string {
+  return MARKS[`../../assets/icons/${name}.svg`] ?? MARKS[`../../assets/icons/${DEFAULT_ICONO}.svg`];
+}
+---
+
+<span
+  class="icono"
+  style={`--icono-size: ${size}px`}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+>
+  <Fragment set:html={mark(icono)} />
+</span>
+
+<style>
+  .icono {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: var(--icono-size);
+    height: var(--icono-size);
+    background-color: var(--salvia-tint);
+    border-radius: var(--radius-circle);
+    color: var(--oliva-oscuro);
+  }
+
+  .icono :global(svg) {
+    width: 58%;
+    height: 58%;
+  }
+</style>
