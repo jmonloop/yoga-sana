@@ -8,6 +8,8 @@ import {
 } from '../data/sheet';
 import { waLink } from '../data/site';
 
+const LISTA = new Intl.ListFormat('es', { type: 'conjunction' });
+
 const BANDA_MINUTOS = 120;
 const SIN_HORA = Number.MAX_SAFE_INTEGER;
 
@@ -28,6 +30,23 @@ export interface Row {
 export interface Grid {
   dias: string[];
   rows: Row[];
+}
+
+export interface Resumen {
+  dias: string;
+  primera: string;
+  ultima: string;
+}
+
+export function resumenHorario(horarios: Horario[]): Resumen | null {
+  const dias = distinctDias(horarios);
+  const horas = distinctHoras(horarios);
+  if (dias.length === 0 || horas.length === 0) return null;
+  return {
+    dias: LISTA.format(dias.map((dia) => dia.toLocaleLowerCase('es'))),
+    primera: horas[0],
+    ultima: horas[horas.length - 1],
+  };
 }
 
 export function buildGrid(snapshot: Snapshot): Grid {

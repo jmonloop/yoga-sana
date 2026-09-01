@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildGrid, type Chip, type Grid } from './horario-grid';
+import { buildGrid, resumenHorario, type Chip, type Grid } from './horario-grid';
 import { SNAPSHOT } from '../data/snapshot';
 import type { Actividad, Ajustes, Horario } from '../data/sheet';
 
@@ -206,5 +206,41 @@ describe('the committed snapshot', () => {
 
     expect(allChips(grid)).toHaveLength(SNAPSHOT.horarios.length);
     expect(placed).toHaveLength(SNAPSHOT.horarios.length);
+  });
+});
+
+describe('resumenHorario', () => {
+  it('has nothing to summarise when there are no rows', () => {
+    expect(resumenHorario([])).toBeNull();
+  });
+
+  it('names the days in weekday order, in lower case', () => {
+    const resumen = resumenHorario([
+      slot('Viernes', '10:00', 'Yoga Relajante'),
+      slot('Lunes', '9:30', 'Yoga Sana'),
+      slot('Miércoles', '19:00', 'Yoga Sana'),
+    ]);
+
+    expect(resumen?.dias).toBe('lunes, miércoles y viernes');
+  });
+
+  it('reports the first and the last hour of the week, not the Sheet order', () => {
+    const resumen = resumenHorario([
+      slot('Lunes', '19:00', 'Yoga Sana'),
+      slot('Lunes', '9:30', 'Yoga Sana'),
+      slot('Martes', '11:00', 'Yoga Suave'),
+    ]);
+
+    expect(resumen?.primera).toBe('9:30');
+    expect(resumen?.ultima).toBe('19:00');
+  });
+
+  it('counts a day once however many classes it has', () => {
+    const resumen = resumenHorario([
+      slot('Lunes', '9:30', 'Yoga Sana'),
+      slot('lunes', '11:00', 'Yoga Suave'),
+    ]);
+
+    expect(resumen?.dias).toBe('lunes');
   });
 });

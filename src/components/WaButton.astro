@@ -13,7 +13,7 @@ const { message, label, ariaSuffix, variant = 'primary', compact = false } = Ast
 ---
 
 <a
-  class:list={['wa-button', variant, { compact }]}
+  class:list={['boton', variant, { compact }]}
   href={waLink(message)}
   aria-label={`${label}: ${ariaSuffix}`}
   target="_blank"
@@ -23,40 +23,9 @@ const { message, label, ariaSuffix, variant = 'primary', compact = false } = Ast
 </a>
 
 <style>
-  .wa-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5em;
-    padding: 0.85em 1.9em;
-    border: 1px solid var(--oliva-oscuro);
-    border-radius: var(--radius-pill);
-    font-family: var(--font-body);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 160ms ease, color 160ms ease;
-  }
-
-  .compact {
-    padding: 0.7em 0.9em;
-    white-space: nowrap;
-    font-size: clamp(0.625rem, 2.2vw, 0.8125rem);
-    letter-spacing: 0.02em;
-  }
-
   .primary {
     background-color: var(--oliva-oscuro);
     color: var(--marfil);
-  }
-
-  .secondary {
-    background-color: transparent;
-    color: var(--tinta);
   }
 
   .primary:hover,
@@ -65,19 +34,10 @@ const { message, label, ariaSuffix, variant = 'primary', compact = false } = Ast
     border-color: var(--tinta);
   }
 
-  .secondary:hover,
-  .secondary:focus-visible {
-    background-color: var(--salvia-tint);
-  }
-
-  .wa-button:focus-visible {
-    outline: 2px solid var(--tinta);
-    outline-offset: 3px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .wa-button {
-      transition: none;
-    }
+  .compact {
+    padding: 0.7em 0.9em;
+    white-space: nowrap;
+    font-size: clamp(0.625rem, 2.2vw, 0.8125rem);
+    letter-spacing: 0.02em;
   }
 </style>

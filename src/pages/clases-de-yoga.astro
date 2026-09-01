@@ -14,12 +14,13 @@ import {
   NOTA_PIE_POR_DEFECTO,
   SNAPSHOT,
   TAGLINE_POR_DEFECTO,
+  sinPuntoFinal,
 } from '../data/snapshot';
 
 const clases = actividadesDe(SNAPSHOT.actividades, 'yoga');
 const otras = actividadesDe(SNAPSHOT.actividades, 'otras');
 
-const tagline = ajuste('tagline', TAGLINE_POR_DEFECTO);
+const tagline = sinPuntoFinal(ajuste('tagline', TAGLINE_POR_DEFECTO));
 const notaPie = ajuste('nota_pie', NOTA_PIE_POR_DEFECTO);
 const mes = ajuste('mes');
 ---
@@ -48,7 +49,7 @@ const mes = ajuste('mes');
       Cada clase tiene su ritmo. Elige la que te resuene y escríbeme: te cuento horarios,
       precios y por dónde empezar.
     </p>
-    <p class="intro modalidad">
+    <p class="intro apunte">
       Todas las clases se pueden hacer presenciales en Catarroja u online, desde donde estés.
       Lo vemos por WhatsApp.
     </p>
@@ -70,7 +71,7 @@ const mes = ajuste('mes');
       guardártelo, descarga el horario como imagen.
     </p>
     <Horario />
-    <p class="intro nota">{notaPie}</p>
+    <p class="nota apunte">{notaPie}</p>
     <DescargarHorario />
   </Section>
 
@@ -84,7 +85,7 @@ const mes = ajuste('mes');
       sizes="(min-width: 70rem) 66rem, 92vw"
       alt="Vista amplia de la sala vacía, con suelo de madera clara, cortinas grises y la estantería de material a la izquierda."
     />
-    <div class="galeria">
+    <div class="galeria rejilla">
       <Foto
         nombre="centro-sala"
         sizes="(min-width: 70rem) 32rem, (min-width: 60rem) 29rem, (min-width: 41rem) 21rem, 92vw"
@@ -108,19 +109,12 @@ const mes = ajuste('mes');
 </Base>
 
 <style>
-  .modalidad {
-    color: var(--oliva-oscuro);
-  }
-
   .nota {
     margin: 2rem 0;
-    color: var(--oliva-oscuro);
   }
 
   .galeria {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-    gap: 1.5rem;
+    --min: 18rem;
     margin-top: 1.5rem;
   }
 </style>

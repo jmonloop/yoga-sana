@@ -3,6 +3,8 @@ import { CTAS, type Cta, type Enlace } from '../data/site';
 
 export const ETIQUETA_EMPRESAS = 'PARA EMPRESAS';
 
+const LISTA = new Intl.ListFormat('es', { type: 'conjunction' });
+
 export function actividadesDe(actividades: Actividad[], grupo: Grupo): Actividad[] {
   return actividades.filter((actividad) => actividad.grupo === grupo).sort(porOrden);
 }
@@ -63,13 +65,6 @@ function ctaClase({ nombre }: Actividad): Cta {
 }
 
 export function nombresEnumerados(actividades: Actividad[]): string {
-  const nombres = actividades.map(({ nombre }) => nombre.trim()).filter((nombre) => nombre !== '');
-  const ultimo = nombres.pop();
-  if (ultimo === undefined) return '';
-  if (nombres.length === 0) return ultimo;
-  return `${nombres.join(', ')} ${empiezaPorSonidoI(ultimo) ? 'e' : 'y'} ${ultimo}`;
-}
-
-function empiezaPorSonidoI(palabra: string): boolean {
-  return /^h?[ií](?!e)/i.test(palabra);
+  const nombres = actividades.map(({ nombre }) => nombre);
+  return nombres.length === 0 ? '' : `${LISTA.format(nombres)}.`;
 }

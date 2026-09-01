@@ -13,12 +13,13 @@ const { nombre, alt, sizes, eager = false } = Astro.props;
 const foto = imagen(nombre);
 const { name, fallback, widths } = foto;
 const alto = altoRenderizado(foto);
+const nativo = Math.max(...widths);
 
 const srcset = (extension: string): string =>
   widths.map((ancho) => `/img/${name}-${ancho}.${extension} ${ancho}w`).join(', ');
 ---
 
-<picture>
+<picture style={`--foto-max: ${nativo}px`}>
   <source type="image/avif" srcset={srcset('avif')} sizes={sizes} />
   <source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
   <img
@@ -39,6 +40,7 @@ const srcset = (extension: string): string =>
 
   img {
     width: 100%;
+    max-width: min(100%, var(--foto-max));
     height: auto;
     border-radius: var(--radius-card);
   }

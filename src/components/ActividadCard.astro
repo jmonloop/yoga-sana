@@ -19,7 +19,7 @@ const descripcion = actividad.descripcion.trim();
 <article class="tarjeta">
   <Icono icono={actividad.icono} size={72} />
   {etiqueta && <p class="etiqueta">{etiqueta}</p>}
-  <h3 class="nombre">{actividad.nombre}</h3>
+  <h3 class="nombre titulo">{actividad.nombre}</h3>
   {descripcion && <p class="descripcion">{descripcion}</p>}
   <div class="accion">
     <WaButton {...cta} variant="secondary" />
@@ -55,13 +55,6 @@ const descripcion = actividad.descripcion.trim();
   }
 
   .nombre {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: 0.04em;
-    color: var(--tinta);
     overflow-wrap: anywhere;
   }
 

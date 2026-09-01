@@ -5,21 +5,24 @@ import Section from '../components/Section.astro';
 import Foto from '../components/Foto.astro';
 import WaButton from '../components/WaButton.astro';
 import { actividadesDe, nombresEnumerados } from '../components/actividad';
+import { resumenHorario } from '../components/horario-grid';
 import { CTAS, INSTAGRAM, INSTAGRAM_URL } from '../data/site';
 import {
   ajuste,
   NOTA_PIE_POR_DEFECTO,
+  sinPuntoFinal,
   SNAPSHOT,
   TAGLINE_POR_DEFECTO,
 } from '../data/snapshot';
 
 const clases = actividadesDe(SNAPSHOT.actividades, 'yoga');
 const talleres = actividadesDe(SNAPSHOT.actividades, 'taller');
+const sanergia = SNAPSHOT.actividades.find(({ nombre }) => nombre === 'Sanergía');
+const resumen = resumenHorario(SNAPSHOT.horarios);
 
-const tagline = ajuste('tagline', TAGLINE_POR_DEFECTO);
+const tagline = sinPuntoFinal(ajuste('tagline', TAGLINE_POR_DEFECTO));
 const notaPie = ajuste('nota_pie', NOTA_PIE_POR_DEFECTO);
 const mes = ajuste('mes');
-const tituloHorario = mes ? `Horario de ${mes.toLocaleLowerCase('es')}` : 'Horario semanal';
 ---
 
 <Base
@@ -32,54 +35,73 @@ const tituloHorario = mes ? `Horario de ${mes.toLocaleLowerCase('es')}` : 'Horar
       <p class="lead">{tagline}.</p>
       <p>Clases, talleres y sesiones individuales, presenciales u online.</p>
       <WaButton {...CTAS.empezar} />
-      <div class="hero-foto" slot="foto">
-        <Foto
-          nombre="yoga-al-aire-libre"
-          sizes="(min-width: 60rem) 26rem, min(92vw, 40rem)"
-          alt="Mujer haciendo una extensión de espalda al aire libre junto al río, a la luz del atardecer."
-          eager
-        />
-      </div>
+      <Foto
+        slot="foto"
+        nombre="yoga-al-aire-libre"
+        sizes="(min-width: 60rem) 26rem, min(92vw, 40rem)"
+        alt="Mujer haciendo una extensión de espalda al aire libre junto al río, a la luz del atardecer."
+        eager
+      />
     </Banda>
   </Section>
 
   <Section title="¿Qué puedes encontrar?" muted animar>
     <p class="intro">
-      Tres formas de practicar conmigo. Todas se pueden hacer presenciales en Catarroja u
-      online, desde donde estés.
+      Todo lo que hago se puede hacer presencial en Catarroja u online, desde donde estés.
     </p>
-    <ul class="teasers" role="list">
+    <ul class="teasers rejilla" role="list">
+      {
+        clases.length > 0 && (
+          <li>
+            <h3 class="titulo">Clases de yoga</h3>
+            <p>{nombresEnumerados(clases)}</p>
+            <p>Cada semana, en grupo y para todos los niveles.</p>
+            <p class="teaser-cta">
+              <a class="boton" href="/clases-de-yoga">
+                Ver las clases
+              </a>
+            </p>
+          </li>
+        )
+      }
+      {
+        talleres.length > 0 && (
+          <li>
+            <h3 class="titulo">Talleres y experiencias</h3>
+            <p>{nombresEnumerados(talleres)}</p>
+            <p>Encuentros puntuales, cada uno con su propio ritmo.</p>
+            <p class="teaser-cta">
+              <a class="boton" href="/talleres-y-experiencias">
+                Ver los talleres
+              </a>
+            </p>
+          </li>
+        )
+      }
       <li>
-        <h3>Clases de yoga</h3>
-        <p>{nombresEnumerados(clases)}.</p>
-        <p>Cada semana, en grupo y para todos los niveles.</p>
-        <p class="teaser-cta"><a class="enlace-boton" href="/clases-de-yoga">Ver las clases</a></p>
-      </li>
-      <li>
-        <h3>Talleres y experiencias</h3>
-        <p>{nombresEnumerados(talleres)}.</p>
-        <p>Encuentros puntuales, cada uno con su propio ritmo.</p>
-        <p class="teaser-cta">
-          <a class="enlace-boton" href="/talleres-y-experiencias">Ver los talleres</a>
+        <h3 class="titulo">Sesiones individuales</h3>
+        <p>
+          La gestión emocional y la Sanergía también se hacen a solas, en sesión individual y
+          a tu ritmo.
         </p>
-      </li>
-      <li>
-        <h3>Sesiones individuales</h3>
-        <p>Si prefieres empezar a solas, también trabajo contigo en sesión individual.</p>
-        <p>Me cuentas qué necesitas y vamos a tu ritmo.</p>
         <p class="teaser-cta"><WaButton {...CTAS.sesionIndividual} variant="secondary" /></p>
       </li>
     </ul>
   </Section>
 
-  <Section title={tituloHorario} eyebrow={mes} animar>
-    <p class="intro">
-      Las clases se repiten cada semana, de mañana y de tarde. Tienes el horario completo en
-      la página de clases: toca cualquier clase y me escribes por WhatsApp para reservar
-      plaza, o descárgatelo como imagen para guardártelo.
-    </p>
-    <p class="intro nota">{notaPie}</p>
-    <a class="enlace-boton" href="/clases-de-yoga#horario">Ver horarios</a>
+  <Section title="Horario semanal" eyebrow={mes} animar>
+    {
+      resumen && (
+        <p class="intro">
+          Hay clases los {resumen.dias}: la primera empieza a las {resumen.primera} y la última a
+          las {resumen.ultima}. En la página de clases lo tienes completo, clase a clase: toca
+          la que te interese y me escribes por WhatsApp para reservar plaza, o descárgatelo
+          como imagen para guardártelo.
+        </p>
+      )
+    }
+    <p class="intro apunte">{notaPie}</p>
+    <a class="boton" href="/clases-de-yoga#horario">Ver horarios</a>
   </Section>
 
   <Section title="Nuestro centro" muted animar>
@@ -106,24 +128,28 @@ const tituloHorario = mes ? `Horario de ${mes.toLocaleLowerCase('es')}` : 'Horar
       semana, cuatro al mes, de una hora más quince minutos de relajación, para repetirlas
       cuando quieras. <strong>30 €</strong> al mes.
     </p>
-    <a class="enlace-boton" href="/online">Quiero unirme</a>
+    <a class="boton" href="/online">Quiero unirme</a>
   </Section>
 
-  <Section title="Sanergía" muted animar>
-    <p class="intro">
-      Técnica energética que armoniza cuerpo, mente y emociones a través de la imposición de
-      manos y la canalización de energía universal. Se reserva presencial en Catarroja u
-      online.
-    </p>
-    <a class="enlace-boton" href="/sanergia">Saber más sobre Sanergía</a>
-  </Section>
+  {
+    sanergia && (
+      <Section title={sanergia.nombre} muted animar>
+        <p class="intro">
+          {sinPuntoFinal(sanergia.descripcion)}. Se reserva presencial en Catarroja u online.
+        </p>
+        <a class="boton" href="/sanergia">
+          Saber más sobre Sanergía
+        </a>
+      </Section>
+    )
+  }
 
   <Section title="Sobre mí" animar>
     <p class="intro">
       Detrás de Yoga Sana estoy yo, Natalia. Doy las clases, acompaño los talleres y las
       sesiones individuales, y soy quien te contesta al WhatsApp.
     </p>
-    <a class="enlace-boton" href="/sobre-mi">Conóceme</a>
+    <a class="boton" href="/sobre-mi">Conóceme</a>
   </Section>
 
   <Section title="¿Te apetece empezar?" muted animar>
@@ -140,7 +166,7 @@ const tituloHorario = mes ? `Horario de ${mes.toLocaleLowerCase('es')}` : 'Horar
       directamente por WhatsApp. Contesto yo.
     </p>
     <WaButton {...CTAS.contacto} />
-    <p class="alternativa">
+    <p class="alternativa apunte">
       ¿No usas WhatsApp? También estoy en Instagram, en <a
         href={INSTAGRAM_URL}
         target="_blank"
@@ -151,17 +177,9 @@ const tituloHorario = mes ? `Horario de ${mes.toLocaleLowerCase('es')}` : 'Horar
 </Base>
 
 <style>
-  .hero-foto {
-    max-width: 40rem;
-  }
-
   .teasers {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    --min: 15rem;
     gap: 2.5rem 2rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
   }
 
   .teasers li {
@@ -181,21 +199,7 @@ const tituloHorario = mes ? `Horario de ${mes.toLocaleLowerCase('es')}` : 'Horar
     margin: 0;
   }
 
-  .teasers h3 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: 0.04em;
-  }
-
-  .nota {
-    color: var(--oliva-oscuro);
-  }
-
   .alternativa {
     margin: 1.5rem 0 0;
-    color: var(--oliva-oscuro);
   }
 </style>

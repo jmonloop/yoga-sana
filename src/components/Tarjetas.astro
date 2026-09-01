@@ -13,7 +13,7 @@ const { actividades, enlaces } = Astro.props;
 
 {
   actividades.length > 0 && (
-    <ul class="tarjetas" role="list">
+    <ul class="rejilla" role="list">
       {actividades.map((actividad) => (
         <li>
           <ActividadCard actividad={actividad} enlace={enlaces?.[actividad.nombre]} />
@@ -22,14 +22,3 @@ const { actividades, enlaces } = Astro.props;
     </ul>
   )
 }
-
-<style>
-  .tarjetas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-    gap: 1.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-</style>

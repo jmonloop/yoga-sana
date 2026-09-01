@@ -19,3 +19,7 @@ export const SNAPSHOT = assertUsable(raw as Snapshot);
 export function ajuste(clave: string, porDefecto = ''): string {
   return (SNAPSHOT.ajustes[clave] ?? '').trim() || porDefecto;
 }
+
+export function sinPuntoFinal(texto: string): string {
+  return texto.replace(/\.+$/, '');
+}

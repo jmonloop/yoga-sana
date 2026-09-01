@@ -22,7 +22,7 @@ import { CTAS } from '../data/site';
       <Foto
         slot="foto"
         nombre="yoga-al-aire-libre"
-        sizes="(min-width: 60rem) 26rem, 92vw"
+        sizes="(min-width: 60rem) 26rem, min(92vw, 40rem)"
         alt="Mujer haciendo una extensión de espalda al aire libre, junto al río."
         eager
       />
@@ -37,7 +37,7 @@ import { CTAS } from '../data/site';
       <li>Las repites las veces que quieras, el día y la hora que te vengan bien.</li>
     </ul>
     <p class="precio"><strong>30 €</strong> al mes</p>
-    <p class="entrega">Cada semana te hago llegar la clase nueva directamente.</p>
+    <p class="entrega apunte">Cada semana te hago llegar la clase nueva directamente.</p>
     <WaButton {...CTAS.unirmeOnline} />
   </Section>
 
@@ -85,6 +85,5 @@ import { CTAS } from '../data/site';
 
   .entrega {
     margin: 0.25rem 0 2rem;
-    color: var(--oliva-oscuro);
   }
 </style>
