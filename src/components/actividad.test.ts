@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { actividadCta, actividadesDe, enlacesDe, ETIQUETA_EMPRESAS } from './actividad';
+import {
+  actividadCta,
+  actividadesDe,
+  enlacesDe,
+  ETIQUETA_EMPRESAS,
+  nombresEnumerados,
+} from './actividad';
 import { SNAPSHOT } from '../data/snapshot';
 import { CTAS } from '../data/site';
 import type { Actividad } from '../data/sheet';
@@ -189,6 +195,51 @@ describe('actividadCta', () => {
     expect(
       actividadCta(actividad({ nombre, etiqueta: ETIQUETA_EMPRESAS })).ariaSuffix,
     ).toContain(nombre);
+  });
+});
+
+describe('nombresEnumerados', () => {
+  const conNombres = (...nombres: string[]): Actividad[] =>
+    nombres.map((nombre) => actividad({ nombre }));
+
+  it('is empty when there is nothing to list', () => {
+    expect(nombresEnumerados([])).toBe('');
+  });
+
+  it('lists a single name on its own', () => {
+    expect(nombresEnumerados(conNombres('Hatha Yoga'))).toBe('Hatha Yoga');
+  });
+
+  it('joins two names with «y»', () => {
+    expect(nombresEnumerados(conNombres('Hatha Yoga', 'Yoga Suave'))).toBe(
+      'Hatha Yoga y Yoga Suave',
+    );
+  });
+
+  it('separates the first names with commas and the last one with «y»', () => {
+    expect(nombresEnumerados(conNombres('Hatha Yoga', 'Yoga Suave', 'Yoga Relajante'))).toBe(
+      'Hatha Yoga, Yoga Suave y Yoga Relajante',
+    );
+  });
+
+  it('uses «e» when the last name starts with an i sound', () => {
+    expect(nombresEnumerados(conNombres('Hatha Yoga', 'Iyengar'))).toBe('Hatha Yoga e Iyengar');
+    expect(nombresEnumerados(conNombres('Hatha Yoga', 'Iniciación'))).toBe(
+      'Hatha Yoga e Iniciación',
+    );
+    expect(nombresEnumerados(conNombres('Hatha Yoga', 'Higiene postural'))).toBe(
+      'Hatha Yoga e Higiene postural',
+    );
+  });
+
+  it('keeps «y» before hie-, where the i is not a vowel sound', () => {
+    expect(nombresEnumerados(conNombres('Cuencos', 'Hierbas'))).toBe('Cuencos y Hierbas');
+  });
+
+  it('ignores rows whose name is blank in the Sheet', () => {
+    expect(nombresEnumerados(conNombres('Hatha Yoga', '  ', 'Yoga Suave'))).toBe(
+      'Hatha Yoga y Yoga Suave',
+    );
   });
 });
 

@@ -91,10 +91,41 @@ h1 {
   transform: none;
 }
 
+.enlace-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85em 1.9em;
+  border: 1px solid var(--oliva-oscuro);
+  border-radius: var(--radius-pill);
+  color: var(--tinta);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+
+.enlace-boton:hover,
+.enlace-boton:focus-visible {
+  background-color: var(--salvia-tint);
+}
+
+.enlace-boton:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .anim .fade-up {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .enlace-boton {
     transition: none;
   }
 }

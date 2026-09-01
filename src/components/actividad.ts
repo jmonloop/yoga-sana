@@ -61,3 +61,15 @@ function ctaClase({ nombre }: Actividad): Cta {
     ariaSuffix: `escribir por WhatsApp sobre ${nombre}: horarios y precios`,
   };
 }
+
+export function nombresEnumerados(actividades: Actividad[]): string {
+  const nombres = actividades.map(({ nombre }) => nombre.trim()).filter((nombre) => nombre !== '');
+  const ultimo = nombres.pop();
+  if (ultimo === undefined) return '';
+  if (nombres.length === 0) return ultimo;
+  return `${nombres.join(', ')} ${empiezaPorSonidoI(ultimo) ? 'e' : 'y'} ${ultimo}`;
+}
+
+function empiezaPorSonidoI(palabra: string): boolean {
+  return /^h?[ií](?!e)/i.test(palabra);
+}

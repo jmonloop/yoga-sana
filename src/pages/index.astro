@@ -1,21 +1,201 @@
 ---
 import Base from '../layouts/Base.astro';
+import Banda from '../components/Banda.astro';
 import Section from '../components/Section.astro';
+import Foto from '../components/Foto.astro';
 import WaButton from '../components/WaButton.astro';
-import { CTAS } from '../data/site';
-import { ajuste, TAGLINE_POR_DEFECTO } from '../data/snapshot';
+import { actividadesDe, nombresEnumerados } from '../components/actividad';
+import { CTAS, INSTAGRAM, INSTAGRAM_URL } from '../data/site';
+import {
+  ajuste,
+  NOTA_PIE_POR_DEFECTO,
+  SNAPSHOT,
+  TAGLINE_POR_DEFECTO,
+} from '../data/snapshot';
+
+const clases = actividadesDe(SNAPSHOT.actividades, 'yoga');
+const talleres = actividadesDe(SNAPSHOT.actividades, 'taller');
 
 const tagline = ajuste('tagline', TAGLINE_POR_DEFECTO);
+const notaPie = ajuste('nota_pie', NOTA_PIE_POR_DEFECTO);
+const mes = ajuste('mes');
+const tituloHorario = mes ? `Horario de ${mes.toLocaleLowerCase('es')}` : 'Horario semanal';
 ---
 
 <Base
-  title="Yoga Sana — Yoga en Catarroja (València)"
-  description="Clases de yoga, talleres y Sanergía en Catarroja. Tu espacio para respirar, conectar y reconectar contigo."
+  title="Yoga Sana — Clases de yoga en Catarroja (València)"
+  description="Clases de yoga, talleres y Sanergía en Catarroja (València), presenciales u online. Tu espacio para respirar, conectar y reconectar contigo. Escríbeme por WhatsApp."
 >
-  <Section eyebrow="Un lugar para ti" title="Yoga Sana" animar>
-    <p>
-      {tagline}, en Catarroja (València).
+  <Section eyebrow="Un lugar para ti">
+    <Banda columnas="1fr 26rem">
+      <h1>Yoga Sana, en Catarroja</h1>
+      <p class="lead">{tagline}.</p>
+      <p>Clases, talleres y sesiones individuales, presenciales u online.</p>
+      <WaButton {...CTAS.empezar} />
+      <div class="hero-foto" slot="foto">
+        <Foto
+          nombre="yoga-al-aire-libre"
+          sizes="(min-width: 60rem) 26rem, min(92vw, 40rem)"
+          alt="Mujer haciendo una extensión de espalda al aire libre junto al río, a la luz del atardecer."
+          eager
+        />
+      </div>
+    </Banda>
+  </Section>
+
+  <Section title="¿Qué puedes encontrar?" muted animar>
+    <p class="intro">
+      Tres formas de practicar conmigo. Todas se pueden hacer presenciales en Catarroja u
+      online, desde donde estés.
+    </p>
+    <ul class="teasers" role="list">
+      <li>
+        <h3>Clases de yoga</h3>
+        <p>{nombresEnumerados(clases)}.</p>
+        <p>Cada semana, en grupo y para todos los niveles.</p>
+        <p class="teaser-cta"><a class="enlace-boton" href="/clases-de-yoga">Ver las clases</a></p>
+      </li>
+      <li>
+        <h3>Talleres y experiencias</h3>
+        <p>{nombresEnumerados(talleres)}.</p>
+        <p>Encuentros puntuales, cada uno con su propio ritmo.</p>
+        <p class="teaser-cta">
+          <a class="enlace-boton" href="/talleres-y-experiencias">Ver los talleres</a>
+        </p>
+      </li>
+      <li>
+        <h3>Sesiones individuales</h3>
+        <p>Si prefieres empezar a solas, también trabajo contigo en sesión individual.</p>
+        <p>Me cuentas qué necesitas y vamos a tu ritmo.</p>
+        <p class="teaser-cta"><WaButton {...CTAS.sesionIndividual} variant="secondary" /></p>
+      </li>
+    </ul>
+  </Section>
+
+  <Section title={tituloHorario} eyebrow={mes} animar>
+    <p class="intro">
+      Las clases se repiten cada semana, de mañana y de tarde. Tienes el horario completo en
+      la página de clases: toca cualquier clase y me escribes por WhatsApp para reservar
+      plaza, o descárgatelo como imagen para guardártelo.
+    </p>
+    <p class="intro nota">{notaPie}</p>
+    <a class="enlace-boton" href="/clases-de-yoga#horario">Ver horarios</a>
+  </Section>
+
+  <Section title="Nuestro centro" muted animar>
+    <Banda columnas="1fr 28rem">
+      <p>
+        Una sala tranquila en Catarroja para practicar sin prisa, con sitio de sobra para
+        extender la esterilla.
+      </p>
+      <p>
+        Aquí tienes esterillas, bolsters, mantas y bloques a mano: tú solo tienes que venir.
+      </p>
+      <Foto
+        slot="foto"
+        nombre="centro-sala"
+        sizes="(min-width: 60rem) 28rem, 92vw"
+        alt="La sala del centro con esterillas verdes extendidas sobre el suelo de madera y una lámpara de sal junto a la pared."
+      />
+    </Banda>
+  </Section>
+
+  <Section title="Yoga online" animar>
+    <p class="intro">
+      Si no puedes venir a Catarroja, o prefieres practicar en casa: una clase nueva cada
+      semana, cuatro al mes, de una hora más quince minutos de relajación, para repetirlas
+      cuando quieras. <strong>30 €</strong> al mes.
+    </p>
+    <a class="enlace-boton" href="/online">Quiero unirme</a>
+  </Section>
+
+  <Section title="Sanergía" muted animar>
+    <p class="intro">
+      Técnica energética que armoniza cuerpo, mente y emociones a través de la imposición de
+      manos y la canalización de energía universal. Se reserva presencial en Catarroja u
+      online.
+    </p>
+    <a class="enlace-boton" href="/sanergia">Saber más sobre Sanergía</a>
+  </Section>
+
+  <Section title="Sobre mí" animar>
+    <p class="intro">
+      Detrás de Yoga Sana estoy yo, Natalia. Doy las clases, acompaño los talleres y las
+      sesiones individuales, y soy quien te contesta al WhatsApp.
+    </p>
+    <a class="enlace-boton" href="/sobre-mi">Conóceme</a>
+  </Section>
+
+  <Section title="¿Te apetece empezar?" muted animar>
+    <p class="intro">
+      No necesitas experiencia previa: hay clases para todos los niveles y prácticas que se
+      adaptan a tu ritmo. Escríbeme, me cuentas qué buscas y vemos por dónde empezar.
     </p>
     <WaButton {...CTAS.empezar} />
   </Section>
+
+  <Section title="Escríbeme" animar>
+    <p class="intro">
+      Cualquier duda —horarios, precios, por dónde empezar— me la puedes preguntar
+      directamente por WhatsApp. Contesto yo.
+    </p>
+    <WaButton {...CTAS.contacto} />
+    <p class="alternativa">
+      ¿No usas WhatsApp? También estoy en Instagram, en <a
+        href={INSTAGRAM_URL}
+        target="_blank"
+        rel="noopener">{INSTAGRAM}</a
+      >.
+    </p>
+  </Section>
 </Base>
+
+<style>
+  .hero-foto {
+    max-width: 40rem;
+  }
+
+  .teasers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 2.5rem 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .teasers li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .teasers .teaser-cta {
+    margin: auto 0 0;
+    padding-top: 0.5rem;
+  }
+
+  .teasers p {
+    margin: 0;
+  }
+
+  .teasers h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+  }
+
+  .nota {
+    color: var(--oliva-oscuro);
+  }
+
+  .alternativa {
+    margin: 1.5rem 0 0;
+    color: var(--oliva-oscuro);
+  }
+</style>
