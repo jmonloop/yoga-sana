@@ -235,14 +235,29 @@ omtheyoga.com. omtheyoga informs layout rhythm and whitespace only.
 --salvia-tint  #E4E9DA   icon circles
 ```
 
-Class chip fills: sage `#C3D0A8` · lavanda `#C9AFD4` · pizarra `#7D9199` ·
-melocotón `#E8A96A` · rosa `#C97B7B`.
+Class chip fills as shipped: sage `#C3D0A8` · lavanda `#C9AFD4` · pizarra `#8A9CA3` ·
+melocotón `#E8A96A` · rosa `#C97B7B` → `#CD8686`.
+
+**Implementation note (measured, supersedes the sampled hex).** Pizarra and rosa were
+sampled from the Canva graphics as `#7D9199` and `#C97B7B`. Measured, `--tinta` on those
+fills gives only 3.93:1 and 4.07:1, under the 4.5:1 AA floor. Both were nudged lighter —
+hue and saturation held, lightness only — to `#8A9CA3` (4.54:1) and `#CD8686` (4.53:1).
+The other three fills already passed: salvia 7.95, lavanda 6.51, melocotón 6.35.
 
 **Accessibility correction to her palette.** Several chip colours fail contrast —
 slate on white is ≈3.0:1 and peach on white is well below that, against the 4.5:1 AA
 floor. Fix: keep the light originals as chip *fills* with `--tinta` on top, and derive
 slightly darkened variants of slate and rose for any use as *text*. The grid stays
 visually near-identical to her Canva version and becomes readable.
+
+Two further measured corrections, both applied in `src/styles/tokens.css`:
+
+- `--oliva #7B8560` as a button fill gives only 3.78:1 against `--marfil`, failing AA for
+  normal text. A darkened `--oliva-oscuro #6A7353` (4.85:1) carries the primary button
+  fill *and* small olive text. `--oliva` itself is unchanged and still used for headers,
+  the script eyebrow and decorative rules, where AA Large applies.
+- Text variants of the two problem chips: `--pizarra-text #627278` and
+  `--rosa-text #9B5F5F`, both 4.84:1 on `--marfil`.
 
 ### Type
 
