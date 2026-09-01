@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { actividadCta, actividadesDe, ETIQUETA_EMPRESAS } from './actividad';
+import { actividadCta, actividadesDe, enlacesDe, ETIQUETA_EMPRESAS } from './actividad';
 import { SNAPSHOT } from '../data/snapshot';
 import { CTAS } from '../data/site';
 import type { Actividad } from '../data/sheet';
@@ -63,6 +63,33 @@ describe('actividadesDe', () => {
     actividadesDe(LISTA, 'yoga');
 
     expect(LISTA).toEqual(original);
+  });
+});
+
+describe('enlacesDe', () => {
+  const sanergia = { href: '/sanergia', texto: 'Saber más sobre Sanergía' };
+
+  it('resolves the link for the activity it names and nothing else', () => {
+    const lista = [actividad({ nombre: 'Sanergía' }), actividad({ nombre: 'Breathwork' })];
+
+    const enlaces = enlacesDe(lista, { Sanergía: sanergia });
+
+    expect(enlaces['Sanergía']).toEqual(sanergia);
+    expect(enlaces['Breathwork']).toBeUndefined();
+  });
+
+  it('accepts an empty map without touching the activities', () => {
+    expect(enlacesDe(LISTA, {})).toEqual({});
+  });
+
+  it('throws when a key matches no activity, so a rename cannot silently drop the link', () => {
+    const lista = [actividad({ nombre: 'Sanergia' })];
+
+    expect(() => enlacesDe(lista, { Sanergía: sanergia })).toThrow(/Sanergía/);
+  });
+
+  it('throws when the activity exists but is not in the list being rendered', () => {
+    expect(() => enlacesDe([], { Sanergía: sanergia })).toThrow(/ninguna actividad/);
   });
 });
 

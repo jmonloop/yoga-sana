@@ -4,13 +4,14 @@ interface Props {
   eyebrow?: string;
   id?: string;
   muted?: boolean;
+  animar?: boolean;
 }
 
-const { title, eyebrow, id, muted = false } = Astro.props;
+const { title, eyebrow, id, muted = false, animar = false } = Astro.props;
 ---
 
 <section class:list={['section', { muted }]} id={id}>
-  <div class="inner">
+  <div class:list={['inner', { 'fade-up': animar }]}>
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
     {title && <h2 class="title">{title}</h2>}
     <slot />
@@ -33,7 +34,7 @@ const { title, eyebrow, id, muted = false } = Astro.props;
   }
 
   .eyebrow {
-    margin: 0;
+    margin: 0 0 1rem;
     font-family: var(--font-script);
     font-size: var(--font-size-display);
     line-height: 1.1;

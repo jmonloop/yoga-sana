@@ -1,8 +1,9 @@
 ---
 import Icono from './Icono.astro';
 import WaButton from './WaButton.astro';
-import { actividadCta, type Enlace } from './actividad';
+import { actividadCta } from './actividad';
 import type { Actividad } from '../data/sheet';
+import type { Enlace } from '../data/site';
 
 interface Props {
   actividad: Actividad;
@@ -15,7 +16,7 @@ const etiqueta = actividad.etiqueta.trim();
 const descripcion = actividad.descripcion.trim();
 ---
 
-<article class="tarjeta fade-up">
+<article class="tarjeta">
   <Icono icono={actividad.icono} size={72} />
   {etiqueta && <p class="etiqueta">{etiqueta}</p>}
   <h3 class="nombre">{actividad.nombre}</h3>
@@ -79,10 +80,6 @@ const descripcion = actividad.descripcion.trim();
     gap: 0.75rem 1rem;
     margin-top: auto;
     padding-top: 0.75rem;
-  }
-
-  .accion :global(.wa-button) {
-    white-space: normal;
   }
 
   .enlace {

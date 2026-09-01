@@ -1,0 +1,27 @@
+---
+interface Props {
+  columnas?: string;
+}
+
+const { columnas = '1fr 1fr' } = Astro.props;
+---
+
+<div class="banda" style={`--columnas: ${columnas}`}>
+  <div class="columna"><slot /></div>
+  <slot name="foto" />
+</div>
+
+<style>
+  .banda {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 60rem) {
+    .banda {
+      grid-template-columns: var(--columnas);
+      gap: 4rem;
+    }
+  }
+</style>

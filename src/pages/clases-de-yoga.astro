@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Banda from '../components/Banda.astro';
 import Section from '../components/Section.astro';
 import DescargarHorario from '../components/DescargarHorario.astro';
 import Foto from '../components/Foto.astro';
@@ -27,24 +28,22 @@ const mes = ajuste('mes');
   title="Clases de yoga en Catarroja (València) — Yoga Sana"
   description="Hatha, dinámico, suave, adaptado, relajante e infantil: clases de yoga en Catarroja para todos los niveles, presenciales y online. Consulta el horario semanal."
 >
-  <Section>
-    <div class="hero">
-      <div class="hero-texto">
-        <p class="hero-script">Respira. Conecta. Fluye.</p>
-        <h1>Clases de yoga en Catarroja</h1>
-        <p>{tagline}, en Catarroja (València).</p>
-        <WaButton {...CTAS.empezar} />
-      </div>
+  <Section eyebrow="Respira. Conecta. Fluye.">
+    <Banda>
+      <h1>Clases de yoga en Catarroja</h1>
+      <p class="lead">{tagline}, en Catarroja (València).</p>
+      <WaButton {...CTAS.empezar} />
       <Foto
+        slot="foto"
         nombre="clase-de-yoga"
         sizes="(min-width: 70rem) 32rem, (min-width: 60rem) 26rem, 92vw"
         alt="Mujer practicando una torsión de yoga sobre una esterilla, con un bloque de corcho al lado."
         eager
       />
-    </div>
+    </Banda>
   </Section>
 
-  <Section title="Las clases" muted>
+  <Section title="Las clases" muted animar>
     <p class="intro">
       Cada clase tiene su ritmo. Elige la que te resuene y escríbeme: te cuento horarios,
       precios y por dónde empezar.
@@ -58,14 +57,14 @@ const mes = ajuste('mes');
 
   {
     otras.length > 0 && (
-      <Section title="Otras actividades">
+      <Section title="Otras actividades" animar>
         <p class="intro">Más propuestas que también puedes encontrar en Yoga Sana.</p>
         <Tarjetas actividades={otras} />
       </Section>
     )
   }
 
-  <Section id="horario" title="Horario semanal" eyebrow={mes}>
+  <Section id="horario" title="Horario semanal" eyebrow={mes} animar>
     <p class="intro">
       Toca cualquier clase para escribirme por WhatsApp y reservar tu plaza. Si prefieres
       guardártelo, descarga el horario como imagen.
@@ -75,7 +74,7 @@ const mes = ajuste('mes');
     <DescargarHorario />
   </Section>
 
-  <Section title="Nuestro centro" muted>
+  <Section title="Nuestro centro" muted animar>
     <p class="intro">
       Un espacio tranquilo en Catarroja para practicar sin prisa, con sitio de sobra para
       extender la esterilla.
@@ -99,7 +98,7 @@ const mes = ajuste('mes');
     </div>
   </Section>
 
-  <Section title="¿Empezamos?">
+  <Section title="¿Empezamos?" animar>
     <p class="intro">
       Escríbeme por WhatsApp y te cuento horarios, precios y por dónde te viene mejor
       empezar.
@@ -109,45 +108,6 @@ const mes = ajuste('mes');
 </Base>
 
 <style>
-  .hero {
-    display: grid;
-    gap: 2.5rem;
-    align-items: center;
-  }
-
-  .hero-texto {
-    display: grid;
-    justify-items: start;
-    gap: 1rem;
-  }
-
-  .hero-script {
-    margin: 0;
-    font-family: var(--font-script);
-    font-size: var(--font-size-display);
-    line-height: 1.1;
-    color: var(--oliva);
-  }
-
-  .hero h1 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 5.5vw, 3.25rem);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: 0.04em;
-    color: var(--tinta);
-  }
-
-  .hero p:not(.hero-script) {
-    margin: 0;
-    font-size: 1.125rem;
-  }
-
-  .intro {
-    margin: 0 0 2rem;
-  }
-
   .modalidad {
     color: var(--oliva-oscuro);
   }
@@ -162,12 +122,5 @@ const mes = ajuste('mes');
     grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
     gap: 1.5rem;
     margin-top: 1.5rem;
-  }
-
-  @media (min-width: 60rem) {
-    .hero {
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-    }
   }
 </style>

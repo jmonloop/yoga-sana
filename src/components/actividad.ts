@@ -1,12 +1,7 @@
 import type { Actividad, Grupo } from '../data/sheet';
-import { CTAS, type Cta } from '../data/site';
+import { CTAS, type Cta, type Enlace } from '../data/site';
 
 export const ETIQUETA_EMPRESAS = 'PARA EMPRESAS';
-
-export interface Enlace {
-  href: string;
-  texto: string;
-}
 
 export function actividadesDe(actividades: Actividad[], grupo: Grupo): Actividad[] {
   return actividades.filter((actividad) => actividad.grupo === grupo).sort(porOrden);
@@ -14,6 +9,20 @@ export function actividadesDe(actividades: Actividad[], grupo: Grupo): Actividad
 
 function porOrden(a: Actividad, b: Actividad): number {
   return a.orden - b.orden;
+}
+
+export function enlacesDe(
+  actividades: Actividad[],
+  enlaces: Record<string, Enlace>,
+): Partial<Record<string, Enlace>> {
+  const nombres = new Set(actividades.map(({ nombre }) => nombre));
+  const huerfano = Object.keys(enlaces).find((nombre) => !nombres.has(nombre));
+  if (huerfano) {
+    throw new Error(
+      `No hay ninguna actividad llamada "${huerfano}" entre las que se van a mostrar, así que su enlace no se renderizaría. Revisa el nombre en la hoja o en la página.`,
+    );
+  }
+  return enlaces;
 }
 
 export function actividadCta(actividad: Actividad): Cta {

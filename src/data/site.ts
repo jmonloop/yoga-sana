@@ -7,6 +7,11 @@ export function waLink(mensaje: string): string {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
 }
 
+export interface Enlace {
+  href: string;
+  texto: string;
+}
+
 export interface Cta {
   message: string;
   label: string;

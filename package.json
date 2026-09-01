@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "check:pendiente": "node scripts/check-pendiente.mjs",
     "snapshot": "node --env-file-if-exists=.env scripts/fetch-snapshot.mjs",
     "images": "node scripts/process-images.mjs",
     "logo": "node scripts/trace-logo.mjs",

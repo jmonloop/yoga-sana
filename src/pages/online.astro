@@ -1,52 +1,47 @@
 ---
 import Base from '../layouts/Base.astro';
+import Banda from '../components/Banda.astro';
 import Section from '../components/Section.astro';
 import Foto from '../components/Foto.astro';
 import WaButton from '../components/WaButton.astro';
 import { CTAS } from '../data/site';
-
-const INCLUYE = [
-  'Una clase nueva cada semana.',
-  'Cuatro clases al mes.',
-  'Una hora de práctica más quince minutos de relajación.',
-  'Las repites las veces que quieras, el día y la hora que te vengan bien.',
-];
 ---
 
 <Base
-  title="Yoga online desde casa, 30 € al mes — Yoga Sana"
-  description="Yoga online desde donde estés: una clase nueva cada semana, cuatro al mes, una hora de práctica más quince minutos de relajación, para repetir cuando quieras. 30 € al mes."
+  title="Yoga online desde toda España, 30 € al mes — Yoga Sana"
+  description="Yoga online desde cualquier punto de España: una clase nueva cada semana, cuatro al mes, una hora de práctica más quince minutos de relajación, para repetir cuando quieras. 30 € al mes."
 >
-  <Section>
-    <div class="hero">
-      <div class="hero-texto">
-        <p class="hero-script">Desde donde estés</p>
-        <h1>Yoga online</h1>
-        <p class="lead">
-          Una clase nueva cada semana para practicar en casa, a tu ritmo y sin depender de
-          cuadrar horarios.
-        </p>
-        <WaButton {...CTAS.unirmeOnline} />
-      </div>
+  <Section eyebrow="Desde donde estés">
+    <Banda columnas="1fr 26rem">
+      <h1>Yoga online</h1>
+      <p class="lead">
+        Una clase nueva cada semana para practicar a tu ritmo, desde cualquier punto de
+        España y sin depender de cuadrar horarios.
+      </p>
+      <WaButton {...CTAS.unirmeOnline} />
       <Foto
+        slot="foto"
         nombre="yoga-al-aire-libre"
         sizes="(min-width: 60rem) 26rem, 92vw"
         alt="Mujer haciendo una extensión de espalda al aire libre, junto al río."
         eager
       />
-    </div>
+    </Banda>
   </Section>
 
-  <Section title="Qué incluye" muted>
+  <Section title="Qué incluye" muted animar>
     <ul class="incluye" role="list">
-      {INCLUYE.map((punto) => <li>{punto}</li>)}
+      <li>Una clase nueva cada semana.</li>
+      <li>Cuatro clases al mes.</li>
+      <li>Una hora de práctica más quince minutos de relajación.</li>
+      <li>Las repites las veces que quieras, el día y la hora que te vengan bien.</li>
     </ul>
     <p class="precio"><strong>30 €</strong> al mes</p>
     <p class="entrega">Cada semana te hago llegar la clase nueva directamente.</p>
     <WaButton {...CTAS.unirmeOnline} />
   </Section>
 
-  <Section title="¿Te queda alguna duda?">
+  <Section title="¿Te queda alguna duda?" animar>
     <p class="intro">
       Escríbeme por WhatsApp y te cuento cómo funciona antes de que te apuntes a nada.
     </p>
@@ -55,41 +50,6 @@ const INCLUYE = [
 </Base>
 
 <style>
-  .hero {
-    display: grid;
-    gap: 2.5rem;
-    align-items: center;
-  }
-
-  .hero-texto {
-    display: grid;
-    justify-items: start;
-    gap: 1rem;
-  }
-
-  .hero-script {
-    margin: 0;
-    font-family: var(--font-script);
-    font-size: var(--font-size-display);
-    line-height: 1.1;
-    color: var(--oliva);
-  }
-
-  .hero h1 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 5.5vw, 3.25rem);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: 0.04em;
-    color: var(--tinta);
-  }
-
-  .lead {
-    margin: 0;
-    font-size: 1.125rem;
-  }
-
   .incluye {
     display: grid;
     gap: 0.75rem;
@@ -126,16 +86,5 @@ const INCLUYE = [
   .entrega {
     margin: 0.25rem 0 2rem;
     color: var(--oliva-oscuro);
-  }
-
-  .intro {
-    margin: 0 0 2rem;
-  }
-
-  @media (min-width: 60rem) {
-    .hero {
-      grid-template-columns: 1fr 26rem;
-      gap: 4rem;
-    }
   }
 </style>
