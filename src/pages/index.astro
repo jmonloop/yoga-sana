@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import WaButton from '../components/WaButton.astro';
+import { MENSAJES_WA } from '../data/site';
+---
+
+<Base
+  title="Yoga Sana — Yoga en Catarroja (València)"
+  description="Clases de yoga, talleres y Sanergía en Catarroja. Tu espacio para respirar, conectar y reconectar contigo."
+>
+  <Section eyebrow="Un lugar para ti" title="Yoga Sana">
+    <p class="fade-up">
+      Tu espacio para respirar, conectar y reconectar contigo, en Catarroja (València).
+    </p>
+    <WaButton
+      message={MENSAJES_WA.empezar}
+      label="Quiero empezar"
+      ariaLabel="Escribir por WhatsApp para empezar en Yoga Sana"
+    />
+  </Section>
+</Base>

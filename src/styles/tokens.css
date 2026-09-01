@@ -1,0 +1,56 @@
+@import '@fontsource/cormorant-garamond/latin-400.css';
+@import '@fontsource/cormorant-garamond/latin-ext-400.css';
+@import '@fontsource/cormorant-garamond/latin-600.css';
+@import '@fontsource/cormorant-garamond/latin-ext-600.css';
+@import '@fontsource/jost/latin-400.css';
+@import '@fontsource/jost/latin-ext-400.css';
+@import '@fontsource/jost/latin-500.css';
+@import '@fontsource/jost/latin-ext-500.css';
+@import '@fontsource/parisienne/latin-400.css';
+@import '@fontsource/parisienne/latin-ext-400.css';
+
+:root {
+  --crema: #f7f3e9;
+  --marfil: #fdfbf6;
+  --oliva: #7b8560;
+  --tinta: #2e332a;
+  --salvia-tint: #e4e9da;
+
+  --salvia: #c3d0a8;
+  --lavanda: #c9afd4;
+  --pizarra: #8a9ca3;
+  --melocoton: #e8a96a;
+  --rosa: #cd8686;
+
+  --oliva-oscuro: #6a7353;
+  --pizarra-text: #627278;
+  --rosa-text: #9b5f5f;
+
+  --font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Jost', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --font-script: 'Parisienne', 'Snell Roundhand', cursive;
+
+  --tracking-display: 0.12em;
+
+  --max-width: 1120px;
+  --measure: 65ch;
+  --space-section: 64px;
+  --space-gutter: 16px;
+
+  --radius-pill: 999px;
+  --radius-card: 18px;
+  --radius-circle: 50%;
+}
+
+@media (min-width: 480px) {
+  :root {
+    --space-gutter: 24px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --space-section: 112px;
+    --space-gutter: 32px;
+  }
+}

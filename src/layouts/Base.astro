@@ -1,0 +1,426 @@
+---
+import WaButton from '../components/WaButton.astro';
+import { CANONICAL_ORIGIN, INSTAGRAM, INSTAGRAM_URL, MENSAJES_WA, waLink } from '../data/site';
+import '../styles/tokens.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, CANONICAL_ORIGIN).href;
+const year = new Date().getFullYear();
+
+const NAV_ITEMS = [
+  { label: 'Clases de Yoga', href: '/clases-de-yoga' },
+  { label: 'Talleres y Experiencias', href: '/talleres-y-experiencias' },
+  { label: 'Sanergía', href: '/sanergia' },
+  { label: 'Online', href: '/online' },
+  { label: 'Sobre mí', href: '/sobre-mi' },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="Yoga Sana, ir al inicio">
+          <span class="brand-wordmark" data-logo-placeholder>Yoga Sana</span>
+          <span class="brand-sub">Catarroja</span>
+        </a>
+
+        <nav class="nav-menu" id="nav-menu" aria-label="Principal">
+          <ul>
+            {
+              NAV_ITEMS.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    aria-current={Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        <div class="header-actions">
+          <div class="header-cta">
+            <WaButton
+              message={MENSAJES_WA.empezar}
+              label="Quiero empezar"
+              ariaLabel="Escribir por WhatsApp para empezar en Yoga Sana"
+            />
+          </div>
+          <button
+            class="nav-toggle"
+            id="nav-toggle"
+            type="button"
+            aria-controls="nav-menu"
+            aria-expanded="false"
+          >
+            <span class="visually-hidden">Menú de navegación</span>
+            <span class="nav-toggle-bars" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p class="footer-brand">Yoga Sana · Catarroja (València)</p>
+        <ul class="footer-contact">
+          <li>
+            <a
+              href={waLink(MENSAJES_WA.contacto)}
+              aria-label="Escribir a Yoga Sana por WhatsApp"
+              target="_blank"
+              rel="noopener">WhatsApp</a
+            >
+          </li>
+          <li>
+            <a
+              href={INSTAGRAM_URL}
+              aria-label={`Instagram de Yoga Sana, ${INSTAGRAM}`}
+              target="_blank"
+              rel="noopener">{INSTAGRAM}</a
+            >
+          </li>
+        </ul>
+        <ul class="footer-legal">
+          <li><a href="/aviso-legal">Aviso legal</a></li>
+          <li><a href="/privacidad">Privacidad</a></li>
+        </ul>
+        <p class="footer-copy">© {year} Yoga Sana. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <script>
+      const revealEntries = (
+        entries: IntersectionObserverEntry[],
+        observer: IntersectionObserver,
+      ) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      };
+
+      const initFadeUp = () => {
+        const targets = document.querySelectorAll('.fade-up');
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced || !('IntersectionObserver' in window)) {
+          targets.forEach((el) => el.classList.add('is-visible'));
+          return;
+        }
+        const observer = new IntersectionObserver(revealEntries, {
+          rootMargin: '0px 0px -10% 0px',
+        });
+        targets.forEach((el) => observer.observe(el));
+      };
+
+      const initNav = () => {
+        const toggle = document.getElementById('nav-toggle');
+        const menu = document.getElementById('nav-menu');
+        if (!toggle || !menu) return;
+        const setOpen = (open: boolean) => {
+          toggle.setAttribute('aria-expanded', String(open));
+          menu.toggleAttribute('data-open', open);
+        };
+        toggle.addEventListener('click', () =>
+          setOpen(toggle.getAttribute('aria-expanded') !== 'true'),
+        );
+        menu.addEventListener('click', (event) => {
+          if (event.target instanceof HTMLAnchorElement) setOpen(false);
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key !== 'Escape' || toggle.getAttribute('aria-expanded') !== 'true') return;
+          setOpen(false);
+          toggle.focus();
+        });
+      };
+
+      initNav();
+      initFadeUp();
+    </script>
+
+    <style is:global>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background-color: var(--crema);
+        color: var(--tinta);
+        font-family: var(--font-body);
+        font-size: 1.0625rem;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      img,
+      svg {
+        display: block;
+        max-width: 100%;
+      }
+
+      p {
+        max-width: var(--measure);
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .js .fade-up {
+        opacity: 0;
+        transform: translateY(1.5rem);
+        transition: opacity 600ms ease, transform 600ms ease;
+      }
+
+      .js .fade-up.is-visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .js .fade-up {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+    </style>
+
+    <style>
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        z-index: 10;
+        padding: 0.75em 1.25em;
+        background-color: var(--marfil);
+        color: var(--tinta);
+      }
+
+      .skip-link:focus {
+        left: var(--space-gutter);
+        top: 0.5rem;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background-color: var(--crema);
+        border-bottom: 1px solid var(--salvia-tint);
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        max-width: var(--max-width);
+        margin-inline: auto;
+        padding: 1rem var(--space-gutter);
+      }
+
+      .brand {
+        display: grid;
+        text-decoration: none;
+        color: var(--tinta);
+      }
+
+      .brand-wordmark {
+        font-family: var(--font-display);
+        font-size: clamp(1rem, 4.6vw, 1.5rem);
+        font-weight: 600;
+        letter-spacing: var(--tracking-display);
+        text-transform: uppercase;
+        line-height: 1.1;
+        white-space: nowrap;
+      }
+
+      .brand-sub {
+        font-size: 0.6875rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--oliva-oscuro);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .nav-menu ul {
+        display: flex;
+        gap: 1.75rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .nav-menu a {
+        color: var(--tinta);
+        font-size: 0.9375rem;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+      }
+
+      .nav-menu a:hover,
+      .nav-menu a:focus-visible,
+      .nav-menu a[aria-current='page'] {
+        border-bottom-color: var(--oliva);
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        background: none;
+        border: 1px solid var(--oliva);
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+      }
+
+      .nav-toggle-bars,
+      .nav-toggle-bars::before,
+      .nav-toggle-bars::after {
+        display: block;
+        width: 18px;
+        height: 1.5px;
+        background-color: var(--tinta);
+      }
+
+      .nav-toggle-bars::before,
+      .nav-toggle-bars::after {
+        content: '';
+        position: relative;
+      }
+
+      .nav-toggle-bars::before {
+        top: -6px;
+      }
+
+      .nav-toggle-bars::after {
+        top: 4.5px;
+      }
+
+      .site-footer {
+        background-color: var(--marfil);
+        border-top: 1px solid var(--salvia-tint);
+      }
+
+      .footer-inner {
+        max-width: var(--max-width);
+        margin-inline: auto;
+        padding: 3rem var(--space-gutter);
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .footer-inner ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.25rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .footer-inner a {
+        color: var(--tinta);
+      }
+
+      .footer-brand {
+        margin: 0;
+        font-size: 1.125rem;
+        font-family: var(--font-display);
+        letter-spacing: var(--tracking-display);
+        text-transform: uppercase;
+      }
+
+      .footer-copy {
+        margin: 1rem 0 0;
+        font-size: 0.875rem;
+        color: var(--oliva-oscuro);
+      }
+
+      @media (max-width: 1023px) {
+        .nav-menu {
+          display: none;
+          position: absolute;
+          inset-inline: 0;
+          top: 100%;
+          padding: 1rem var(--space-gutter) 1.5rem;
+          background-color: var(--crema);
+          border-bottom: 1px solid var(--salvia-tint);
+        }
+
+        .nav-menu[data-open] {
+          display: block;
+        }
+
+        .nav-menu ul {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .header-cta :global(.wa-button) {
+          padding-inline: 0.9em;
+          font-size: 0.6875rem;
+          letter-spacing: 0.02em;
+        }
+      }
+
+      @media (max-width: 479px) {
+        .header-inner {
+          gap: 0.5rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .nav-toggle {
+          display: none;
+        }
+      }
+    </style>
+  </body>
+</html>

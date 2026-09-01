@@ -1,0 +1,75 @@
+---
+import { waLink } from '../data/site';
+
+interface Props {
+  message: string;
+  label: string;
+  ariaLabel: string;
+  variant?: 'primary' | 'secondary';
+}
+
+const { message, label, ariaLabel, variant = 'primary' } = Astro.props;
+---
+
+<a
+  class:list={['wa-button', variant]}
+  href={waLink(message)}
+  aria-label={ariaLabel}
+  target="_blank"
+  rel="noopener"
+>
+  {label}
+</a>
+
+<style>
+  .wa-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    padding: 0.85em 1.9em;
+    border: 1px solid var(--oliva-oscuro);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 160ms ease, color 160ms ease;
+  }
+
+  .primary {
+    background-color: var(--oliva-oscuro);
+    color: var(--marfil);
+  }
+
+  .secondary {
+    background-color: transparent;
+    color: var(--tinta);
+  }
+
+  .primary:hover,
+  .primary:focus-visible {
+    background-color: var(--tinta);
+    border-color: var(--tinta);
+  }
+
+  .secondary:hover,
+  .secondary:focus-visible {
+    background-color: var(--salvia-tint);
+  }
+
+  .wa-button:focus-visible {
+    outline: 2px solid var(--tinta);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wa-button {
+      transition: none;
+    }
+  }
+</style>
