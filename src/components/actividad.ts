@@ -17,6 +17,7 @@ export function enlacesDe(
   actividades: Actividad[],
   enlaces: Record<string, Enlace>,
 ): Partial<Record<string, Enlace>> {
+  if (actividades.length === 0) return {};
   const nombres = new Set(actividades.map(({ nombre }) => nombre));
   const huerfano = Object.keys(enlaces).find((nombre) => !nombres.has(nombre));
   if (huerfano) {

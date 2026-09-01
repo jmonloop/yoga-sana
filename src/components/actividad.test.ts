@@ -94,8 +94,14 @@ describe('enlacesDe', () => {
     expect(() => enlacesDe(lista, { Sanergía: sanergia })).toThrow(/Sanergía/);
   });
 
-  it('throws when the activity exists but is not in the list being rendered', () => {
-    expect(() => enlacesDe([], { Sanergía: sanergia })).toThrow(/ninguna actividad/);
+  it('returns nothing to link when there is nothing to render, so hiding every row in the Sheet does not break the build', () => {
+    expect(enlacesDe([], { Sanergía: sanergia })).toEqual({});
+  });
+
+  it('still throws when the list has rows but none of them is the one named', () => {
+    const lista = [actividad({ nombre: 'Breathwork' })];
+
+    expect(() => enlacesDe(lista, { Sanergía: sanergia })).toThrow(/ninguna actividad/);
   });
 });
 
