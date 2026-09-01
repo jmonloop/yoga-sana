@@ -1,0 +1,65 @@
+name: Snapshot
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    name: Actualizar src/data/snapshot.json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Instalar Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Estado de la hoja de Google
+        env:
+          SHEET_ID: ${{ vars.PUBLIC_SHEET_ID }}
+        run: |
+          if [ -n "$SHEET_ID" ]; then
+            echo "Hoja publicada configurada: el snapshot se descarga de Google."
+          else
+            echo "::warning::Sin la variable PUBLIC_SHEET_ID: el snapshot se regenera desde seed/*.csv."
+          fi
+
+      - name: Descargar el snapshot
+        env:
+          PUBLIC_SHEET_ID: ${{ vars.PUBLIC_SHEET_ID }}
+          PUBLIC_SHEET_GID_ACTIVIDADES: ${{ vars.PUBLIC_SHEET_GID_ACTIVIDADES }}
+          PUBLIC_SHEET_GID_HORARIOS: ${{ vars.PUBLIC_SHEET_GID_HORARIOS }}
+          PUBLIC_SHEET_GID_AJUSTES: ${{ vars.PUBLIC_SHEET_GID_AJUSTES }}
+        run: pnpm snapshot
+
+      - name: Comprometer el snapshot si ha cambiado
+        run: |
+          if git diff --quiet -- src/data/snapshot.json; then
+            echo "El snapshot no ha cambiado, no hay nada que comprometer."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/data/snapshot.json
+          git commit -m 'chore: actualizar el snapshot de horarios y actividades'
+          git push origin HEAD:main

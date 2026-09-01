@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import Banda from '../components/Banda.astro';
+import Section from '../components/Section.astro';
+import Pendiente from '../components/Pendiente.astro';
+import WaButton from '../components/WaButton.astro';
+import { CTAS } from '../data/site';
+---
+
+<Base
+  title="Natalia, profesora de yoga en Catarroja (València) — Yoga Sana"
+  description="Sobre mí: soy Natalia, doy las clases de Yoga Sana en Catarroja (València), acompaño los talleres y las sesiones individuales, presenciales u online."
+>
+  <Section eyebrow="Encantada">
+    <div class="columna">
+      <h1>Hola, soy Natalia</h1>
+      <p class="lead">
+        Detrás de Yoga Sana estoy yo: doy las clases, acompaño los talleres y las sesiones
+        individuales, y soy quien te contesta al WhatsApp.
+      </p>
+      <WaButton {...CTAS.contacto} />
+    </div>
+  </Section>
+
+  <Section title="Mi historia" muted animar>
+    <Banda columnas="1fr 22rem">
+      <Pendiente>
+        aquí va tu texto largo sobre ti: quién eres, cómo llegaste al yoga, qué has
+        estudiado y con quién, cuánto tiempo llevas enseñando y cómo entiendes la práctica.
+        No existe texto original de partida y no se ha escrito nada inventado.
+      </Pendiente>
+      <Pendiente slot="foto">
+        aquí va tu foto. La única candidata del archivo de imágenes está sin confirmar y no
+        se publica en una página que dice «soy yo» una fotografía de una persona sin tener
+        la certeza de quién es. Envía la foto que quieras usar.
+      </Pendiente>
+    </Banda>
+  </Section>
+
+  <Section title="¿Empezamos?" animar>
+    <p class="intro">
+      No necesitas experiencia previa ni una forma física concreta. Escríbeme, me cuentas
+      qué buscas y vemos juntas por dónde empezar.
+    </p>
+    <WaButton {...CTAS.empezar} />
+    <p class="alternativa apunte">
+      Si prefieres mirar antes con calma: <a href="/clases-de-yoga">las clases de yoga</a>,
+      <a href="/talleres-y-experiencias">los talleres</a>, <a href="/sanergia">la Sanergía</a>
+      o <a href="/online">el yoga online</a>.
+    </p>
+  </Section>
+</Base>
+
+<style>
+  .alternativa {
+    margin: 1.5rem 0 0;
+  }
+</style>

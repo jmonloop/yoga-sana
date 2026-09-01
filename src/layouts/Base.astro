@@ -2,6 +2,7 @@
 import logoFigura from '../../assets/logo/logo-figura.svg?raw';
 import logoTexto from '../../assets/logo/logo-texto.svg?raw';
 import WaButton from '../components/WaButton.astro';
+import { altoRenderizado, imagen } from '../data/imagenes';
 import { CTAS, INSTAGRAM, INSTAGRAM_URL, waLink } from '../data/site';
 import '../styles/tokens.css';
 import '../styles/base.css';
@@ -15,6 +16,11 @@ const { title, description } = Astro.props;
 const path = Astro.originPathname;
 const canonical = new URL(path, Astro.site).href;
 const year = new Date().getFullYear();
+
+const portada = imagen('centro-sala');
+const OG_IMAGEN = new URL(`/img/${portada.name}-${portada.fallback}.jpg`, Astro.site).href;
+const OG_ALT =
+  'La sala de Yoga Sana en Catarroja, con esterillas verdes extendidas sobre el suelo.';
 
 const NAV_ITEMS = [
   { label: 'Clases de Yoga', href: '/clases-de-yoga' },
@@ -33,6 +39,23 @@ const NAV_ITEMS = [
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Yoga Sana" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={OG_IMAGEN} />
+    <meta property="og:image:width" content={String(portada.fallback)} />
+    <meta property="og:image:height" content={String(altoRenderizado(portada))} />
+    <meta property="og:image:alt" content={OG_ALT} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={OG_IMAGEN} />
+    <meta name="twitter:image:alt" content={OG_ALT} />
     <script is:inline>
       document.documentElement.classList.add('js');
     </script>

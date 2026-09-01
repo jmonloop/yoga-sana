@@ -1,0 +1,87 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Construir y comprobar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Instalar Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Tests
+        run: pnpm test
+
+      - name: Tipos
+        run: npx tsc --noEmit
+
+      - name: Astro check
+        run: pnpm check
+
+      - name: Estado de la hoja de Google
+        env:
+          SHEET_ID: ${{ vars.PUBLIC_SHEET_ID }}
+        run: |
+          if [ -n "$SHEET_ID" ]; then
+            echo "Hoja publicada configurada: la web se refrescará en vivo desde Google."
+          else
+            echo "::warning::Sin las variables PUBLIC_SHEET_*: la web solo mostrará el snapshot comprometido y no se refrescará en vivo."
+          fi
+
+      - name: Construir el sitio
+        env:
+          PUBLIC_SHEET_ID: ${{ vars.PUBLIC_SHEET_ID }}
+          PUBLIC_SHEET_GID_ACTIVIDADES: ${{ vars.PUBLIC_SHEET_GID_ACTIVIDADES }}
+          PUBLIC_SHEET_GID_HORARIOS: ${{ vars.PUBLIC_SHEET_GID_HORARIOS }}
+          PUBLIC_SHEET_GID_AJUSTES: ${{ vars.PUBLIC_SHEET_GID_AJUSTES }}
+        run: pnpm build
+
+      - name: Ningún texto pendiente
+        run: pnpm check:pendiente
+
+      - name: Subir el sitio construido
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Publicar en GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar
+        id: deployment
+        uses: actions/deploy-pages@v5

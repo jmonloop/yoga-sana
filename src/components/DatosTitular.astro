@@ -1,0 +1,70 @@
+---
+import Pendiente from './Pendiente.astro';
+import { CTAS, NIF, waLink } from '../data/site';
+---
+
+<dl class="datos">
+  <dt>Titular</dt>
+  <dd>
+    <Pendiente>
+      aquí van tu nombre y tus apellidos completos, tal y como figuran en tu DNI. La ley
+      obliga a publicarlos.
+    </Pendiente>
+  </dd>
+
+  <dt>NIF</dt>
+  <dd>{NIF}</dd>
+
+  <dt>Domicilio</dt>
+  <dd>
+    <Pendiente>
+      aquí va la dirección completa del centro en Catarroja: calle, número, código postal
+      y población.
+    </Pendiente>
+  </dd>
+
+  <dt>Contacto</dt>
+  <dd>
+    <a
+      href={waLink(CTAS.contacto.message)}
+      aria-label={`WhatsApp: ${CTAS.contacto.ariaSuffix}`}
+      target="_blank"
+      rel="noopener">WhatsApp +34 677 808 098</a
+    >
+  </dd>
+
+  <dt>Sitio web</dt>
+  <dd>yogasana.es</dd>
+</dl>
+
+<style>
+  .datos {
+    display: grid;
+    gap: 0.35rem 1.5rem;
+    max-width: var(--measure);
+    margin: 0 0 2rem;
+  }
+
+  dt {
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.8125rem;
+    color: var(--oliva-oscuro);
+  }
+
+  dd {
+    margin: 0 0 0.75rem;
+  }
+
+  @media (min-width: 40rem) {
+    .datos {
+      grid-template-columns: 9rem 1fr;
+      align-items: baseline;
+    }
+
+    dd {
+      margin-bottom: 0.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,151 @@
+---
+import Base from '../layouts/Base.astro';
+import Legal from '../components/Legal.astro';
+import DatosTitular from '../components/DatosTitular.astro';
+import { toSheetConfig } from '../data/sheet-config';
+
+const ACTUALIZADO = '2 de septiembre de 2026';
+const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
+---
+
+<Base
+  title="Política de privacidad — Yoga Sana, Catarroja (València)"
+  description="Política de privacidad de yogasana.es: esta web no recoge datos, no usa cookies ni analítica, y explica qué recibe Google cuando tu navegador consulta los horarios."
+>
+  <Legal titulo="Política de privacidad">
+    <p class="lead">
+      Esta web no recoge ningún dato tuyo, no usa cookies y no lleva analítica. Lo único que
+      sale de aquí hacia un tercero es una consulta a Google para comprobar si los horarios
+      han cambiado, y eso se explica abajo con detalle.
+    </p>
+
+    <h2>Quién es la responsable</h2>
+    <DatosTitular />
+
+    <h2>Qué datos recojo con esta web</h2>
+    <p>
+      Ninguno. No hay formulario de contacto, ni registro, ni área privada, ni comentarios,
+      ni newsletter. No hay ninguna herramienta de analítica —ni Google Analytics ni
+      ninguna otra— ni píxeles de seguimiento de redes sociales.
+    </p>
+    <p>
+      Las tipografías se sirven desde esta misma web, no desde Google Fonts, así que
+      visitarla no genera ninguna petición a un servidor de tipografías.
+    </p>
+
+    <h2>Cookies</h2>
+    <p>
+      Esta web no instala cookies, ni propias ni de terceros, ni utiliza almacenamiento
+      local del navegador para identificarte. Por eso no verás ningún banner de cookies: no
+      hay nada que consentir. Si alguna vez esto cambia, se pedirá tu consentimiento antes.
+    </p>
+
+    <h2>Google Sheets y tu dirección IP</h2>
+    <p>
+      Los horarios y las actividades de esta web se editan en una hoja de cálculo de Google
+      publicada como CSV. Es la única conexión automática con un tercero que puede hacer tu
+      navegador mientras la miras, así que conviene explicarla entera.
+    </p>
+    <p>
+      La página se pinta con una copia de esa hoja guardada dentro del propio sitio: la ves
+      completa sin pedirle nada a nadie. Después, si la hoja está configurada, tu navegador
+      pide ese CSV directamente a <code>docs.google.com</code> para comprobar si hay algún
+      cambio de última hora, y solo entonces vuelve a dibujar el horario.
+    </p>
+    <p>
+      Esa petición la hace tu navegador, no un servidor mío. Eso significa que
+      <strong>Google recibe tu dirección IP</strong>, la fecha y la hora, y los datos que tu
+      navegador manda en cualquier petición: el tipo de navegador y el idioma. No recibe
+      ningún dato que yo le envíe sobre ti, porque yo no tengo ninguno.
+    </p>
+    <p>
+      La petición se hace sin credenciales, de modo que tu navegador no envía a Google las
+      cookies que puedas tener de tu propia sesión de Google, ni Google puede guardar cookies
+      a través de ella. Aun así, esa dirección IP la trata Google conforme a su propia
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener"
+        >política de privacidad</a
+      >, sobre la que no tengo ningún control.
+    </p>
+    {
+      hojaConfigurada ? (
+        <p>
+          <strong>Estado actual:</strong> en la versión publicada de esta web la hoja sí está
+          configurada, así que esa petición a Google se realiza en cada visita.
+        </p>
+      ) : (
+        <p>
+          <strong>Estado actual:</strong> la hoja todavía no está configurada en la versión
+          publicada de esta web. El código que haría esa petición ni siquiera se incluye en
+          la página, así que <strong>ahora mismo no se hace ninguna petición a Google</strong>.
+          Este apartado sigue aquí porque en cuanto se configure la hoja la petición pasará a
+          hacerse, y esta misma página lo dirá.
+        </p>
+      )
+    }
+    <p>
+      Si bloqueas esa petición, o navegas con JavaScript desactivado, la web sigue
+      funcionando igual: verás la copia guardada del horario.
+    </p>
+
+    <h2>Alojamiento</h2>
+    <p>
+      Esta web está alojada en GitHub Pages (GitHub, Inc.). Como cualquier servidor web, su
+      infraestructura recibe tu dirección IP al servirte cada página e imagen, y la trata
+      conforme a la
+      <a
+        href="https://docs.github.com/es/site-policy/privacy-policies/github-privacy-statement"
+        target="_blank"
+        rel="noopener">declaración de privacidad de GitHub</a
+      >. No tengo acceso a esos registros.
+    </p>
+
+    <h2>WhatsApp e Instagram</h2>
+    <p>
+      Todos los botones de esta web abren una conversación de WhatsApp con un mensaje ya
+      escrito. Nada se envía hasta que tú lo envías. Cuando me escribes, veo tu número de
+      teléfono y lo que me cuentes, y la conversación queda en mi teléfono como cualquier
+      otra conversación de WhatsApp. La uso únicamente para atenderte: informarte, organizar
+      tu plaza y responderte. La base para tratar esos datos es tu propia petición.
+    </p>
+    <p>
+      Esa conversación se rige además por las condiciones y la política de privacidad de
+      WhatsApp, y lo mismo ocurre con Instagram si decides escribirme por ahí. Son servicios
+      de terceros: esta web solo enlaza a ellos, no incrusta nada suyo ni carga nada desde
+      sus servidores.
+    </p>
+
+    <h2>Cuánto tiempo conservo tus datos</h2>
+    <p>
+      Las conversaciones de WhatsApp se conservan mientras dure la relación y mientras
+      puedan hacer falta para atenderte. Si me pides que borre la conversación, la borro.
+    </p>
+
+    <h2>Con quién comparto tus datos</h2>
+    <p>
+      Con nadie. No cedo, vendo ni comparto datos con terceros, y no se hacen
+      transferencias internacionales por mi parte. Las únicas empresas implicadas son las
+      que prestan los servicios descritos arriba —GitHub como alojamiento, Google en la
+      consulta del horario y WhatsApp en la conversación—, cada una con su propia política.
+    </p>
+
+    <h2>Tus derechos</h2>
+    <p>
+      Como esta web no guarda datos tuyos, no hay nada aquí que consultar, rectificar ni
+      suprimir. Sobre lo que sí me hayas dado tú al escribirme, tienes derecho de acceso,
+      rectificación, supresión, oposición, limitación del tratamiento y portabilidad:
+      escríbeme por WhatsApp y lo resolvemos. Si crees que no lo he hecho bien, puedes
+      reclamar ante la
+      <a href="https://www.aepd.es" target="_blank" rel="noopener"
+        >Agencia Española de Protección de Datos</a
+      >.
+    </p>
+
+    <h2>Cambios en esta política</h2>
+    <p>
+      Si cambia algo de lo anterior —por ejemplo, si algún día se añade una herramienta de
+      analítica— se actualizará esta página y cambiará la fecha de abajo.
+    </p>
+
+    <p class="actualizado apunte">Última actualización: {ACTUALIZADO}.</p>
+  </Legal>
+</Base>

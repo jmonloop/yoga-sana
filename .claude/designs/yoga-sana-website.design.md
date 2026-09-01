@@ -428,7 +428,8 @@ and has the WhatsApp-status image she used to build in Canva.
 ## 9. Repo, build, hosting
 
 ```
-.github/workflows/   snapshot.yml (cron + push), deploy.yml — TBD
+.github/workflows/   snapshot.yml (push + daily cron, commits the snapshot)
+                     deploy.yml (build, checks, GitHub Pages)
 seed/                horarios.csv · actividades.csv · ajustes.csv
 sources/             images/ — the untouched original archive (15 files)
 assets/icons/        14 marks: 6 traced poses (hatha, dinamico, suave,
@@ -436,15 +437,56 @@ assets/icons/        14 marks: 6 traced poses (hatha, dinamico, suave,
                      espiral, familia, camilla, cuencos, loto-manos, loto)
 assets/logo/         logo-figura.svg · logo-texto.svg — traced, `pnpm logo`
 scripts/             fetch-snapshot.mjs · process-images.mjs · trace-logo.mjs
+                     check-pendiente.mjs (+ a .test.ts for the two .mjs that
+                     have logic worth testing)
 src/data/            snapshot.json · sheet.ts · site.ts · sheet-config.ts
-                     live-refresh.ts · snapshot.ts (+ a .test.ts each)
-src/components/      Icono · WaButton · Section (Horario · ActividadCard TBD)
-src/layouts/         Base.astro
-src/pages/           index (clases-de-yoga · talleres-y-experiencias · sanergia
-                     online · sobre-mi · aviso-legal · privacidad all TBD)
+                     live-refresh.ts · snapshot.ts · imagenes.ts · seo.ts
+                     (+ a .test.ts each except snapshot.json/imagenes.ts)
+src/components/      Section · Banda · Foto · Icono · WaButton · Tarjetas
+                     ActividadCard · Horario · DescargarHorario
+                     Pendiente · Legal · DatosTitular
+                     (+ actividad.ts · horario-grid.ts · horario-markup.ts ·
+                     horario-png.ts, the pure logic behind them, each tested)
+src/layouts/         Base.astro — head (canonical, Open Graph, Twitter),
+                     header, footer, nav
+src/pages/           index · clases-de-yoga · talleres-y-experiencias ·
+                     sanergia · online · sobre-mi · aviso-legal · privacidad
+                     sitemap.xml.ts · robots.txt.ts (generated, no integration)
 src/styles/          tokens.css · base.css
 public/img/          62 committed avif/webp/jpg derivatives, 1.16 MB
 ```
+
+**No `@astrojs/sitemap`.** `src/data/seo.ts` builds `sitemap.xml` and `robots.txt`
+from `Object.keys(import.meta.glob('./**/*.astro'))` in two three-line endpoints —
+new pages appear in the sitemap with no config, and it is less code than the
+integration's configuration would have been. Both use `Astro.site`, so
+`https://yogasana.es` is declared once, in `astro.config.mjs`.
+
+**Open Graph image:** `/img/centro-sala-960.jpg`, the primary "nuestro centro" shot —
+960×612, below the 1200×630 that Facebook recommends but well over its 200×200 floor.
+It is site-wide, not per page. Chosen because it is unambiguously hers (§10 provenance),
+shows the actual room, and depicts no person: the portrait candidate is still
+unconfirmed. A purpose-made 1200×630 card is the obvious later upgrade.
+
+**Node is pinned to 24 in both workflows** and `packageManager` pins pnpm in
+`package.json`. Not cosmetic: `scripts/*.mjs` import `src/data/*.ts` directly and rely
+on Node's native TypeScript stripping, which throws `ERR_UNKNOWN_FILE_EXTENSION` on
+Node 20.
+
+**`deploy.yml` passes `PUBLIC_SHEET_ID` and the three `PUBLIC_SHEET_GID_*`** from
+repository *variables* (not secrets — nothing here is secret). Without them Vite
+dead-code-eliminates the whole live-refresh path and the deployed site would silently
+never refresh; the workflow emits a `::warning::` when they are unset, which is the
+state until the Sheet exists. The build is gated on `pnpm check:pendiente`, so no page
+carrying `PENDIENTE DE TEXTO` can reach `yogasana.es`. **That gate fails today, on
+purpose** — `/sanergia`, `/sobre-mi`, `/aviso-legal` and `/privacidad` all carry
+placeholders waiting on the owner.
+
+**The two workflows are not chained.** A push made by `GITHUB_TOKEN` does not trigger
+another workflow, so the snapshot commit cannot itself trigger a deploy. Instead both
+run on their own cron — snapshot at 04:17 UTC, deploy at 06:17 UTC — so a snapshot
+change goes live on the same night. Visitors get fresh content from the live fetch
+regardless; the committed snapshot only governs the instant paint.
 
 **Hosting: €0** on GitHub Pages.
 
@@ -733,6 +775,15 @@ themeable, no image weight.
   true if nobody adds Google Analytics later. If she wants numbers, GoatCounter's free
   tier is cookieless.
 
+**Both pages are built.** `/privacidad` also discloses GitHub Pages as the host, which
+receives the visitor's IP like any web server, and states that the Sheet fetch carries
+no cookies — `fetch()` defaults to `credentials: 'same-origin'`, so a cross-origin
+request sends none and stores none. The Google-Sheets section renders one of two
+states, decided at build time by whether `PUBLIC_SHEET_*` is configured: today it says
+plainly that no request to Google is made at all, because the live-refresh module is
+dead-code-eliminated out of the bundle. It flips to "this request happens on every
+visit" the moment the Sheet is wired up, with no edit.
+
 ---
 
 ## 12. Risks and unverified claims
@@ -764,16 +815,49 @@ only; Valencian is a possible later addition).
 
 ## 14. Next steps
 
-1. **Register `yogasana.es`** — confirmed available on 2026-09-01, and it is the only
-   part of this project someone else can take. Then point DNS at GitHub Pages per §9.
-2. Create the Google Sheet by importing `seed/*.csv` into the three tabs, publish each
-   as CSV, verify CORS against the real URLs.
-3. Request from the owner: her full legal name and the studio address for the aviso
-   legal, confirmation that `yoga1` is her, and whether class durations should be shown
-   (`hora_fin`).
-4. Draw or source the 7 workshop icons to match the traced silhouettes' weight.
-5. Scaffold Astro, tokens, layout, components.
-6. Build `/clases-de-yoga` first — it exercises the Sheet pipeline, the grid, and the
-   export in one page.
-7. Remaining pages, legal pages, image processing.
-8. Deploy to GitHub Pages; test the export on the owner's actual phone.
+All eight pages are built and the CI is wired. What remains is not code.
+
+### Blocking — only the owner can supply these
+
+1. **Her full legal name and the studio address.** `/aviso-legal` and `/privacidad`
+   carry a loud `PENDIENTE DE TEXTO` box in place of each. LSSI-CE requires both, and
+   the NIF is already published on that page, as the law requires of a sole trader —
+   she should know it is public.
+2. **The long "Sobre mí" text**, and the two Sanergía texts (what Sanergía is, and
+   Espacio Raíz). Nothing was written for her: inventing a biography, a training or a
+   lineage for a real person is not a gap a build task can fill.
+3. **A portrait for `/sobre-mi`.** `yoga1` / `meditacion-sentada` was earmarked for it
+   but §10 still flags "confirm this is Natalia", so the page carries an image
+   placeholder instead. An unconfirmed photograph of a person under the words "soy yo"
+   is not a risk worth taking.
+4. **Image provenance.** §10 reads `yoga2` and `consciencia-corporal` as stock or AI.
+   If either is licensed stock, the licence needs checking before publishing; if their
+   origin is unknown, replace them. The aviso legal deliberately makes no claim about
+   who owns which image.
+
+Until 1–3 are answered, `pnpm check:pendiente` fails and **the deploy is blocked by
+design** — placeholder copy cannot reach `yogasana.es`.
+
+### Blocking — infrastructure
+
+5. **Register `yogasana.es`** (confirmed available on 2026-09-01) and point DNS at
+   GitHub Pages per §9. Set the custom domain in *Settings → Pages* — **not** a
+   `public/CNAME` file, which this deployment style ignores — then tick Enforce HTTPS
+   once the certificate provisions.
+6. **Enable GitHub Pages with source = GitHub Actions** in *Settings → Pages*, before
+   the first `deploy.yml` run.
+7. **Create the Google Sheet** from `seed/*.csv`, publish each of the three tabs as
+   CSV, and set `PUBLIC_SHEET_ID` + the three `PUBLIC_SHEET_GID_*` as repository
+   variables. Then re-verify the CORS claim in §12 against the real URLs, and confirm
+   `pnpm snapshot` does not 404. Until this is done the site runs entirely off the
+   committed snapshot and makes no request to Google at all — which `/privacidad`
+   states, and stops stating automatically once the variables are set.
+
+### Then
+
+8. **Test the PNG export on her actual Android phone**, including from the Instagram
+   in-app browser — §12 lists that as an unverified belief, not a measurement.
+9. Ask whether class durations should be shown (`hora_fin`, §8).
+10. Optional: a purpose-made 1200×630 Open Graph card, and a daylight reshoot of two
+    of the "nuestro centro" photos — §10 calls that the single highest-value thing she
+    could do for the site's look.

@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Banda from '../components/Banda.astro';
 import Section from '../components/Section.astro';
 import Foto from '../components/Foto.astro';
+import Pendiente from '../components/Pendiente.astro';
 import WaButton from '../components/WaButton.astro';
 import { CTAS } from '../data/site';
 ---
@@ -27,22 +28,21 @@ import { CTAS } from '../data/site';
   </Section>
 
   <Section title="Qué es la Sanergía" muted animar>
-    <p class="pendiente">
-      PENDIENTE DE TEXTO — Natalia: aquí va tu explicación larga de la Sanergía (qué es, en
-      qué consiste una sesión, cómo se desarrolla, para quién es y tu formación en la
-      técnica). No existe texto original de partida y no se ha escrito nada inventado.
-      Sustituir antes de publicar.
-    </p>
+    <Pendiente>
+      aquí va tu explicación larga de la Sanergía (qué es, en qué consiste una sesión, cómo
+      se desarrolla, para quién es y tu formación en la técnica). No existe texto original de
+      partida y no se ha escrito nada inventado.
+    </Pendiente>
   </Section>
 
   <Section title="Espacio Raíz" animar>
     <Banda columnas="1fr 24rem">
       <p>Espacio Raíz es el acompañamiento individual de Yoga Sana.</p>
-      <p class="pendiente">
-        PENDIENTE DE TEXTO — Natalia: aquí va la descripción de Espacio Raíz (en qué
-        consiste el acompañamiento, cómo se organiza y a quién va dirigido). No existe texto
-        original de partida y no se ha escrito nada inventado. Sustituir antes de publicar.
-      </p>
+      <Pendiente>
+        aquí va la descripción de Espacio Raíz (en qué consiste el acompañamiento, cómo se
+        organiza y a quién va dirigido). No existe texto original de partida y no se ha
+        escrito nada inventado.
+      </Pendiente>
       <WaButton {...CTAS.espacioRaiz} />
       <Foto
         slot="foto"
@@ -66,13 +66,5 @@ import { CTAS } from '../data/site';
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem 1rem;
-  }
-
-  .pendiente {
-    padding: 1rem 1.25rem;
-    border: 2px dashed var(--rosa-text);
-    border-radius: var(--radius-card);
-    color: var(--rosa-text);
-    font-weight: 500;
   }
 </style>

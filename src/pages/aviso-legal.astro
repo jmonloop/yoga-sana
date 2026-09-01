@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import Legal from '../components/Legal.astro';
+import DatosTitular from '../components/DatosTitular.astro';
+import { INSTAGRAM, INSTAGRAM_URL } from '../data/site';
+
+const ACTUALIZADO = '2 de septiembre de 2026';
+---
+
+<Base
+  title="Aviso legal — Yoga Sana, Catarroja (València)"
+  description="Aviso legal de yogasana.es: datos identificativos de la titular, condiciones de uso del sitio, propiedad intelectual y legislación aplicable."
+>
+  <Legal titulo="Aviso legal">
+    <p class="lead">
+      Información exigida por la Ley 34/2002, de servicios de la sociedad de la
+      información y de comercio electrónico (LSSI-CE), sobre quién está detrás de
+      <strong>yogasana.es</strong> y en qué condiciones se usa este sitio.
+    </p>
+
+    <h2>Datos identificativos</h2>
+    <DatosTitular />
+
+    <h2>Objeto de este sitio</h2>
+    <p>
+      yogasana.es es una web informativa sobre las clases de yoga, los talleres y las
+      sesiones individuales de Yoga Sana, en Catarroja (València). No se venden productos
+      ni servicios a través de la web: no hay carrito, ni pasarela de pago, ni formulario
+      de contacto. Las reservas y las consultas se hacen por WhatsApp, hablando
+      directamente con la titular.
+    </p>
+    <p>
+      Los horarios, los precios y las actividades publicados son informativos y pueden
+      cambiar. Lo que se confirme en la conversación de WhatsApp es lo que vale.
+    </p>
+
+    <h2>Condiciones de uso</h2>
+    <p>
+      Navegar por esta web te da la condición de usuario e implica que aceptas este aviso
+      legal. El acceso es libre y gratuito, y no requiere registro. Te comprometes a usar
+      el sitio conforme a la ley y a no realizar acciones que puedan dañarlo o impedir su
+      funcionamiento normal.
+    </p>
+
+    <h2>Propiedad intelectual</h2>
+    <p>
+      Los contenidos de este sitio —textos, fotografías, ilustraciones, iconos, logotipo y
+      código— están protegidos por la normativa de propiedad intelectual e industrial. No
+      se permite reproducirlos, distribuirlos ni transformarlos sin autorización previa por
+      escrito, salvo el uso personal que permite la ley. Puedes enlazar libremente a
+      cualquier página de este sitio.
+    </p>
+
+    <h2>Responsabilidad</h2>
+    <p>
+      Se cuida que la información publicada sea correcta y esté actualizada, pero puede
+      contener errores u omisiones, o quedar desfasada entre una actualización y otra. No
+      se asume responsabilidad por las decisiones que tomes a partir de ella sin
+      confirmarla.
+    </p>
+    <p>
+      Tampoco se garantiza que el sitio esté disponible de forma ininterrumpida ni libre de
+      fallos: depende de servicios de terceros —el alojamiento, tu conexión— que están
+      fuera del control de la titular.
+    </p>
+    <p>
+      Las clases, los talleres y las sesiones que se describen aquí son prácticas de
+      bienestar. No sustituyen a un diagnóstico, un tratamiento ni un consejo médico. Si
+      tienes una lesión, estás embarazada o sigues algún tratamiento, consúltalo con tu
+      profesional sanitario y cuéntamelo antes de empezar.
+    </p>
+
+    <h2>Enlaces a otros sitios</h2>
+    <p>
+      Esta web enlaza a WhatsApp y a
+      <a href={INSTAGRAM_URL} target="_blank" rel="noopener">{INSTAGRAM}</a> en Instagram.
+      Son servicios de terceros con sus propias condiciones y políticas de privacidad, sobre
+      los que la titular no tiene ningún control ni responsabilidad.
+    </p>
+
+    <h2>Protección de datos</h2>
+    <p>
+      Esta web no recoge datos personales. Cómo se tratan los datos de quien escribe por
+      WhatsApp, y qué recibe Google cuando el navegador consulta los horarios, se explica en
+      la <a href="/privacidad">política de privacidad</a>.
+    </p>
+
+    <h2>Legislación aplicable</h2>
+    <p>
+      Este aviso legal se rige por la legislación española. Para cualquier controversia
+      serán competentes los juzgados y tribunales que correspondan conforme a la normativa
+      aplicable.
+    </p>
+
+    <p class="actualizado apunte">Última actualización: {ACTUALIZADO}.</p>
+  </Legal>
+</Base>
+
