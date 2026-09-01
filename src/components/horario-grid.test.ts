@@ -1,30 +1,34 @@
 import { describe, expect, it } from 'vitest';
-import { buildGrid, slotAriaLabel, slotMessage, type Chip, type Grid } from './horario-grid';
+import { buildGrid, type Chip, type Grid } from './horario-grid';
 import { SNAPSHOT } from '../data/snapshot';
-import type { Ajustes, Horario } from '../data/sheet';
+import type { Actividad, Ajustes, Horario } from '../data/sheet';
 
 function slot(dia: string, hora: string, actividad: string, nota = ''): Horario {
   return { dia, hora, actividad, nota };
 }
 
-function gridOf(horarios: Horario[], ajustes: Ajustes = {}): Grid {
-  return buildGrid({ actividades: [], horarios, ajustes });
+function gridOf(horarios: Horario[], ajustes: Ajustes = {}, actividades: Actividad[] = []): Grid {
+  return buildGrid({ actividades, horarios, ajustes });
 }
 
 function chipsAt(grid: Grid, hora: string, dia: string): Chip[] {
   const row = grid.rows.find((candidate) => candidate.hora === hora);
-  return row?.cells.find((cell) => cell.dia === dia)?.chips ?? [];
+  return row?.cells[grid.dias.indexOf(dia)] ?? [];
 }
 
 function allChips(grid: Grid): Chip[] {
-  return grid.rows.flatMap((row) => row.cells).flatMap((cell) => cell.chips);
+  return grid.rows.flatMap((row) => row.cells).flat();
 }
 
-const SEED = buildGrid(SNAPSHOT);
-
-const MENSAJE_JUEVES =
-  '¡Hola Natalia! Me gustaría reservar plaza en Yoga Infantil del Jueves a las 17:30.' +
-  ' ¿Queda sitio?';
+const SEPTIEMBRE = [
+  slot('Lunes', '9:30', 'Yoga Sana'),
+  slot('Viernes', '10:00', 'Yoga Relajante'),
+  slot('Lunes', '11:00', 'Yoga Suave'),
+  slot('Jueves', '17:30', 'Yoga Infantil'),
+  slot('Viernes', '18:00', 'Yoga Relajante'),
+  slot('Lunes', '19:00', 'Yoga Sana'),
+  slot('Viernes', '20:00', 'Meditación guiada', 'Reserva anticipada'),
+];
 
 describe('columns', () => {
   it('orders the days canonically whatever order the sheet rows arrive in', () => {
@@ -51,6 +55,18 @@ describe('columns', () => {
 
     expect(grid.dias).toEqual(['Domingo', 'Festivos']);
   });
+
+  it('gathers two spellings of an unrecognised day into one column', () => {
+    const grid = gridOf([
+      slot('Festivos', '10:00', 'Taller de respiración'),
+      slot('festivos', '12:00', 'Baño de cuencos'),
+    ]);
+
+    expect(grid.dias).toEqual(['Festivos']);
+    expect(chipsAt(grid, '12:00', 'Festivos').map((chip) => chip.actividad)).toEqual([
+      'Baño de cuencos',
+    ]);
+  });
 });
 
 describe('rows', () => {
@@ -64,16 +80,10 @@ describe('rows', () => {
     expect(grid.rows.map((row) => row.hora)).toEqual(['9:30', '20:00', 'a convenir']);
   });
 
-  it('renders only the times that have a class, so no empty rows appear', () => {
-    expect(SEED.rows.map((row) => row.hora)).toEqual([
-      '9:30',
-      '10:00',
-      '11:00',
-      '17:30',
-      '18:00',
-      '19:00',
-      '20:00',
-    ]);
+  it('invents no row for a time nobody teaches at', () => {
+    const grid = gridOf([slot('Lunes', '9:30', 'Yoga Sana'), slot('Lunes', '11:00', 'Yoga Suave')]);
+
+    expect(grid.rows.map((row) => row.hora)).toEqual(['9:30', '11:00']);
   });
 
   it('stacks two classes that share a day and a time instead of overwriting', () => {
@@ -87,17 +97,19 @@ describe('rows', () => {
       'Meditación guiada',
     ]);
   });
+
+  it('leaves a day without a class at that time empty', () => {
+    const grid = gridOf([slot('Lunes', '9:30', 'Yoga Sana'), slot('Martes', '11:00', 'Yoga Suave')]);
+
+    expect(chipsAt(grid, '9:30', 'Martes')).toEqual([]);
+  });
 });
 
 describe('band separator', () => {
-  it('breaks the band exactly once in the seed grid, where the morning ends', () => {
-    const banded = SEED.rows.filter((row) => row.band).map((row) => row.hora);
+  it('breaks the band where the morning ends and not on the hourly evening steps', () => {
+    const grid = gridOf(SEPTIEMBRE);
 
-    expect(banded).toEqual(['17:30']);
-  });
-
-  it('leaves the one-hour step from 19:00 to 20:00 unbroken', () => {
-    expect(SEED.rows.find((row) => row.hora === '20:00')?.band).toBe(false);
+    expect(grid.rows.filter((row) => row.separada).map((row) => row.hora)).toEqual(['17:30']);
   });
 
   it('breaks the band on a gap of more than two hours and not on exactly two', () => {
@@ -107,59 +119,92 @@ describe('band separator', () => {
       slot('Lunes', '13:01', 'Yoga Suave'),
     ]);
 
-    expect(grid.rows.map((row) => row.band)).toEqual([false, false, true]);
+    expect(grid.rows.map((row) => row.separada)).toEqual([false, false, true]);
+  });
+
+  it('draws no band above an unparseable time, having no gap to express', () => {
+    const grid = gridOf([
+      slot('Lunes', '9:30', 'Yoga Sana'),
+      slot('Lunes', 'a convenir', 'Sanergía'),
+    ]);
+
+    expect(grid.rows.map((row) => row.separada)).toEqual([false, false]);
   });
 });
 
 describe('chips', () => {
-  it('gives every seed class the colour pinned in ajustes', () => {
-    const colores = Object.fromEntries(allChips(SEED).map((chip) => [chip.actividad, chip.color]));
-
-    expect(colores).toEqual({
-      'Yoga Sana': 'salvia',
-      'Yoga Suave': 'lavanda',
-      'Yoga Relajante': 'pizarra',
-      'Yoga Infantil': 'melocoton',
-      'Meditación guiada': 'rosa',
-    });
-  });
-
-  it('carries the free-text nota of the only slot that has one', () => {
-    const withNota = allChips(SEED).filter((chip) => chip.nota !== '');
-
-    expect(withNota).toHaveLength(1);
-    expect(withNota[0]).toMatchObject({
-      actividad: 'Meditación guiada',
-      nota: 'Reserva anticipada',
-    });
-  });
-
-  it('books the exact slot over WhatsApp', () => {
-    expect(slotMessage(slot('Jueves', '17:30', 'Yoga Infantil'))).toBe(MENSAJE_JUEVES);
-    expect(chipsAt(SEED, '17:30', 'Jueves')[0]?.href).toBe(
-      `https://wa.me/34677808098?text=${encodeURIComponent(MENSAJE_JUEVES)}`,
+  it('takes the colour pinned in ajustes over the one on the activity card', () => {
+    const card: Actividad = {
+      nombre: 'Yoga Suave',
+      grupo: 'yoga',
+      descripcion: '',
+      etiqueta: '',
+      icono: 'suave',
+      orden: 1,
+      color: 'melocoton',
+      mensajeWa: null,
+    };
+    const grid = gridOf(
+      [slot('Lunes', '11:00', 'Yoga Suave'), slot('Lunes', '9:30', 'Yoga Sana')],
+      { 'color.Yoga Suave': 'lavanda' },
+      [card],
     );
+
+    expect(chipsAt(grid, '11:00', 'Lunes')[0]?.color).toBe('lavanda');
   });
 
-  it('names the class, day and time in the accessible name', () => {
-    expect(slotAriaLabel(slot('Jueves', '17:30', 'Yoga Infantil'))).toBe(
+  it('falls back to the colour on the activity card, then to the palette in order', () => {
+    const card: Actividad = {
+      nombre: 'Yoga Relajante',
+      grupo: 'yoga',
+      descripcion: '',
+      etiqueta: '',
+      icono: 'relajante',
+      orden: 1,
+      color: 'pizarra',
+      mensajeWa: null,
+    };
+    const grid = gridOf(
+      [slot('Lunes', '9:30', 'Yoga Relajante'), slot('Lunes', '11:00', 'Yoga Sana')],
+      {},
+      [card],
+    );
+
+    expect(chipsAt(grid, '9:30', 'Lunes')[0]?.color).toBe('pizarra');
+    expect(chipsAt(grid, '11:00', 'Lunes')[0]?.color).toBe('salvia');
+  });
+
+  it('carries the free-text nota of the slot that has one', () => {
+    const grid = gridOf(SEPTIEMBRE);
+
+    expect(chipsAt(grid, '20:00', 'Viernes')[0]?.nota).toBe('Reserva anticipada');
+    expect(chipsAt(grid, '9:30', 'Lunes')[0]?.nota).toBe('');
+  });
+
+  it('books the exact slot over WhatsApp, naming it to a screen reader', () => {
+    const mensaje =
+      '¡Hola Natalia! Me gustaría reservar plaza en Yoga Infantil del Jueves a las 17:30.' +
+      ' ¿Queda sitio?';
+    const chip = chipsAt(gridOf(SEPTIEMBRE), '17:30', 'Jueves')[0];
+
+    expect(chip?.href).toBe(`https://wa.me/34677808098?text=${encodeURIComponent(mensaje)}`);
+    expect(chip?.ariaLabel).toBe(
       'Yoga Infantil: reservar plaza el jueves a las 17:30 por WhatsApp',
     );
-  });
-
-  it('keeps the visible chip text inside every accessible name', () => {
-    const mismatched = allChips(SEED).filter(
-      (chip) => !chip.ariaLabel.startsWith(`${chip.actividad}: `),
-    );
-
-    expect(mismatched).toEqual([]);
   });
 });
 
 describe('the committed snapshot', () => {
-  it('lays 17 classes out over 7 times and 5 days', () => {
-    expect(allChips(SEED)).toHaveLength(17);
-    expect(SEED.rows).toHaveLength(7);
-    expect(SEED.dias).toEqual(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']);
+  it('puts every timetable row on the grid, once, under its own day and time', () => {
+    const grid = buildGrid(SNAPSHOT);
+    const placed = SNAPSHOT.horarios.filter(
+      (horario) =>
+        chipsAt(grid, horario.hora, horario.dia).filter(
+          (chip) => chip.actividad === horario.actividad,
+        ).length > 0,
+    );
+
+    expect(allChips(grid)).toHaveLength(SNAPSHOT.horarios.length);
+    expect(placed).toHaveLength(SNAPSHOT.horarios.length);
   });
 });

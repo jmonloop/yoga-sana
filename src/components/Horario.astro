@@ -15,12 +15,17 @@ const markup = renderHorario(SNAPSHOT);
   };
 
   const refresh = async (): Promise<void> => {
-    const [{ renderHorario }, { onFreshSnapshot }, { SNAPSHOT }] = await Promise.all([
-      import('./horario-markup'),
-      import('../data/live-refresh'),
-      import('../data/snapshot'),
-    ]);
-    await onFreshSnapshot(SNAPSHOT, (fresh) => paint(renderHorario(fresh)));
+    if (!import.meta.env.PUBLIC_SHEET_ID) return;
+    try {
+      const [{ renderHorario }, { onFreshSnapshot }, { SNAPSHOT }] = await Promise.all([
+        import('./horario-markup'),
+        import('../data/live-refresh'),
+        import('../data/snapshot'),
+      ]);
+      await onFreshSnapshot(SNAPSHOT, (fresh) => paint(renderHorario(fresh)));
+    } catch {
+      return;
+    }
   };
 
   if (document.readyState === 'complete') void refresh();
@@ -46,7 +51,7 @@ const markup = renderHorario(SNAPSHOT);
     font-weight: 600;
     letter-spacing: var(--tracking-display);
     text-transform: uppercase;
-    color: var(--oliva);
+    color: var(--oliva-oscuro);
   }
 
   .horario :global(thead th:first-child) {
@@ -70,6 +75,11 @@ const markup = renderHorario(SNAPSHOT);
 
   .horario :global(tbody td) {
     padding-inline: 0.25rem;
+    text-align: center;
+  }
+
+  .horario :global(.horario-clase + .horario-clase) {
+    margin-top: 0.35rem;
   }
 
   .horario :global(.horario-banda > *) {
@@ -87,10 +97,6 @@ const markup = renderHorario(SNAPSHOT);
     text-align: center;
     text-decoration: none;
     text-wrap: balance;
-  }
-
-  .horario :global(.horario-chip + .horario-chip) {
-    margin-top: 0.35rem;
   }
 
   .horario :global(.horario-chip:hover) {
@@ -126,7 +132,6 @@ const markup = renderHorario(SNAPSHOT);
     margin: 0.3rem 0 0;
     font-size: 0.75rem;
     line-height: 1.4;
-    text-align: center;
     color: var(--oliva-oscuro);
   }
 
@@ -141,7 +146,7 @@ const markup = renderHorario(SNAPSHOT);
     font-weight: 600;
     letter-spacing: var(--tracking-display);
     text-transform: uppercase;
-    color: var(--oliva);
+    color: var(--oliva-oscuro);
   }
 
   .horario :global(.horario-dia ul) {
@@ -154,7 +159,7 @@ const markup = renderHorario(SNAPSHOT);
 
   .horario :global(.horario-dia li) {
     display: grid;
-    gap: 0.3rem;
+    gap: 0.35rem;
     max-width: 24rem;
   }
 
@@ -166,11 +171,7 @@ const markup = renderHorario(SNAPSHOT);
     color: var(--oliva-oscuro);
   }
 
-  .horario :global(.horario-lista .horario-nota) {
-    text-align: left;
-  }
-
-  @container (min-width: 900px) {
+  @container (min-width: 836px) {
     .horario :global(.horario-tabla) {
       display: table;
     }

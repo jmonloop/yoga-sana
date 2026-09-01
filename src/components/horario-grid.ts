@@ -9,6 +9,7 @@ import {
 import { waLink } from '../data/site';
 
 const BANDA_MINUTOS = 120;
+const SIN_HORA = Number.MAX_SAFE_INTEGER;
 
 export interface Chip {
   actividad: string;
@@ -18,15 +19,10 @@ export interface Chip {
   ariaLabel: string;
 }
 
-export interface Cell {
-  dia: string;
-  chips: Chip[];
-}
-
 export interface Row {
   hora: string;
-  band: boolean;
-  cells: Cell[];
+  separada: boolean;
+  cells: Chip[][];
 }
 
 export interface Grid {
@@ -44,9 +40,15 @@ export function buildGrid(snapshot: Snapshot): Grid {
 }
 
 function distinctDias(horarios: Horario[]): string[] {
-  return [...new Set(horarios.map((horario) => horario.dia))].sort(
-    (a, b) => toDiaIndex(a) - toDiaIndex(b),
-  );
+  const dias: string[] = [];
+  for (const { dia } of horarios) {
+    if (!dias.some((known) => claveDia(known) === claveDia(dia))) dias.push(dia);
+  }
+  return dias.sort((a, b) => toDiaIndex(a) - toDiaIndex(b));
+}
+
+function claveDia(dia: string): string {
+  return dia.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 }
 
 function distinctHoras(horarios: Horario[]): string[] {
@@ -58,14 +60,19 @@ function distinctHoras(horarios: Horario[]): string[] {
 function toRow(hora: string, prev: string | undefined, dias: string[], snapshot: Snapshot): Row {
   return {
     hora,
-    band: prev !== undefined && toHoraMinutes(hora) - toHoraMinutes(prev) > BANDA_MINUTOS,
-    cells: dias.map((dia) => ({ dia, chips: toChips(dia, hora, snapshot) })),
+    separada: separaBanda(hora, prev),
+    cells: dias.map((dia) => toChips(dia, hora, snapshot)),
   };
+}
+
+function separaBanda(hora: string, prev: string | undefined): boolean {
+  if (prev === undefined || toHoraMinutes(hora) === SIN_HORA) return false;
+  return toHoraMinutes(hora) - toHoraMinutes(prev) > BANDA_MINUTOS;
 }
 
 function toChips(dia: string, hora: string, snapshot: Snapshot): Chip[] {
   return snapshot.horarios
-    .filter((horario) => horario.dia === dia && horario.hora === hora)
+    .filter((horario) => claveDia(horario.dia) === claveDia(dia) && horario.hora === hora)
     .map((horario) => toChip(horario, snapshot));
 }
 
@@ -79,10 +86,10 @@ function toChip(horario: Horario, snapshot: Snapshot): Chip {
   };
 }
 
-export function slotMessage({ actividad, dia, hora }: Horario): string {
+function slotMessage({ actividad, dia, hora }: Horario): string {
   return `¡Hola Natalia! Me gustaría reservar plaza en ${actividad} del ${dia} a las ${hora}. ¿Queda sitio?`;
 }
 
-export function slotAriaLabel({ actividad, dia, hora }: Horario): string {
+function slotAriaLabel({ actividad, dia, hora }: Horario): string {
   return `${actividad}: reservar plaza el ${dia.toLocaleLowerCase('es')} a las ${hora} por WhatsApp`;
 }
