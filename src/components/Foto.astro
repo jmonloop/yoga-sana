@@ -1,0 +1,42 @@
+---
+interface Props {
+  nombre: string;
+  widths: number[];
+  fallback: number;
+  width: number;
+  height: number;
+  alt: string;
+  sizes: string;
+  eager?: boolean;
+}
+
+const { nombre, widths, fallback, width, height, alt, sizes, eager = false } = Astro.props;
+
+const srcset = (extension: string): string =>
+  widths.map((ancho) => `/img/${nombre}-${ancho}.${extension} ${ancho}w`).join(', ');
+---
+
+<picture>
+  <source type="image/avif" srcset={srcset('avif')} sizes={sizes} />
+  <source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
+  <img
+    src={`/img/${nombre}-${fallback}.jpg`}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding={eager ? 'sync' : 'async'}
+  />
+</picture>
+
+<style>
+  picture {
+    display: block;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-card);
+  }
+</style>

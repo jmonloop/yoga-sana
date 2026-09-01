@@ -1,0 +1,214 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import ActividadCard from '../components/ActividadCard.astro';
+import DescargarHorario from '../components/DescargarHorario.astro';
+import Foto from '../components/Foto.astro';
+import Horario from '../components/Horario.astro';
+import WaButton from '../components/WaButton.astro';
+import { actividadesDe } from '../components/actividad';
+import { CTAS } from '../data/site';
+import { SNAPSHOT } from '../data/snapshot';
+
+const ajuste = (clave: string, porDefecto: string): string =>
+  (SNAPSHOT.ajustes[clave] ?? '').trim() || porDefecto;
+
+const clases = actividadesDe(SNAPSHOT.actividades, 'yoga');
+const otras = actividadesDe(SNAPSHOT.actividades, 'otras');
+
+const tagline = ajuste('tagline', 'Tu espacio para respirar, conectar y reconectar contigo');
+const notaPie = ajuste(
+  'nota_pie',
+  'Clases para todos los niveles. Escucha tu cuerpo, honra tu proceso.',
+);
+const mes = ajuste('mes', '');
+---
+
+<Base
+  title="Clases de yoga en Catarroja (València) — Yoga Sana"
+  description="Hatha, dinámico, suave, adaptado, relajante e infantil: clases de yoga en Catarroja para todos los niveles, presenciales y online. Consulta el horario semanal."
+>
+  <Section>
+    <div class="hero">
+      <div class="hero-texto">
+        <p class="hero-script">Respira. Conecta. Fluye.</p>
+        <h1>Clases de yoga en Catarroja</h1>
+        <p>{tagline}, en Catarroja (València).</p>
+        <p>{notaPie}</p>
+        <WaButton {...CTAS.empezar} />
+      </div>
+      <Foto
+        nombre="clase-de-yoga"
+        widths={[640, 960, 1254]}
+        fallback={960}
+        width={960}
+        height={640}
+        sizes="(min-width: 70rem) 32rem, (min-width: 60rem) 26rem, 92vw"
+        alt="Mujer practicando una torsión de yoga sobre una esterilla, con un bloque de corcho al lado."
+        eager
+      />
+    </div>
+  </Section>
+
+  <Section title="Las clases" muted>
+    <p class="intro">
+      Cada clase tiene su ritmo. Elige la que te resuene y escríbeme: te cuento horarios,
+      precios y por dónde empezar.
+    </p>
+    <p class="intro modalidad">
+      Todas las clases se pueden hacer presenciales en Catarroja u online, desde donde estés.
+      Lo vemos juntas por WhatsApp.
+    </p>
+    <ul class="tarjetas">
+      {
+        clases.map((actividad) => (
+          <li>
+            <ActividadCard actividad={actividad} />
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  {
+    otras.length > 0 && (
+      <Section title="Otras actividades">
+        <p class="intro">Más propuestas que también puedes encontrar en Yoga Sana.</p>
+        <ul class="tarjetas">
+          {otras.map((actividad) => (
+            <li>
+              <ActividadCard actividad={actividad} />
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )
+  }
+
+  <Section id="horario" title="Horario semanal" eyebrow={mes}>
+    <p class="intro">
+      Toca cualquier clase para escribirme por WhatsApp y reservar tu plaza. Si prefieres
+      guardártelo, descarga el horario como imagen.
+    </p>
+    <Horario />
+    <p class="intro nota">{notaPie}</p>
+    <DescargarHorario />
+  </Section>
+
+  <Section title="Nuestro centro" muted>
+    <p class="intro">
+      Un espacio tranquilo en Catarroja para practicar sin prisa, con sitio de sobra para
+      extender la esterilla.
+    </p>
+    <Foto
+      nombre="centro-sala-amplia"
+      widths={[640, 960, 1280, 1600]}
+      fallback={960}
+      width={960}
+      height={384}
+      sizes="(min-width: 70rem) 66rem, 92vw"
+      alt="Vista amplia de la sala vacía, con suelo de madera clara, cortinas grises y la estantería de material al fondo."
+    />
+    <div class="galeria">
+      <Foto
+        nombre="centro-sala"
+        widths={[640, 960, 1280, 1600]}
+        fallback={960}
+        width={960}
+        height={612}
+        sizes="(min-width: 70rem) 32rem, (min-width: 45rem) 20rem, 92vw"
+        alt="La sala con esterillas verdes extendidas sobre el suelo de madera y una lámpara de sal junto a la pared."
+      />
+      <Foto
+        nombre="centro-materiales"
+        widths={[640, 960, 1280, 1472]}
+        fallback={960}
+        width={960}
+        height={620}
+        sizes="(min-width: 70rem) 32rem, (min-width: 45rem) 20rem, 92vw"
+        alt="Estantería del centro con bolsters verdes, bloques de corcho, mantas y cojines de meditación."
+      />
+    </div>
+  </Section>
+
+  <Section title="¿Empezamos?">
+    <p class="intro">
+      Escríbeme por WhatsApp y te cuento horarios, precios y por dónde te viene mejor
+      empezar. Sin compromiso.
+    </p>
+    <WaButton {...CTAS.empezar} />
+  </Section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero-texto {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+  }
+
+  .hero-script {
+    margin: 0;
+    font-family: var(--font-script);
+    font-size: var(--font-size-display);
+    line-height: 1.1;
+    color: var(--oliva);
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5.5vw, 3.25rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    color: var(--tinta);
+  }
+
+  .hero p:not(.hero-script) {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+
+  .intro {
+    margin: 0 0 2rem;
+  }
+
+  .modalidad {
+    color: var(--oliva-oscuro);
+  }
+
+  .nota {
+    margin: 2rem 0;
+    color: var(--oliva-oscuro);
+  }
+
+  .tarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 60rem) {
+    .hero {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+  }
+</style>
