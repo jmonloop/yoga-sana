@@ -1,0 +1,219 @@
+---
+import logoFigura from '../../assets/logo/logo-figura.svg?raw';
+import logoTexto from '../../assets/logo/logo-texto.svg?raw';
+import { SNAPSHOT } from '../data/snapshot';
+
+const mes = SNAPSHOT.ajustes['mes'];
+const tagline = SNAPSHOT.ajustes['tagline'];
+const notaPie = SNAPSHOT.ajustes['nota_pie'];
+---
+
+<div class="descarga" data-descarga-horario data-mes={mes}>
+  <button class="boton" type="button">Descargar horario</button>
+  <p class="estado" role="status" data-estado></p>
+
+  <template>
+    <div class="lamina">
+      <header class="lamina-cabecera">
+        <span class="lamina-figura" set:html={logoFigura} />
+        <span class="lamina-marca" set:html={logoTexto} />
+        <p class="lamina-lugar">Catarroja · València</p>
+        <h2 class="lamina-titulo">Horario</h2>
+        {mes && <p class="lamina-mes">{mes}</p>}
+        {tagline && <p class="lamina-tagline">{tagline}</p>}
+      </header>
+
+      <div class="lamina-grid" data-destino></div>
+
+      {notaPie && <p class="lamina-pie">{notaPie}</p>}
+    </div>
+  </template>
+</div>
+
+<script>
+  import { iniciarDescargaHorario } from './horario-png';
+
+  iniciarDescargaHorario();
+</script>
+
+<style>
+  html:not(.js) .descarga {
+    display: none;
+  }
+
+  .descarga {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+  }
+
+  .boton {
+    padding: 0.85em 1.9em;
+    background-color: transparent;
+    border: 1px solid var(--oliva-oscuro);
+    border-radius: var(--radius-pill);
+    color: var(--tinta);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 160ms ease;
+  }
+
+  .boton:hover,
+  .boton:focus-visible {
+    background-color: var(--salvia-tint);
+  }
+
+  .boton:focus-visible {
+    outline: 2px solid var(--tinta);
+    outline-offset: 3px;
+  }
+
+  .boton:disabled {
+    color: var(--oliva-oscuro);
+    border-color: var(--salvia-tint);
+    cursor: progress;
+  }
+
+  .estado {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--oliva-oscuro);
+  }
+
+  .lamina {
+    position: fixed;
+    top: 0;
+    left: -9999px;
+    width: 1600px;
+    padding: 88px 80px 72px;
+    background-color: var(--crema);
+    color: var(--tinta);
+    font-family: var(--font-body);
+  }
+
+  .lamina-cabecera {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    margin-bottom: 72px;
+  }
+
+  .lamina-figura :global(svg) {
+    height: 148px;
+    width: auto;
+    color: var(--oliva);
+  }
+
+  .lamina-marca :global(svg) {
+    height: 58px;
+    width: auto;
+    margin-top: 18px;
+    color: var(--tinta);
+  }
+
+  .lamina-lugar {
+    max-width: none;
+    margin: 10px 0 0;
+    font-size: 20px;
+    line-height: 1.2;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--oliva-oscuro);
+  }
+
+  .lamina-titulo {
+    margin: 52px 0 0;
+    font-family: var(--font-display);
+    font-size: 84px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+  }
+
+  .lamina-mes {
+    max-width: none;
+    margin: 6px 0 0;
+    font-family: var(--font-script);
+    font-size: 92px;
+    line-height: 1.3;
+    color: var(--oliva);
+  }
+
+  .lamina-tagline {
+    max-width: 42ch;
+    margin: 18px 0 0;
+    font-size: 30px;
+    line-height: 1.5;
+    text-wrap: balance;
+    color: var(--oliva-oscuro);
+  }
+
+  .lamina-grid {
+    padding: 44px 40px;
+    background-color: var(--marfil);
+    border-radius: var(--radius-card);
+  }
+
+  .lamina-pie {
+    max-width: none;
+    margin: 56px 0 0;
+    font-size: 24px;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--oliva-oscuro);
+  }
+
+  .lamina :global(.horario .horario-tabla thead th) {
+    padding-bottom: 26px;
+    font-size: 34px;
+  }
+
+  .lamina :global(.horario .horario-tabla thead th:first-child) {
+    width: 150px;
+  }
+
+  .lamina :global(.horario .horario-tabla tbody th) {
+    padding-right: 20px;
+    font-size: 24px;
+  }
+
+  .lamina :global(.horario .horario-tabla tbody th),
+  .lamina :global(.horario .horario-tabla tbody td) {
+    padding-block: 10px;
+  }
+
+  .lamina :global(.horario .horario-tabla tbody td) {
+    padding-inline: 8px;
+  }
+
+  .lamina :global(.horario .horario-tabla .horario-chip) {
+    padding: 0.55em 0.9em;
+    font-size: 26px;
+  }
+
+  .lamina :global(.horario .horario-tabla .horario-nota) {
+    margin-top: 8px;
+    font-size: 18px;
+  }
+
+  .lamina :global(.horario .horario-tabla .horario-clase + .horario-clase) {
+    margin-top: 12px;
+  }
+
+  .lamina :global(.horario .horario-tabla .horario-banda > *) {
+    padding-top: 56px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .boton {
+      transition: none;
+    }
+  }
+</style>
