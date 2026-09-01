@@ -1,31 +1,34 @@
 ---
+import { altoRenderizado, imagen } from '../data/imagenes';
+
 interface Props {
   nombre: string;
-  widths: number[];
-  fallback: number;
-  width: number;
-  height: number;
   alt: string;
   sizes: string;
   eager?: boolean;
 }
 
-const { nombre, widths, fallback, width, height, alt, sizes, eager = false } = Astro.props;
+const { nombre, alt, sizes, eager = false } = Astro.props;
+
+const foto = imagen(nombre);
+const { name, fallback, widths } = foto;
+const alto = altoRenderizado(foto);
 
 const srcset = (extension: string): string =>
-  widths.map((ancho) => `/img/${nombre}-${ancho}.${extension} ${ancho}w`).join(', ');
+  widths.map((ancho) => `/img/${name}-${ancho}.${extension} ${ancho}w`).join(', ');
 ---
 
 <picture>
   <source type="image/avif" srcset={srcset('avif')} sizes={sizes} />
   <source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
   <img
-    src={`/img/${nombre}-${fallback}.jpg`}
+    src={`/img/${name}-${fallback}.jpg`}
     alt={alt}
-    width={width}
-    height={height}
+    width={fallback}
+    height={alto}
     loading={eager ? 'eager' : 'lazy'}
     decoding={eager ? 'sync' : 'async'}
+    fetchpriority={eager ? 'high' : undefined}
   />
 </picture>
 

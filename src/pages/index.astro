@@ -3,10 +3,9 @@ import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
 import WaButton from '../components/WaButton.astro';
 import { CTAS } from '../data/site';
-import { SNAPSHOT } from '../data/snapshot';
+import { ajuste, TAGLINE_POR_DEFECTO } from '../data/snapshot';
 
-const tagline =
-  SNAPSHOT.ajustes['tagline'] || 'Tu espacio para respirar, conectar y reconectar contigo';
+const tagline = ajuste('tagline', TAGLINE_POR_DEFECTO);
 ---
 
 <Base

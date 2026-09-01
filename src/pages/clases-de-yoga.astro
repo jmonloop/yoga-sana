@@ -1,27 +1,26 @@
 ---
 import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
-import ActividadCard from '../components/ActividadCard.astro';
 import DescargarHorario from '../components/DescargarHorario.astro';
 import Foto from '../components/Foto.astro';
 import Horario from '../components/Horario.astro';
+import Tarjetas from '../components/Tarjetas.astro';
 import WaButton from '../components/WaButton.astro';
 import { actividadesDe } from '../components/actividad';
 import { CTAS } from '../data/site';
-import { SNAPSHOT } from '../data/snapshot';
-
-const ajuste = (clave: string, porDefecto: string): string =>
-  (SNAPSHOT.ajustes[clave] ?? '').trim() || porDefecto;
+import {
+  ajuste,
+  NOTA_PIE_POR_DEFECTO,
+  SNAPSHOT,
+  TAGLINE_POR_DEFECTO,
+} from '../data/snapshot';
 
 const clases = actividadesDe(SNAPSHOT.actividades, 'yoga');
 const otras = actividadesDe(SNAPSHOT.actividades, 'otras');
 
-const tagline = ajuste('tagline', 'Tu espacio para respirar, conectar y reconectar contigo');
-const notaPie = ajuste(
-  'nota_pie',
-  'Clases para todos los niveles. Escucha tu cuerpo, honra tu proceso.',
-);
-const mes = ajuste('mes', '');
+const tagline = ajuste('tagline', TAGLINE_POR_DEFECTO);
+const notaPie = ajuste('nota_pie', NOTA_PIE_POR_DEFECTO);
+const mes = ajuste('mes');
 ---
 
 <Base
@@ -34,15 +33,10 @@ const mes = ajuste('mes', '');
         <p class="hero-script">Respira. Conecta. Fluye.</p>
         <h1>Clases de yoga en Catarroja</h1>
         <p>{tagline}, en Catarroja (València).</p>
-        <p>{notaPie}</p>
         <WaButton {...CTAS.empezar} />
       </div>
       <Foto
         nombre="clase-de-yoga"
-        widths={[640, 960, 1254]}
-        fallback={960}
-        width={960}
-        height={640}
         sizes="(min-width: 70rem) 32rem, (min-width: 60rem) 26rem, 92vw"
         alt="Mujer practicando una torsión de yoga sobre una esterilla, con un bloque de corcho al lado."
         eager
@@ -57,30 +51,16 @@ const mes = ajuste('mes', '');
     </p>
     <p class="intro modalidad">
       Todas las clases se pueden hacer presenciales en Catarroja u online, desde donde estés.
-      Lo vemos juntas por WhatsApp.
+      Lo vemos por WhatsApp.
     </p>
-    <ul class="tarjetas">
-      {
-        clases.map((actividad) => (
-          <li>
-            <ActividadCard actividad={actividad} />
-          </li>
-        ))
-      }
-    </ul>
+    <Tarjetas actividades={clases} />
   </Section>
 
   {
     otras.length > 0 && (
       <Section title="Otras actividades">
         <p class="intro">Más propuestas que también puedes encontrar en Yoga Sana.</p>
-        <ul class="tarjetas">
-          {otras.map((actividad) => (
-            <li>
-              <ActividadCard actividad={actividad} />
-            </li>
-          ))}
-        </ul>
+        <Tarjetas actividades={otras} />
       </Section>
     )
   }
@@ -102,30 +82,18 @@ const mes = ajuste('mes', '');
     </p>
     <Foto
       nombre="centro-sala-amplia"
-      widths={[640, 960, 1280, 1600]}
-      fallback={960}
-      width={960}
-      height={384}
       sizes="(min-width: 70rem) 66rem, 92vw"
-      alt="Vista amplia de la sala vacía, con suelo de madera clara, cortinas grises y la estantería de material al fondo."
+      alt="Vista amplia de la sala vacía, con suelo de madera clara, cortinas grises y la estantería de material a la izquierda."
     />
     <div class="galeria">
       <Foto
         nombre="centro-sala"
-        widths={[640, 960, 1280, 1600]}
-        fallback={960}
-        width={960}
-        height={612}
-        sizes="(min-width: 70rem) 32rem, (min-width: 45rem) 20rem, 92vw"
+        sizes="(min-width: 70rem) 32rem, (min-width: 60rem) 29rem, (min-width: 41rem) 21rem, 92vw"
         alt="La sala con esterillas verdes extendidas sobre el suelo de madera y una lámpara de sal junto a la pared."
       />
       <Foto
         nombre="centro-materiales"
-        widths={[640, 960, 1280, 1472]}
-        fallback={960}
-        width={960}
-        height={620}
-        sizes="(min-width: 70rem) 32rem, (min-width: 45rem) 20rem, 92vw"
+        sizes="(min-width: 70rem) 32rem, (min-width: 60rem) 29rem, (min-width: 41rem) 21rem, 92vw"
         alt="Estantería del centro con bolsters verdes, bloques de corcho, mantas y cojines de meditación."
       />
     </div>
@@ -134,7 +102,7 @@ const mes = ajuste('mes', '');
   <Section title="¿Empezamos?">
     <p class="intro">
       Escríbeme por WhatsApp y te cuento horarios, precios y por dónde te viene mejor
-      empezar. Sin compromiso.
+      empezar.
     </p>
     <WaButton {...CTAS.empezar} />
   </Section>
@@ -187,15 +155,6 @@ const mes = ajuste('mes', '');
   .nota {
     margin: 2rem 0;
     color: var(--oliva-oscuro);
-  }
-
-  .tarjetas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-    gap: 1.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
   }
 
   .galeria {

@@ -33,6 +33,20 @@ describe('actividadesDe', () => {
     expect(nombres).toEqual(['Hatha Yoga', 'Yoga Suave', 'Yoga Relajante']);
   });
 
+  it('keeps the Sheet order when two rows share the same orden', () => {
+    const empatadas = [
+      actividad({ nombre: 'Yoga B', orden: 2 }),
+      actividad({ nombre: 'Yoga A', orden: 2 }),
+      actividad({ nombre: 'Yoga C', orden: 1 }),
+    ];
+
+    expect(actividadesDe(empatadas, 'yoga').map((item) => item.nombre)).toEqual([
+      'Yoga C',
+      'Yoga B',
+      'Yoga A',
+    ]);
+  });
+
   it('surfaces the rows routed to the otras fallback bucket', () => {
     expect(actividadesDe(LISTA, 'otras').map((item) => item.nombre)).toEqual([
       'Retiro de fin de semana',
@@ -97,7 +111,12 @@ describe('actividadCta', () => {
       etiqueta: ETIQUETA_EMPRESAS,
     });
 
-    expect(actividadCta(empresas)).toEqual({ ...CTAS.empresas });
+    expect(actividadCta(empresas)).toEqual({
+      message: CTAS.empresas.message,
+      label: CTAS.empresas.label,
+      ariaSuffix:
+        'escribir por WhatsApp sobre Gestión Emocional, el programa de bienestar emocional para equipos',
+    });
   });
 
   it('reads the PARA EMPRESAS badge tolerantly of case and padding', () => {
@@ -109,7 +128,18 @@ describe('actividadCta', () => {
   it('still lets mensaje_wa override the PARA EMPRESAS message', () => {
     const empresas = actividad({ etiqueta: ETIQUETA_EMPRESAS, mensajeWa: 'Mensaje de la Sheet' });
 
-    expect(actividadCta(empresas)).toEqual({ ...CTAS.empresas, message: 'Mensaje de la Sheet' });
+    expect(actividadCta(empresas)).toMatchObject({
+      message: 'Mensaje de la Sheet',
+      label: CTAS.empresas.label,
+    });
+  });
+
+  it('ignores a whitespace-only mensaje_wa rather than sending a blank message', () => {
+    const enBlanco = actividad({ nombre: 'Yoga Suave', mensajeWa: '   ' });
+
+    expect(actividadCta(enBlanco).message).toBe(
+      '¡Hola Natalia! Me interesa Yoga Suave. ¿Me cuentas horarios y precios?',
+    );
   });
 
   it('treats every other badge as free text with no effect on the message', () => {
@@ -124,12 +154,14 @@ describe('actividadCta', () => {
     );
   });
 
-  it('names the activity inside an accessible name that contains the visible label', () => {
-    const cta = actividadCta(actividad({ nombre: 'Yoga para Niños' }));
+  it('names the activity in the aria suffix of every branch', () => {
+    const nombre = 'Yoga para Niños';
 
-    expect(`${cta.label}: ${cta.ariaSuffix}`).toBe(
-      'Me interesa: escribir por WhatsApp sobre Yoga para Niños: horarios y precios',
-    );
+    expect(actividadCta(actividad({ nombre })).ariaSuffix).toContain(nombre);
+    expect(actividadCta(actividad({ nombre, grupo: 'taller' })).ariaSuffix).toContain(nombre);
+    expect(
+      actividadCta(actividad({ nombre, etiqueta: ETIQUETA_EMPRESAS })).ariaSuffix,
+    ).toContain(nombre);
   });
 });
 

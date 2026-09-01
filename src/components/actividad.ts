@@ -12,12 +12,20 @@ function porOrden(a: Actividad, b: Actividad): number {
 }
 
 export function actividadCta(actividad: Actividad): Cta {
-  const base = esParaEmpresas(actividad) ? CTAS.empresas : ctaGenerada(actividad);
-  return actividad.mensajeWa ? { ...base, message: actividad.mensajeWa } : { ...base };
+  const base = esParaEmpresas(actividad) ? ctaEmpresas(actividad) : ctaGenerada(actividad);
+  return { ...base, message: actividad.mensajeWa?.trim() || base.message };
 }
 
 function esParaEmpresas({ etiqueta }: Actividad): boolean {
   return etiqueta.trim().toLocaleUpperCase('es') === ETIQUETA_EMPRESAS;
+}
+
+function ctaEmpresas({ nombre }: Actividad): Cta {
+  return {
+    message: CTAS.empresas.message,
+    label: CTAS.empresas.label,
+    ariaSuffix: `escribir por WhatsApp sobre ${nombre}, el programa de bienestar emocional para equipos`,
+  };
 }
 
 function ctaGenerada(actividad: Actividad): Cta {

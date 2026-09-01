@@ -1,9 +1,7 @@
 ---
 import logoFigura from '../../assets/logo/logo-figura.svg?raw';
 import logoTexto from '../../assets/logo/logo-texto.svg?raw';
-import { SNAPSHOT } from '../data/snapshot';
-
-const ajuste = (clave: string): string => (SNAPSHOT.ajustes[clave] ?? '').trim();
+import { ajuste } from '../data/snapshot';
 ---
 
 <div class="descarga" data-descarga-horario data-mes={ajuste('mes')}>

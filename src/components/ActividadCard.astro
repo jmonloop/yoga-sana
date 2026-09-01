@@ -10,13 +10,15 @@ interface Props {
 
 const { actividad } = Astro.props;
 const cta = actividadCta(actividad);
+const etiqueta = actividad.etiqueta.trim();
+const descripcion = actividad.descripcion.trim();
 ---
 
 <article class="tarjeta fade-up">
   <Icono icono={actividad.icono} size={72} />
-  {actividad.etiqueta && <p class="etiqueta">{actividad.etiqueta}</p>}
+  {etiqueta && <p class="etiqueta">{etiqueta}</p>}
   <h3 class="nombre">{actividad.nombre}</h3>
-  <p class="descripcion">{actividad.descripcion}</p>
+  {descripcion && <p class="descripcion">{descripcion}</p>}
   <div class="accion">
     <WaButton {...cta} variant="secondary" />
   </div>
@@ -36,7 +38,6 @@ const cta = actividadCta(actividad);
   }
 
   .etiqueta {
-    max-width: none;
     margin: 0.25rem 0 0;
     padding: 0.35em 0.9em;
     background-color: var(--salvia-tint);
@@ -47,6 +48,7 @@ const cta = actividadCta(actividad);
     line-height: 1.4;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
   }
 
   .nombre {
@@ -57,6 +59,7 @@ const cta = actividadCta(actividad);
     line-height: 1.2;
     letter-spacing: 0.04em;
     color: var(--tinta);
+    overflow-wrap: anywhere;
   }
 
   .descripcion {
@@ -64,6 +67,7 @@ const cta = actividadCta(actividad);
     font-size: 1rem;
     line-height: 1.6;
     color: var(--tinta);
+    overflow-wrap: anywhere;
   }
 
   .accion {

@@ -1,81 +1,12 @@
 import { copyFile, mkdir, readdir, rename, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
+import { IMAGENES } from '../src/data/imagenes.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SOURCE_DIR = path.join(ROOT, 'sources/images');
 const OUT_DIR = path.join(ROOT, 'public/img');
 const STAGE_DIR = path.join(ROOT, 'public/img.tmp');
-
-const NEUTRAL = { warm: 0, saturation: 1, brightness: 1 };
-const FLUORESCENT = { warm: 1, saturation: 1.08, brightness: 1.03 };
-
-const IMAGES = [
-  {
-    source: 'yoga1.jpeg',
-    name: 'meditacion-sentada',
-    fallback: 400,
-    crop: { left: 0, top: 0, width: 501, height: 668 },
-    grade: { warm: 0.35, saturation: 1.03, brightness: 1 },
-    widths: [320, 400, 501],
-  },
-  {
-    source: 'yoga2.jpeg',
-    name: 'clase-de-yoga',
-    fallback: 960,
-    crop: { left: 0, top: 313, width: 1254, height: 836 },
-    grade: NEUTRAL,
-    widths: [640, 960, 1254],
-  },
-  {
-    source: 'yoga3.jpeg',
-    name: 'yoga-al-aire-libre',
-    fallback: 480,
-    crop: { left: 0, top: 0, width: 640, height: 608 },
-    grade: { warm: -0.3, saturation: 0.88, brightness: 1 },
-    widths: [320, 480, 640],
-  },
-  {
-    source: 'consciencia-corporal.jpg',
-    name: 'consciencia-corporal',
-    fallback: 480,
-    crop: { left: 0, top: 95, width: 600, height: 905 },
-    grade: NEUTRAL,
-    widths: [360, 480, 600],
-  },
-  {
-    source: 'nuestro-centro2.jpg',
-    name: 'centro-sala',
-    fallback: 960,
-    crop: { left: 0, top: 180, width: 1600, height: 1020 },
-    grade: FLUORESCENT,
-    widths: [640, 960, 1280, 1600],
-  },
-  {
-    source: 'nuestro-centro.jpg',
-    name: 'centro-sala-amplia',
-    fallback: 960,
-    crop: { left: 0, top: 210, width: 1600, height: 640 },
-    grade: FLUORESCENT,
-    widths: [640, 960, 1280, 1600],
-  },
-  {
-    source: 'nuestro-centro3.txt',
-    name: 'centro-materiales',
-    fallback: 960,
-    crop: { left: 128, top: 250, width: 1472, height: 950 },
-    grade: FLUORESCENT,
-    widths: [640, 960, 1280, 1472],
-  },
-  {
-    source: 'nuestro-centro4.txt',
-    name: 'centro-camilla',
-    fallback: 690,
-    crop: { left: 460, top: 0, width: 920, height: 760 },
-    grade: { warm: 1, saturation: 0.9, brightness: 1.03 },
-    widths: [460, 690, 920],
-  },
-];
 
 function cropAndGrade({ source, crop, grade }) {
   const { warm, saturation, brightness } = grade;
@@ -105,7 +36,7 @@ async function writeWidth(image, width) {
 
 async function swapIntoPlace() {
   const present = await readdir(OUT_DIR).catch(() => []);
-  const isOurs = (name) => IMAGES.some((image) => name.startsWith(`${image.name}-`));
+  const isOurs = (name) => IMAGENES.some((image) => name.startsWith(`${image.name}-`));
   const unmanaged = present.filter((name) => !isOurs(name));
   const carry = (name) => copyFile(path.join(OUT_DIR, name), path.join(STAGE_DIR, name));
   await Promise.all(unmanaged.map(carry));
@@ -114,7 +45,7 @@ async function swapIntoPlace() {
 }
 
 async function reportSizes() {
-  const names = IMAGES.flatMap(outputNames).sort();
+  const names = IMAGENES.flatMap(outputNames).sort();
   const sizes = await Promise.all(names.map((name) => stat(path.join(OUT_DIR, name))));
   const total = sizes.reduce((sum, file) => sum + file.size, 0);
   names.forEach((name, index) => console.log(`${name}\t${sizes[index].size}`));
@@ -124,7 +55,7 @@ async function reportSizes() {
 await rm(STAGE_DIR, { recursive: true, force: true });
 await mkdir(STAGE_DIR, { recursive: true });
 try {
-  for (const image of IMAGES) {
+  for (const image of IMAGENES) {
     await Promise.all(image.widths.map((width) => writeWidth(image, width)));
   }
   await swapIntoPlace();
