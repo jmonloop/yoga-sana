@@ -9,6 +9,7 @@ const ajuste = (clave: string): string => (SNAPSHOT.ajustes[clave] ?? '').trim()
 <div class="descarga" data-descarga-horario data-mes={ajuste('mes')}>
   <button class="boton" type="button">Descargar horario</button>
   <p class="estado" role="status" data-estado></p>
+  <div class="vista" data-vista></div>
 
   <template>
     <div class="lamina">
@@ -84,6 +85,22 @@ const ajuste = (clave: string): string => (SNAPSHOT.ajustes[clave] ?? '').trim()
     margin: 0;
     font-size: 0.875rem;
     color: var(--oliva-oscuro);
+  }
+
+  .vista {
+    flex-basis: 100%;
+  }
+
+  .vista:empty {
+    display: none;
+  }
+
+  .vista :global(img) {
+    width: 100%;
+    max-width: 22rem;
+    height: auto;
+    border: 1px solid var(--salvia-tint);
+    border-radius: var(--radius-card);
   }
 
   .lamina {

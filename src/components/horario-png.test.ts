@@ -17,6 +17,7 @@ function montaPagina({ boton = true, estado = true, plantilla, horario = true }:
     <div data-descarga-horario data-mes="Septiembre">
       ${boton ? '<button type="button">Descargar horario</button>' : ''}
       ${estado ? '<p data-estado></p>' : ''}
+      <div data-vista></div>
       ${plantilla === undefined ? '' : `<template>${plantilla}</template>`}
     </div>
   `;
