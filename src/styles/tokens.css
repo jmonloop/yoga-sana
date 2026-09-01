@@ -1,13 +1,8 @@
 @import '@fontsource/cormorant-garamond/latin-400.css';
-@import '@fontsource/cormorant-garamond/latin-ext-400.css';
 @import '@fontsource/cormorant-garamond/latin-600.css';
-@import '@fontsource/cormorant-garamond/latin-ext-600.css';
 @import '@fontsource/jost/latin-400.css';
-@import '@fontsource/jost/latin-ext-400.css';
 @import '@fontsource/jost/latin-500.css';
-@import '@fontsource/jost/latin-ext-500.css';
 @import '@fontsource/parisienne/latin-400.css';
-@import '@fontsource/parisienne/latin-ext-400.css';
 
 :root {
   --crema: #f7f3e9;
