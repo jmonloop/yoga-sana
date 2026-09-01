@@ -19,17 +19,23 @@ importers:
         version: 5.3.0
       astro:
         specifier: ^5
-        version: 5.18.2(rollup@4.63.1)(typescript@5.9.3)(yaml@2.9.0)
+        version: 5.18.2(@types/node@26.4.0)(rollup@4.63.1)(typescript@5.9.3)(yaml@2.9.0)
+      papaparse:
+        specifier: ^5.7.0
+        version: 5.7.0
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.10
         version: 0.9.10(prettier@3.9.6)(typescript@5.9.3)
+      '@types/papaparse':
+        specifier: ^5.5.2
+        version: 5.5.2
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
         specifier: ^4.1.11
-        version: 4.1.11(vite@6.4.3(yaml@2.9.0))
+        version: 4.1.11(@types/node@26.4.0)(vite@6.4.3(@types/node@26.4.0)(yaml@2.9.0))
 
 packages:
 
@@ -768,6 +774,12 @@ packages:
   '@types/nlcst@2.0.3':
     resolution: {integrity: sha512-vSYNSDe6Ix3q+6Z7ri9lyWqgGhJTmzRjZRqyq15N0Z/1/UnVsno9G/N40NBijoYx2seFDIl0+B2mgAb9mezUCA==}
 
+  '@types/node@26.4.0':
+    resolution: {integrity: sha512-faiGnoIrLH/V8cibOMEAZ8pMw6oXqSukl29ra4mN8GdaB2ZewzeaLj+INpV5N+Z1eKWzY+IzaIZH2EIR6YZRNQ==}
+
+  '@types/papaparse@5.5.2':
+    resolution: {integrity: sha512-gFnFp/JMzLHCwRf7tQHrNnfhN4eYBVYYI897CGX4MY1tzY9l2aLkVyx2IlKZ/SAqDbB3I1AOZW5gTMGGsqWliA==}
+
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
 
@@ -1461,6 +1473,9 @@ packages:
   package-manager-detector@1.8.0:
     resolution: {integrity: sha512-yQA4H19AmPEoMUeavPMDIe1higySl/gH/yaQrkT/s07Qp+7pp2hYz30N3z2l5BkjVkF9Ow6o0wjJamm2y7Sn0A==}
 
+  papaparse@5.7.0:
+    resolution: {integrity: sha512-qBGxg/7Q3Kl9Wfhrz2Z74UnvnHTXLNG6jmKJFeBvP2+y4lV7So+7SR62+Zd47JvdrCkX+nDcnr0ObPzek/+6RA==}
+
   parse-latin@7.0.0:
     resolution: {integrity: sha512-mhHgobPPua5kZ98EF4HWiH167JWBfl4pvAIXXdbaVohtK7a6YBOy56kvhCqduqyo/f3yrHFWmqmiMg/BkBkYYQ==}
 
@@ -1710,6 +1725,9 @@ packages:
 
   uncrypto@0.1.3:
     resolution: {integrity: sha512-Ql87qFHB3s/De2ClA9e0gsnS6zXG27SkTiSJwjCc9MebbfapQfuPzumMIUMi38ezPZVNFcHI9sUIepeQfw8J8Q==}
+
+  undici-types@8.3.0:
+    resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
   undici@8.10.1:
     resolution: {integrity: sha512-YQ3WlbqjYMmNpdvDH64jAgLjxuAR9+649calDWhbshYaeQGO2bR4nI94ORJmwI3J9YhoKQnpyGOK+0zlWS5N5Q==}
@@ -2636,6 +2654,14 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
+  '@types/node@26.4.0':
+    dependencies:
+      undici-types: 8.3.0
+
+  '@types/papaparse@5.5.2':
+    dependencies:
+      '@types/node': 26.4.0
+
   '@types/unist@3.0.3': {}
 
   '@ungap/structured-clone@1.4.0': {}
@@ -2649,13 +2675,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.1
 
-  '@vitest/mocker@4.1.11(vite@6.4.3(yaml@2.9.0))':
+  '@vitest/mocker@4.1.11(vite@6.4.3(@types/node@26.4.0)(yaml@2.9.0))':
     dependencies:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 6.4.3(yaml@2.9.0)
+      vite: 6.4.3(@types/node@26.4.0)(yaml@2.9.0)
 
   '@vitest/pretty-format@4.1.11':
     dependencies:
@@ -2771,7 +2797,7 @@ snapshots:
 
   assertion-error@2.0.1: {}
 
-  astro@5.18.2(rollup@4.63.1)(typescript@5.9.3)(yaml@2.9.0):
+  astro@5.18.2(@types/node@26.4.0)(rollup@4.63.1)(typescript@5.9.3)(yaml@2.9.0):
     dependencies:
       '@astrojs/compiler': 2.13.1
       '@astrojs/internal-helpers': 0.7.6
@@ -2828,8 +2854,8 @@ snapshots:
       unist-util-visit: 5.1.0
       unstorage: 1.17.5
       vfile: 6.0.3
-      vite: 6.4.3(yaml@2.9.0)
-      vitefu: 1.1.3(vite@6.4.3(yaml@2.9.0))
+      vite: 6.4.3(@types/node@26.4.0)(yaml@2.9.0)
+      vitefu: 1.1.3(vite@6.4.3(@types/node@26.4.0)(yaml@2.9.0))
       xxhash-wasm: 1.1.0
       yargs-parser: 21.1.1
       yocto-spinner: 0.2.3
@@ -3660,6 +3686,8 @@ snapshots:
 
   package-manager-detector@1.8.0: {}
 
+  papaparse@5.7.0: {}
+
   parse-latin@7.0.0:
     dependencies:
       '@types/nlcst': 2.0.3
@@ -3988,6 +4016,8 @@ snapshots:
 
   uncrypto@0.1.3: {}
 
+  undici-types@8.3.0: {}
+
   undici@8.10.1: {}
 
   unified@11.0.5:
@@ -4074,7 +4104,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite@6.4.3(yaml@2.9.0):
+  vite@6.4.3(@types/node@26.4.0)(yaml@2.9.0):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.7)
@@ -4083,17 +4113,18 @@ snapshots:
       rollup: 4.63.1
       tinyglobby: 0.2.17
     optionalDependencies:
+      '@types/node': 26.4.0
       fsevents: 2.3.3
       yaml: 2.9.0
 
-  vitefu@1.1.3(vite@6.4.3(yaml@2.9.0)):
+  vitefu@1.1.3(vite@6.4.3(@types/node@26.4.0)(yaml@2.9.0)):
     optionalDependencies:
-      vite: 6.4.3(yaml@2.9.0)
+      vite: 6.4.3(@types/node@26.4.0)(yaml@2.9.0)
 
-  vitest@4.1.11(vite@6.4.3(yaml@2.9.0)):
+  vitest@4.1.11(@types/node@26.4.0)(vite@6.4.3(@types/node@26.4.0)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@6.4.3(yaml@2.9.0))
+      '@vitest/mocker': 4.1.11(vite@6.4.3(@types/node@26.4.0)(yaml@2.9.0))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11
@@ -4110,8 +4141,10 @@ snapshots:
       tinyexec: 1.3.0
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.1
-      vite: 6.4.3(yaml@2.9.0)
+      vite: 6.4.3(@types/node@26.4.0)(yaml@2.9.0)
       why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 26.4.0
     transitivePeerDependencies:
       - msw
 

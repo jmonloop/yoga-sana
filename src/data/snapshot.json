@@ -1,0 +1,248 @@
+{
+  "actividades": [
+    {
+      "nombre": "Hatha Yoga",
+      "grupo": "yoga",
+      "descripcion": "Equilibrio entre fuerza, flexibilidad y respiración.",
+      "etiqueta": "",
+      "icono": "hatha",
+      "orden": 1,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Yoga Dinámico",
+      "grupo": "yoga",
+      "descripcion": "Energía, movimiento y vitalidad para cuerpo y mente.",
+      "etiqueta": "",
+      "icono": "dinamico",
+      "orden": 2,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Yoga Suave",
+      "grupo": "yoga",
+      "descripcion": "Clases suaves y conscientes para soltar tensiones.",
+      "etiqueta": "",
+      "icono": "suave",
+      "orden": 3,
+      "color": "lavanda",
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Yoga Adaptado",
+      "grupo": "yoga",
+      "descripcion": "Prácticas adaptadas a tus necesidades y ritmo.",
+      "etiqueta": "",
+      "icono": "adaptado",
+      "orden": 4,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Yoga Relajante",
+      "grupo": "yoga",
+      "descripcion": "Relajación profunda para liberar el estrés y calmar la mente.",
+      "etiqueta": "",
+      "icono": "relajante",
+      "orden": 5,
+      "color": "pizarra",
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Yoga para Niños",
+      "grupo": "yoga",
+      "descripcion": "Yoga y juegos para crecer en equilibrio corporal y emocional.",
+      "etiqueta": "",
+      "icono": "ninos",
+      "orden": 6,
+      "color": "melocoton",
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Gestión Emocional",
+      "grupo": "taller",
+      "descripcion": "Talleres y sesiones individuales para comprender y gestionar tus emociones.",
+      "etiqueta": "PARA EMPRESAS",
+      "icono": "mente",
+      "orden": 1,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Breathwork",
+      "grupo": "taller",
+      "descripcion": "Talleres de respiración consciente para liberar, renovar y conectar contigo.",
+      "etiqueta": "TALLERES 1 VEZ AL MES",
+      "icono": "pulmones",
+      "orden": 2,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Rebirthing Consciente",
+      "grupo": "taller",
+      "descripcion": "Respiración conectada para liberar bloqueos emocionales y transformar tu energía.",
+      "etiqueta": "GRUPO FIJO UN JUEVES CADA 15 DÍAS",
+      "icono": "espiral",
+      "orden": 3,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Constelaciones Familiares",
+      "grupo": "taller",
+      "descripcion": "Sanar, comprender y liberar patrones para vivir en armonía con tu sistema familiar.",
+      "etiqueta": "",
+      "icono": "familia",
+      "orden": 4,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Gimnasia Pasiva en Camilla",
+      "grupo": "taller",
+      "descripcion": "Relajación profunda a través del movimiento pasivo. Libera tensiones y restaura tu energía.",
+      "etiqueta": "",
+      "icono": "camilla",
+      "orden": 5,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Baño de Cuencos",
+      "grupo": "taller",
+      "descripcion": "Relajación profunda con sonido y vibración que armonizan cuerpo y mente.",
+      "etiqueta": "TALLERES 1 VEZ AL MES",
+      "icono": "cuencos",
+      "orden": 6,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Sanergía",
+      "grupo": "taller",
+      "descripcion": "Técnica energética que armoniza cuerpo, mente y emociones a través de la imposición de manos y la canalización de energía universal.",
+      "etiqueta": "",
+      "icono": "loto-manos",
+      "orden": 7,
+      "color": null,
+      "mensajeWa": null
+    }
+  ],
+  "horarios": [
+    {
+      "dia": "Lunes",
+      "hora": "9:30",
+      "actividad": "Yoga Sana",
+      "nota": ""
+    },
+    {
+      "dia": "Martes",
+      "hora": "9:30",
+      "actividad": "Yoga Sana",
+      "nota": ""
+    },
+    {
+      "dia": "Miércoles",
+      "hora": "9:30",
+      "actividad": "Yoga Sana",
+      "nota": ""
+    },
+    {
+      "dia": "Jueves",
+      "hora": "9:30",
+      "actividad": "Yoga Sana",
+      "nota": ""
+    },
+    {
+      "dia": "Viernes",
+      "hora": "10:00",
+      "actividad": "Yoga Relajante",
+      "nota": ""
+    },
+    {
+      "dia": "Lunes",
+      "hora": "11:00",
+      "actividad": "Yoga Suave",
+      "nota": ""
+    },
+    {
+      "dia": "Martes",
+      "hora": "11:00",
+      "actividad": "Yoga Suave",
+      "nota": ""
+    },
+    {
+      "dia": "Miércoles",
+      "hora": "11:00",
+      "actividad": "Yoga Suave",
+      "nota": ""
+    },
+    {
+      "dia": "Jueves",
+      "hora": "11:00",
+      "actividad": "Yoga Suave",
+      "nota": ""
+    },
+    {
+      "dia": "Lunes",
+      "hora": "17:30",
+      "actividad": "Yoga Sana",
+      "nota": ""
+    },
+    {
+      "dia": "Miércoles",
+      "hora": "17:30",
+      "actividad": "Yoga Sana",
+      "nota": ""
+    },
+    {
+      "dia": "Jueves",
+      "hora": "17:30",
+      "actividad": "Yoga Infantil",
+      "nota": ""
+    },
+    {
+      "dia": "Viernes",
+      "hora": "18:00",
+      "actividad": "Yoga Relajante",
+      "nota": ""
+    },
+    {
+      "dia": "Lunes",
+      "hora": "19:00",
+      "actividad": "Yoga Sana",
+      "nota": ""
+    },
+    {
+      "dia": "Miércoles",
+      "hora": "19:00",
+      "actividad": "Yoga Sana",
+      "nota": ""
+    },
+    {
+      "dia": "Martes",
+      "hora": "20:00",
+      "actividad": "Yoga Relajante",
+      "nota": ""
+    },
+    {
+      "dia": "Viernes",
+      "hora": "20:00",
+      "actividad": "Meditación guiada",
+      "nota": "Reserva anticipada"
+    }
+  ],
+  "ajustes": {
+    "mes": "Septiembre",
+    "tagline": "Tu espacio para respirar, conectar y reconectar contigo",
+    "nota_pie": "Clases para todos los niveles. Escucha tu cuerpo, honra tu proceso.",
+    "color.Yoga Sana": "salvia",
+    "color.Yoga Suave": "lavanda",
+    "color.Yoga Relajante": "pizarra",
+    "color.Yoga Infantil": "melocoton",
+    "color.Meditación guiada": "rosa"
+  }
+}
