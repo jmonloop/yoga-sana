@@ -1,5 +1,5 @@
 ---
-import { DEFAULT_ICONO, type Icono } from '../data/sheet';
+import type { Icono } from '../data/sheet';
 
 interface Props {
   icono: Icono;
@@ -15,9 +15,7 @@ const MARKS = import.meta.glob<string>('../../assets/icons/*.svg', {
   eager: true,
 });
 
-function mark(name: string): string {
-  return MARKS[`../../assets/icons/${name}.svg`] ?? MARKS[`../../assets/icons/${DEFAULT_ICONO}.svg`];
-}
+const mark = MARKS[`../../assets/icons/${icono}.svg`];
 ---
 
 <span
@@ -27,7 +25,7 @@ function mark(name: string): string {
   aria-label={label}
   aria-hidden={label ? undefined : 'true'}
 >
-  <Fragment set:html={mark(icono)} />
+  <Fragment set:html={mark} />
 </span>
 
 <style>

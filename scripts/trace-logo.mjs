@@ -1,17 +1,20 @@
 import { execFileSync } from 'node:child_process';
 import { mkdir, stat, writeFile } from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 import sharp from 'sharp';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SOURCE = path.join(ROOT, 'sources/images/logo.jpeg');
 const OUT_DIR = path.join(ROOT, 'assets/logo');
-const TMP = path.join(os.tmpdir(), 'yoga-sana-logo.pbm');
 
 const THRESHOLD = 150;
-const SOURCE_BANDS = ['figura', 'wordmark', 'lema'];
-const TRACED_PARTS = ['logo-figura', 'logo-texto'];
+const POTRACE = ['-b', 'svg', '--flat', '-a', '1.2', '-O', '0.25', '-t', '6', '-o', '-', '-'];
+
+const BANDS = [
+  { name: 'figura', output: 'logo-figura' },
+  { name: 'texto', output: 'logo-texto' },
+  { name: 'lema', output: null },
+];
 
 async function readMask() {
   const { data, info } = await sharp(SOURCE).greyscale().raw().toBuffer({ resolveWithObject: true });
@@ -34,25 +37,31 @@ function inkBands({ ink, width, height }) {
   return bands;
 }
 
-function boundingBox(mask, band) {
+function inkColumns(mask, band) {
   const columnHasInk = (x) => {
     for (let y = band.top; y <= band.bottom; y++) if (mask.ink(x, y)) return true;
     return false;
   };
-  const inked = Array.from({ length: mask.width }, (_, x) => x).filter(columnHasInk);
-  const left = inked[0];
-  return { left, top: band.top, width: inked.at(-1) - left + 1, height: band.bottom - band.top + 1 };
+  let left = 0;
+  let right = mask.width - 1;
+  while (!columnHasInk(left)) left++;
+  while (!columnHasInk(right)) right--;
+  return { left, width: right - left + 1 };
 }
 
-function toPbm(mask, box) {
-  const stride = Math.ceil(box.width / 8);
-  const bits = Buffer.alloc(stride * box.height);
-  for (let y = 0; y < box.height; y++) {
-    for (let x = 0; x < box.width; x++) {
-      if (mask.ink(box.left + x, box.top + y)) bits[y * stride + (x >> 3)] |= 0x80 >> (x & 7);
-    }
+function rowBits(mask, y, left, width) {
+  const bits = Buffer.alloc(Math.ceil(width / 8));
+  for (let x = 0; x < width; x++) {
+    if (mask.ink(left + x, y)) bits[x >> 3] |= 0x80 >> (x & 7);
   }
-  return Buffer.concat([Buffer.from(`P4\n${box.width} ${box.height}\n`), bits]);
+  return bits;
+}
+
+function toPbm(mask, band) {
+  const { left, width } = inkColumns(mask, band);
+  const height = band.bottom - band.top + 1;
+  const rows = Array.from({ length: height }, (_, row) => rowBits(mask, band.top + row, left, width));
+  return Buffer.concat([Buffer.from(`P4\n${width} ${height}\n`), ...rows]);
 }
 
 function normalise(svg) {
@@ -66,18 +75,32 @@ function normalise(svg) {
     .concat('\n');
 }
 
-async function tracePart(mask, band, name) {
-  const target = path.join(OUT_DIR, `${name}.svg`);
-  await writeFile(TMP, toPbm(mask, boundingBox(mask, band)));
-  const svg = execFileSync('potrace', ['-b', 'svg', '--flat', '-a', '1.2', '-O', '0.25', '-t', '6', '-o', '-', TMP]);
-  await writeFile(target, normalise(svg.toString()));
-  console.log(`${name}.svg\t${(await stat(target)).size}`);
+function trace(mask, band) {
+  try {
+    return normalise(execFileSync('potrace', POTRACE, { input: toPbm(mask, band) }).toString());
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    throw new Error('potrace is not installed; install it first (macOS: brew install potrace)');
+  }
+}
+
+function bandsToTrace(bands) {
+  const expected = BANDS.map((part) => part.name).join(', ');
+  if (bands.length !== BANDS.length) {
+    throw new Error(`expected ink bands ${expected}; found ${bands.length} bands`);
+  }
+  return BANDS.map((part, index) => ({ ...part, band: bands[index] })).filter((part) => part.output);
+}
+
+async function writeAll(traced) {
+  await mkdir(OUT_DIR, { recursive: true });
+  for (const { output, svg } of traced) {
+    const target = path.join(OUT_DIR, `${output}.svg`);
+    await writeFile(target, svg);
+    console.log(`${output}.svg\t${(await stat(target)).size}`);
+  }
 }
 
 const mask = await readMask();
-const bands = inkBands(mask);
-if (bands.length !== SOURCE_BANDS.length) {
-  throw new Error(`expected ink bands ${SOURCE_BANDS.join(', ')}; found ${bands.length} bands`);
-}
-await mkdir(OUT_DIR, { recursive: true });
-for (const [index, name] of TRACED_PARTS.entries()) await tracePart(mask, bands[index], name);
+const parts = bandsToTrace(inkBands(mask));
+await writeAll(parts.map((part) => ({ output: part.output, svg: trace(mask, part.band) })));

@@ -418,18 +418,22 @@ and has the WhatsApp-status image she used to build in Canva.
 ## 9. Repo, build, hosting
 
 ```
-.github/workflows/   snapshot.yml (cron + push), deploy.yml
+.github/workflows/   snapshot.yml (cron + push), deploy.yml — TBD
 seed/                horarios.csv · actividades.csv · ajustes.csv
-assets/icons/        6 traced class SVGs (hatha, dinamico, suave,
-                     adaptado, relajante, ninos) + 7 workshop marks TBD
-scripts/             fetch-snapshot.mjs
-src/data/            snapshot.json · sheet.ts · site.ts
-src/components/      Horario · ActividadCard · WaButton · Section
+sources/             images/ — the untouched original archive (15 files)
+assets/icons/        14 marks: 6 traced poses (hatha, dinamico, suave,
+                     adaptado, relajante, ninos) + 8 drawn (mente, pulmones,
+                     espiral, familia, camilla, cuencos, loto-manos, loto)
+assets/logo/         logo-figura.svg · logo-texto.svg — traced, `pnpm logo`
+scripts/             fetch-snapshot.mjs · process-images.mjs · trace-logo.mjs
+src/data/            snapshot.json · sheet.ts · site.ts · sheet-config.ts
+                     live-refresh.ts · snapshot.ts (+ a .test.ts each)
+src/components/      Icono · WaButton · Section (Horario · ActividadCard TBD)
 src/layouts/         Base.astro
-src/pages/           index · clases-de-yoga · talleres-y-experiencias
-                     sanergia · online · sobre-mi · aviso-legal · privacidad
-src/styles/          tokens.css
-public/img/          webp/avif derivatives
+src/pages/           index (clases-de-yoga · talleres-y-experiencias · sanergia
+                     online · sobre-mi · aviso-legal · privacidad all TBD)
+src/styles/          tokens.css · base.css
+public/img/          62 committed avif/webp/jpg derivatives, 1.16 MB
 ```
 
 **Hosting: €0** on GitHub Pages.
@@ -508,7 +512,21 @@ Ceiling tiles and fluorescent panels are cropped out of all four. `yoga3` is gra
 *cooler* (warm −0.3, saturation 0.88) — it is the one source with a magenta, not a cool,
 cast. Output names stay neutral about who is in frame while `yoga1` is
 unconfirmed. Caps respected: `meditacion-sentada` tops out at 501 px and `yoga-al-aire-libre` at
-640 px, never upscaled.
+640 px, and `resize({ withoutEnlargement: true })` makes the no-upscaling rule explicit
+rather than a property of the current widths.
+
+**The manifest deliberately covers 8 of the 15 tracked sources**, plus `logo.jpeg`
+handled by `scripts/trace-logo.mjs` — nine in total. The remaining six,
+`yoga-pose1..6.png`, are **inputs to the icon trace, not page imagery**, so they have no
+derivatives and never reach `public/img/`.
+
+**Both scripts write non-destructively.** `process-images.mjs` renders every derivative
+into `public/img.tmp` and only swaps it over `public/img/` once all 62 succeed (files it
+does not own — a future `og-image.png` — are carried across, and the staging directory is
+removed in a `finally`, so a mid-run failure leaves the committed outputs and `git status`
+untouched). `trace-logo.mjs` runs potrace for both parts before writing either, so a
+failure on the second cannot leave the first overwritten. Both were verified by
+deliberately failing them mid-run.
 
 3. **Mixed provenance.** `yoga2` and `consciencia-corporal` read as stock or AI;
    `yoga1`, `yoga3` and the centro shots read as genuinely hers. Put the authentic
@@ -556,10 +574,14 @@ Reproducible, zero-cost:
    baked circle and ground.
 2. Crop to the figure's bounding box, squared and centred, with 6% padding — this
    normalises framing across all six.
-3. Write 1-bit PBM, then
-   `potrace -b svg --flat -a 1.2 -O 0.25 -t 6`.
+3. Write a 1-bit PBM and pipe it to potrace on stdin:
+   `potrace -b svg --flat -a 1.2 -O 0.25 -t 6 -o - -`.
 4. Post-process: strip the DOCTYPE comment and fixed `width`/`height`, swap
    `fill="#000000"` for `fill="currentColor"`.
+
+**Prerequisite: potrace.** It is a system binary, not an npm dependency — `pnpm logo`
+needs `brew install potrace` (or the distro equivalent) and says so with a plain message
+instead of a raw `ENOENT` when it is missing. `pnpm images` needs nothing beyond sharp.
 
 Result: one `<path>` per file, square viewBox, transparent, inheriting colour from CSS.
 The sage circle becomes a CSS element using `--salvia-tint`, so all six match exactly
@@ -603,6 +625,7 @@ fourteen read as one set. Nothing third-party is vendored, so no attribution fil
 
 | File | Bytes | Mark |
 |---|---|---|
+| `espiral.svg` | 271 | 2½-turn coil, even 38-unit band, round terminals |
 | `mente.svg` | 406 | bust with a heart in the head |
 | `cuencos.svg` | 455 | bowl radiating symmetric sound arcs |
 | `camilla.svg` | 463 | figure reclining on a treatment table |
@@ -610,12 +633,20 @@ fourteen read as one set. Nothing third-party is vendored, so no attribution fil
 | `familia.svg` | 620 | two adults and a child |
 | `loto.svg` | 836 | five-petal lotus on a water line |
 | `loto-manos.svg` | 1314 | two open palms under a lotus |
-| `espiral.svg` | 2202 | tapering spiral ribbon |
-| **Total** | **6874** | half the weight of the traced six |
+| **Total** | **4943** | 38 % of the traced six (12 852 B) |
+
+**`espiral` redrawn.** The first version was a generated ~90-point polyline of a ribbon
+that tapered to nothing: 2202 B, the heaviest file in the set, and it read as a thin line
+next to thirteen solid marks even though its ink coverage (27.4 %) was mid-band — area is
+not weight. It is now six half-turn arcs on one path, stroked at a constant 38 units with
+round caps, matching the band weight of `cuencos`' sound arcs: 271 B, 24.9 % coverage, and
+legible down to the 37 px the icon actually renders at. Rendered beside the other thirteen
+on `--crema` and `--oliva`, at 64 px and 37 px, it now sits with them.
 
 Ink coverage was measured at 256², to keep the two groups in one weight band: traced six
-9.5–29.9 %, drawn eight 18.3–31.8 % (`familia` was redrawn down from 44.9 %). All eight
-use `viewBox="0 0 512 512"`, `fill="currentColor"`, no fixed width/height.
+9.3–29.4 %, drawn eight 18.2–31.6 % (`familia` was redrawn down from 44.9 %). All eight
+use `viewBox="0 0 512 512"` and no fixed width/height; seven are `fill="currentColor"`
+and `espiral` is a `stroke="currentColor"` band, as `cuencos` already was in part.
 
 **Optical sizing nit — measured, not fixable by scaling.** Equalising *rendered area*
 would need `relajante` ~1.7× larger, but its bounding box already fills 94 % of the box
@@ -632,8 +663,9 @@ olive strokes, with a heavier stroke weight to match the solid silhouettes.
 
 **Traced cleanly — no raster fallback needed.** The logo is single-tone dark line art on
 a pale-green ground, so the same pipeline works on it: `scripts/trace-logo.mjs`
-(`pnpm logo`) thresholds it, finds its three ink bands (figure, wordmark, tagline),
-bounding-boxes each and runs the same potrace flags. Serif detail survives, checked by
+(`pnpm logo`) thresholds it, finds its three ink bands (`figura`, `texto`, `lema` — the
+manifest names them, and the one with no output file is the tagline it deliberately
+drops), bounding-boxes the two it emits and runs the same potrace flags. Serif detail survives, checked by
 rendering the wordmark far above the size the header uses.
 
 | File | Bytes | viewBox |
@@ -644,12 +676,28 @@ rendering the wordmark far above the size the header uses.
 The stacked original cannot work in a 78 px header — the wordmark would render at ~10 px
 — so the header uses a **horizontal lockup**: figure left, wordmark right, `Catarroja`
 kept as the sub-line. The tagline band ("Yoga, meditación y talleres") is deliberately
-not traced; nothing on the site uses it. Measured after the swap: header 78.09 px at
-≥480 px and 77 px below (both identical to before the swap, where the 44 px nav toggle
-is the tallest child), at nine viewport widths from 320 to 1440, with `scroll-padding-top`
-94 px still clearing it everywhere. The brand lockup is narrower than the text one it
-replaced only because it steps down at ≤479 px; at 320 px it leaves 11.5 px of slack
-against the CTA and burger.
+not traced; nothing on the site uses it.
+
+**Sizing is continuous, with no breakpoint of its own:** `height: clamp(26px, 8vw, 43px)`
+on the figure and `clamp(14px, 4.5vw, 24px)` on the wordmark, both reaching their cap at
+~537 px — the same shape as the `clamp()` text wordmark they replaced. A first attempt
+used two fixed pixel heights with a ≤479 px step-down; measurement showed the step fired
+60–80 px earlier than the layout needed (at 480 px the full lockup still had 64 px of
+slack) and jumped brand width +66 % across the boundary, so it is gone.
+
+Measured on the built header at 16 viewport widths from 320 to 1440: the brand, CTA and
+burger stay on **one row everywhere**, with the tightest fit 9.5 px of slack at 320 px
+(79.1 px at 420 px, 81.1 px at 480 px, growing from there). Header height is 77 px up to
+~508 px — where the 44 px nav toggle plus the 1 px bottom border is the tallest child —
+then rises continuously to **78.09 px from ~535 px up**, once the brand lockup overtakes
+the toggle. `scroll-padding-top` is 94 px, so anchor targets clear that 78.09 px maximum
+at every width.
+
+*Correction to an earlier claim here:* the swap was described as leaving the header
+height "identical to before" at nine widths. It was not, at 480 px — the pre-swap text
+lockup measured 77 px there (its `clamp()` only capped between 500 and 540 px) while the
+first traced version stepped up to 78.09. Harmless, but wrong; the numbers above are the
+current ones, re-measured.
 
 ### Botanical motifs
 

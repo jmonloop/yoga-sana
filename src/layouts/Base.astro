@@ -210,12 +210,12 @@ const NAV_ITEMS = [
       }
 
       .brand-mark :global(svg) {
-        height: 43px;
+        height: clamp(26px, 8vw, 43px);
         width: auto;
       }
 
       .brand-wordmark :global(svg) {
-        height: 24px;
+        height: clamp(14px, 4.5vw, 24px);
         width: auto;
       }
 
@@ -398,14 +398,6 @@ const NAV_ITEMS = [
 
         .brand {
           gap: 0.5rem;
-        }
-
-        .brand-mark :global(svg) {
-          height: 26px;
-        }
-
-        .brand-wordmark :global(svg) {
-          height: 14px;
         }
 
         .brand-sub {
