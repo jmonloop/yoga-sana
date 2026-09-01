@@ -1,0 +1,182 @@
+---
+import { renderHorario } from './horario-markup';
+import { SNAPSHOT } from '../data/snapshot';
+
+const markup = renderHorario(SNAPSHOT);
+---
+
+<div class="horario" data-horario set:html={markup} />
+
+<script>
+  const paint = (markup: string): void => {
+    document.querySelectorAll('[data-horario]').forEach((mount) => {
+      mount.innerHTML = markup;
+    });
+  };
+
+  const refresh = async (): Promise<void> => {
+    const [{ renderHorario }, { onFreshSnapshot }, { SNAPSHOT }] = await Promise.all([
+      import('./horario-markup'),
+      import('../data/live-refresh'),
+      import('../data/snapshot'),
+    ]);
+    await onFreshSnapshot(SNAPSHOT, (fresh) => paint(renderHorario(fresh)));
+  };
+
+  if (document.readyState === 'complete') void refresh();
+  else window.addEventListener('load', () => void refresh(), { once: true });
+</script>
+
+<style>
+  .horario {
+    container-type: inline-size;
+  }
+
+  .horario :global(.horario-tabla) {
+    display: none;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .horario :global(thead th) {
+    padding-bottom: 0.9rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+    color: var(--oliva);
+  }
+
+  .horario :global(thead th:first-child) {
+    width: 5.5rem;
+  }
+
+  .horario :global(tbody th) {
+    padding-right: 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-align: right;
+    white-space: nowrap;
+    color: var(--oliva-oscuro);
+  }
+
+  .horario :global(tbody th),
+  .horario :global(tbody td) {
+    padding-block: 0.3rem;
+    vertical-align: top;
+  }
+
+  .horario :global(tbody td) {
+    padding-inline: 0.25rem;
+  }
+
+  .horario :global(.horario-banda > *) {
+    padding-top: 2.5rem;
+  }
+
+  .horario :global(.horario-chip) {
+    display: block;
+    padding: 0.6em 0.9em;
+    border-radius: var(--radius-pill);
+    background-color: var(--chip);
+    color: var(--tinta);
+    font-size: 0.875rem;
+    line-height: 1.3;
+    text-align: center;
+    text-decoration: none;
+    text-wrap: balance;
+  }
+
+  .horario :global(.horario-chip + .horario-chip) {
+    margin-top: 0.35rem;
+  }
+
+  .horario :global(.horario-chip:hover) {
+    text-decoration: underline;
+  }
+
+  .horario :global(.horario-chip:focus-visible) {
+    outline: 2px solid var(--tinta);
+    outline-offset: 2px;
+  }
+
+  .horario :global(.color-salvia) {
+    --chip: var(--salvia);
+  }
+
+  .horario :global(.color-lavanda) {
+    --chip: var(--lavanda);
+  }
+
+  .horario :global(.color-pizarra) {
+    --chip: var(--pizarra);
+  }
+
+  .horario :global(.color-melocoton) {
+    --chip: var(--melocoton);
+  }
+
+  .horario :global(.color-rosa) {
+    --chip: var(--rosa);
+  }
+
+  .horario :global(.horario-nota) {
+    margin: 0.3rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--oliva-oscuro);
+  }
+
+  .horario :global(.horario-dia) {
+    margin-bottom: 2rem;
+  }
+
+  .horario :global(.horario-dia h3) {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+    color: var(--oliva);
+  }
+
+  .horario :global(.horario-dia ul) {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .horario :global(.horario-dia li) {
+    display: grid;
+    gap: 0.3rem;
+    max-width: 24rem;
+  }
+
+  .horario :global(.horario-hora) {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--oliva-oscuro);
+  }
+
+  .horario :global(.horario-lista .horario-nota) {
+    text-align: left;
+  }
+
+  @container (min-width: 900px) {
+    .horario :global(.horario-tabla) {
+      display: table;
+    }
+
+    .horario :global(.horario-lista) {
+      display: none;
+    }
+  }
+</style>
