@@ -1,23 +1,23 @@
-import { browserSheetConfig, csvUrl, type SheetConfig } from './sheet-config';
+import { csvUrl, toSheetConfig, type SheetConfig } from './sheet-config';
 import { isUsableSnapshot, parseSnapshot, type Snapshot, type TabCsv } from './sheet';
 
 export async function onFreshSnapshot(
   baked: Snapshot,
   apply: (snapshot: Snapshot) => void,
 ): Promise<void> {
-  const config = browserSheetConfig();
+  const config = toSheetConfig(import.meta.env ?? {});
   if (!config) return;
-  const fresh = await readLiveSnapshot(config);
-  if (fresh && differs(fresh, baked)) apply(fresh);
+  try {
+    const fresh = await readLiveSnapshot(config);
+    if (fresh && differs(fresh, baked)) apply(fresh);
+  } catch {
+    return;
+  }
 }
 
 async function readLiveSnapshot(config: SheetConfig): Promise<Snapshot | null> {
-  try {
-    const live = parseSnapshot(await fetchTabs(config));
-    return live && isUsableSnapshot(live) ? live : null;
-  } catch {
-    return null;
-  }
+  const live = parseSnapshot(await fetchTabs(config));
+  return live && isUsableSnapshot(live) ? live : null;
 }
 
 async function fetchTabs(config: SheetConfig): Promise<TabCsv> {

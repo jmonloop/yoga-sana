@@ -53,7 +53,7 @@ export interface Horario {
   nota: string;
 }
 
-export type Ajustes = Record<string, string>;
+export type Ajustes = Record<string, string | undefined>;
 
 export interface TabCsv {
   actividades: string;
@@ -197,21 +197,25 @@ export function parseSnapshot(csv: TabCsv): Snapshot | null {
 }
 
 export function isUsableSnapshot(snapshot: Snapshot): boolean {
-  return snapshot.actividades.length > 0 && snapshot.horarios.length > 0;
+  return hasRows(snapshot.actividades) && hasRows(snapshot.horarios);
+}
+
+function hasRows(rows: unknown[]): boolean {
+  return Array.isArray(rows) && rows.length > 0;
 }
 
 export function resolveColor(actividad: string, snapshot: Snapshot): PaletteColor {
-  return (
-    pinnedColor(actividad, snapshot.ajustes) ??
-    cardColor(actividad, snapshot.actividades) ??
-    autoColor(actividad, snapshot)
-  );
+  return explicitColor(actividad, snapshot) ?? autoColor(actividad, snapshot);
+}
+
+function explicitColor(actividad: string, snapshot: Snapshot): PaletteColor | null {
+  return pinnedColor(actividad, snapshot.ajustes) ?? cardColor(actividad, snapshot.actividades);
 }
 
 function pinnedColor(actividad: string, ajustes: Ajustes): PaletteColor | null {
   const wanted = `color.${normalize(actividad)}`;
   const pinned = Object.entries(ajustes).find(([clave]) => normalize(clave) === wanted);
-  return pinned ? toPaletteColor(pinned[1]) : null;
+  return toPaletteColor(pinned?.[1] ?? '');
 }
 
 function cardColor(actividad: string, actividades: Actividad[]): PaletteColor | null {
@@ -222,15 +226,9 @@ function cardColor(actividad: string, actividades: Actividad[]): PaletteColor | 
 function autoColor(actividad: string, snapshot: Snapshot): PaletteColor {
   const timetableNames = [...new Set(snapshot.horarios.map((horario) => horario.actividad))];
   const unpinned = timetableNames
-    .filter((nombre) => !hasExplicitColor(nombre, snapshot))
+    .filter((nombre) => explicitColor(nombre, snapshot) === null)
     .map(normalize);
   const index = unpinned.indexOf(normalize(actividad));
   return PALETTE[(index === -1 ? unpinned.length : index) % PALETTE.length];
 }
 
-function hasExplicitColor(actividad: string, snapshot: Snapshot): boolean {
-  return (
-    pinnedColor(actividad, snapshot.ajustes) !== null ||
-    cardColor(actividad, snapshot.actividades) !== null
-  );
-}

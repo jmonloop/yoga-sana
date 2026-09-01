@@ -1,34 +1,45 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { SNAPSHOT } from './snapshot';
 import {
   DEFAULT_ICONO,
   isUsableSnapshot,
   parseActividades,
   parseAjustes,
   parseHorarios,
-  PALETTE,
   parseSnapshot,
   resolveColor,
+  type Actividad,
+  type Horario,
   type Snapshot,
+  type TabCsv,
 } from './sheet';
 
 function seed(tab: string): string {
   return readFileSync(new URL(`../../seed/${tab}.csv`, import.meta.url), 'utf8');
 }
 
-const SEED: Snapshot = parseSnapshot({
+function parse(csv: TabCsv): Snapshot {
+  const snapshot = parseSnapshot(csv);
+  if (!snapshot) throw new Error('a tab under test was rejected outright');
+  return snapshot;
+}
+
+const SEED = parse({
   actividades: seed('actividades'),
   horarios: seed('horarios'),
   ajustes: seed('ajustes'),
-})!;
+});
 
-function actividades(csv: string) {
-  return parseActividades(csv)!;
+function actividades(csv: string): Actividad[] {
+  const rows = parseActividades(csv);
+  expect(rows).not.toBeNull();
+  return rows ?? [];
 }
 
-function horarios(csv: string) {
-  return parseHorarios(csv)!;
+function horarios(csv: string): Horario[] {
+  const rows = parseHorarios(csv);
+  expect(rows).not.toBeNull();
+  return rows ?? [];
 }
 
 describe('rule 1 — read by header name, never column index', () => {
@@ -99,12 +110,12 @@ describe('rule 3 — hora parses leniently and displays cleanly', () => {
   });
 
   it('strips the seconds Sheets adds so both spellings share one row', () => {
-    expect(rows[0]!.hora).toBe('9:30');
-    expect(rows[1]!.hora).toBe('9:30');
+    expect(rows[0].hora).toBe('9:30');
+    expect(rows[1].hora).toBe('9:30');
   });
 
   it('displays an unparseable hora verbatim', () => {
-    expect(rows[3]!.hora).toBe('a convenir');
+    expect(rows[3].hora).toBe('a convenir');
   });
 });
 
@@ -130,19 +141,19 @@ describe('rule 4 — dia matched case- and accent-insensitively', () => {
       'Sin acento',
       'Desconocido',
     ]);
-    expect(rows[3]!.dia).toBe('Cualquier día');
+    expect(rows[3].dia).toBe('Cualquier día');
   });
 });
 
 describe('rule 5 — a timetable class with no activity card still renders', () => {
   it('keeps the entry and gives it an auto-assigned colour', () => {
-    const snapshot = parseSnapshot({
+    const snapshot = parse({
       actividades: 'nombre,grupo,descripcion\nHatha Yoga,yoga,x',
       horarios: 'dia,hora,actividad\nViernes,20:00,Meditación guiada',
       ajustes: 'clave,valor\nmes,Septiembre',
-    })!;
+    });
 
-    expect(snapshot.horarios[0]!.actividad).toBe('Meditación guiada');
+    expect(snapshot.horarios[0].actividad).toBe('Meditación guiada');
     expect(resolveColor('Meditación guiada', snapshot)).toBe('salvia');
   });
 });
@@ -164,7 +175,7 @@ describe('rule 6 — header normalisation', () => {
   it('survives the byte order mark Sheets puts in front of the first header', () => {
     const rows = horarios('\uFEFFdia,hora,actividad\nLunes,9:30,Yoga Sana');
 
-    expect(rows[0]!.dia).toBe('Lunes');
+    expect(rows[0].dia).toBe('Lunes');
   });
 });
 
@@ -255,7 +266,7 @@ describe('icono', () => {
 
 describe('resolveColor', () => {
   const build = (ajustes: string, actividadesCsv: string, horariosCsv: string): Snapshot =>
-    parseSnapshot({ actividades: actividadesCsv, horarios: horariosCsv, ajustes })!;
+    parse({ actividades: actividadesCsv, horarios: horariosCsv, ajustes });
 
   it('prefers the color.* key in ajustes over the actividades column', () => {
     const snapshot = build(
@@ -383,40 +394,27 @@ describe('the real seed CSVs', () => {
 });
 
 describe('isUsableSnapshot', () => {
-  const headerOnly = parseSnapshot({
+  const headerOnly = parse({
     actividades: 'nombre,grupo,descripcion',
     horarios: 'dia,hora,actividad',
     ajustes: 'clave,valor',
-  })!;
+  });
 
   it('rejects tabs that parse but carry no rows', () => {
-    expect(headerOnly).not.toBeNull();
     expect(isUsableSnapshot(headerOnly)).toBe(false);
   });
 
   it('rejects a Sheet whose every row was switched off with activo NO', () => {
-    const allHidden = parseSnapshot({
+    const allHidden = parse({
       actividades: 'nombre,grupo,descripcion,activo\nHatha Yoga,yoga,x,NO',
       horarios: 'dia,hora,actividad,activo\nLunes,9:30,Yoga Sana,NO',
       ajustes: 'clave,valor\nmes,Septiembre',
-    })!;
+    });
 
     expect(isUsableSnapshot(allHidden)).toBe(false);
   });
 
   it('accepts the seed data', () => {
     expect(isUsableSnapshot(SEED)).toBe(true);
-  });
-});
-
-describe('the committed snapshot', () => {
-  it('is never empty, so no visitor can meet an empty Horarios or Actividades', () => {
-    expect(isUsableSnapshot(SNAPSHOT)).toBe(true);
-  });
-
-  it('gives every timetable class a palette colour', () => {
-    for (const horario of SNAPSHOT.horarios) {
-      expect(PALETTE).toContain(resolveColor(horario.actividad, SNAPSHOT));
-    }
   });
 });

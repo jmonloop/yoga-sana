@@ -10,7 +10,11 @@ const BAKED: TabCsv = {
 
 const LIVE: TabCsv = { ...BAKED, ajustes: 'clave,valor\nmes,Octubre' };
 
-const snapshotOf = (csv: TabCsv): Snapshot => parseSnapshot(csv)!;
+function snapshotOf(csv: TabCsv): Snapshot {
+  const snapshot = parseSnapshot(csv);
+  if (!snapshot) throw new Error('the fixture CSV no longer parses');
+  return snapshot;
+}
 
 function configureSheet(): void {
   vi.stubEnv('PUBLIC_SHEET_ID', '2PACX-abc');
@@ -89,7 +93,7 @@ describe('onFreshSnapshot', () => {
     );
     const apply = vi.fn();
 
-    await expect(onFreshSnapshot(snapshotOf(BAKED), vi.fn())).resolves.toBeUndefined();
+    await expect(onFreshSnapshot(snapshotOf(BAKED), apply)).resolves.toBeUndefined();
     expect(apply).not.toHaveBeenCalled();
   });
 
@@ -105,6 +109,17 @@ describe('onFreshSnapshot', () => {
     await onFreshSnapshot(snapshotOf(BAKED), apply);
 
     expect(apply).not.toHaveBeenCalled();
+  });
+
+  it('swallows an exception thrown by the re-render it triggers', async () => {
+    configureSheet();
+    serve(LIVE);
+    const apply = vi.fn(() => {
+      throw new Error('the grid blew up');
+    });
+
+    await expect(onFreshSnapshot(snapshotOf(BAKED), apply)).resolves.toBeUndefined();
+    expect(apply).toHaveBeenCalled();
   });
 
   it('keeps the baked snapshot when the live CSV is missing a required column', async () => {

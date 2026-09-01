@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { csvUrl, missingSheetEnvKeys, toSheetConfig } from './sheet-config';
+import { csvUrl, missingSheetEnvKeys, toSheetConfig, type SheetConfig } from './sheet-config';
 
 const FULL = {
   PUBLIC_SHEET_ID: '2PACX-abc',
@@ -33,7 +33,12 @@ describe('toSheetConfig', () => {
 
 describe('csvUrl', () => {
   it('points at the published CSV endpoint for the requested tab', () => {
-    const url = new URL(csvUrl(toSheetConfig(FULL)!, 'horarios'));
+    const config: SheetConfig = {
+      sheetId: '2PACX-abc',
+      gids: { actividades: '0', horarios: '111', ajustes: '222' },
+    };
+
+    const url = new URL(csvUrl(config, 'horarios'));
 
     expect(url.origin + url.pathname).toBe(
       'https://docs.google.com/spreadsheets/d/2PACX-abc/pub',

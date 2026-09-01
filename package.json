@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "snapshot": "node scripts/fetch-snapshot.mjs",
+    "snapshot": "node --env-file-if-exists=.env scripts/fetch-snapshot.mjs",
     "test": "vitest run"
   },
   "dependencies": {

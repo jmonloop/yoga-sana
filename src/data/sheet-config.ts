@@ -13,10 +13,12 @@ const ENV_KEYS = {
   ajustes: 'PUBLIC_SHEET_GID_AJUSTES',
 } as const;
 
-type Env = Partial<Record<string, string>>;
+export const SHEET_ENV_KEYS: readonly string[] = Object.values(ENV_KEYS);
+
+type Env = Record<string, string | undefined>;
 
 export function missingSheetEnvKeys(env: Env): string[] {
-  return Object.values(ENV_KEYS).filter((key) => read(env, key) === '');
+  return SHEET_ENV_KEYS.filter((key) => read(env, key) === '');
 }
 
 export function toSheetConfig(env: Env): SheetConfig | null {
@@ -35,9 +37,6 @@ function read(env: Env, key: string): string {
   return env[key]?.trim() ?? '';
 }
 
-export function browserSheetConfig(): SheetConfig | null {
-  return toSheetConfig(import.meta.env ?? {});
-}
 
 export function csvUrl(config: SheetConfig, tab: Tab): string {
   const base = `https://docs.google.com/spreadsheets/d/${config.sheetId}/pub`;
