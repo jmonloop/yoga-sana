@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Foto from '../components/Foto.astro';
+import WaButton from '../components/WaButton.astro';
+import { CTAS } from '../data/site';
+---
+
+<Base
+  title="Sanergía en Catarroja (València), presencial y online — Yoga Sana"
+  description="Sanergía: técnica energética que armoniza cuerpo, mente y emociones a través de la imposición de manos. Sesiones individuales presenciales en Catarroja u online."
+>
+  <Section>
+    <div class="hero">
+      <p class="hero-script">Un lugar para ti</p>
+      <h1>Sanergía</h1>
+      <p class="hero-texto">
+        Técnica energética que armoniza cuerpo, mente y emociones a través de la imposición
+        de manos y la canalización de energía universal.
+      </p>
+      <div class="acciones">
+        <WaButton {...CTAS.reservarSanergia} />
+        <WaButton {...CTAS.reservarSanergiaOnline} variant="secondary" />
+      </div>
+      <p class="modalidad">
+        La sesión es individual y puede ser presencial en Catarroja u online.
+      </p>
+    </div>
+  </Section>
+
+  <Section title="Qué es la Sanergía" muted>
+    <p class="pendiente">
+      PENDIENTE DE TEXTO — Natalia: aquí va tu explicación larga de la Sanergía (qué es, en
+      qué consiste una sesión, cómo se desarrolla, para quién es y tu formación en la
+      técnica). No existe texto original de partida y no se ha escrito nada inventado.
+      Sustituir antes de publicar.
+    </p>
+  </Section>
+
+  <Section title="Espacio Raíz">
+    <div class="raiz">
+      <div class="raiz-texto">
+        <p>Espacio Raíz es el acompañamiento individual de Yoga Sana.</p>
+        <p class="pendiente">
+          PENDIENTE DE TEXTO — Natalia: aquí va la descripción de Espacio Raíz (en qué
+          consiste el acompañamiento, cómo se organiza y a quién va dirigido). No existe
+          texto original de partida y no se ha escrito nada inventado. Sustituir antes de
+          publicar.
+        </p>
+        <WaButton {...CTAS.espacioRaiz} />
+      </div>
+      <Foto
+        nombre="consciencia-corporal"
+        sizes="(min-width: 60rem) 24rem, 92vw"
+        alt="Mujer bailando con los brazos abiertos en una sala luminosa, captada en movimiento."
+      />
+    </div>
+  </Section>
+
+  <Section title="¿Te queda alguna duda?" muted>
+    <p class="intro">
+      Escríbeme por WhatsApp y te lo cuento sin compromiso, antes de reservar nada.
+    </p>
+    <WaButton {...CTAS.contacto} />
+  </Section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+  }
+
+  .hero-script {
+    margin: 0;
+    font-family: var(--font-script);
+    font-size: var(--font-size-display);
+    line-height: 1.1;
+    color: var(--oliva);
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5.5vw, 3.25rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    color: var(--tinta);
+  }
+
+  .hero-texto {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .modalidad {
+    margin: 0;
+    color: var(--oliva-oscuro);
+  }
+
+  .intro {
+    margin: 0 0 2rem;
+  }
+
+  .raiz {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .raiz-texto {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+  }
+
+  .raiz-texto p {
+    margin: 0;
+  }
+
+  .pendiente {
+    padding: 1rem 1.25rem;
+    border: 2px dashed var(--rosa-text);
+    border-radius: var(--radius-card);
+    color: var(--rosa-text);
+    font-weight: 500;
+  }
+
+  @media (min-width: 60rem) {
+    .raiz {
+      grid-template-columns: 1fr 24rem;
+      gap: 4rem;
+    }
+  }
+</style>

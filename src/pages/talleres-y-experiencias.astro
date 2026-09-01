@@ -1,0 +1,130 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Foto from '../components/Foto.astro';
+import Tarjetas from '../components/Tarjetas.astro';
+import WaButton from '../components/WaButton.astro';
+import { actividadesDe } from '../components/actividad';
+import { CTAS } from '../data/site';
+import { SNAPSHOT } from '../data/snapshot';
+
+const talleres = actividadesDe(SNAPSHOT.actividades, 'taller');
+
+const ENLACES = {
+  Sanergía: { href: '/sanergia', texto: 'Saber más sobre Sanergía' },
+};
+---
+
+<Base
+  title="Talleres de breathwork y experiencias en Catarroja (València) — Yoga Sana"
+  description="Breathwork, rebirthing consciente, constelaciones familiares, baño de cuencos, gimnasia pasiva y Sanergía: talleres y sesiones individuales en Catarroja, cerca de València."
+>
+  <Section>
+    <div class="hero">
+      <p class="hero-script">Date un espacio</p>
+      <h1>Talleres y experiencias</h1>
+      <p class="hero-texto">
+        Encuentros puntuales para respirar hondo, mirar hacia dentro y soltar lo que pesa,
+        en Catarroja (València).
+      </p>
+      <WaButton {...CTAS.empezar} />
+    </div>
+  </Section>
+
+  <Section title="Los talleres" muted>
+    <p class="intro">
+      Cada propuesta tiene su propio ritmo: algunas se repiten una vez al mes, otras son un
+      grupo fijo cada quince días y otras se convocan puntualmente. Por eso no están en el
+      horario semanal. Las que tienen una frecuencia fija lo dicen en su tarjeta; para el
+      resto, escríbeme y te aviso de la próxima.
+    </p>
+    <Tarjetas actividades={talleres} enlaces={ENLACES} />
+  </Section>
+
+  <Section title="Sesiones individuales">
+    <div class="individuales">
+      <div class="individuales-texto">
+        <p>
+          No todo pasa en grupo. La gestión emocional, la gimnasia pasiva en camilla y la
+          Sanergía también se hacen en sesión individual, a solas y a tu ritmo.
+        </p>
+        <p>
+          Escríbeme, me cuentas qué necesitas y vemos cuándo nos viene bien y por dónde
+          empezar.
+        </p>
+        <WaButton {...CTAS.sesionIndividual} />
+      </div>
+      <Foto
+        nombre="centro-camilla"
+        sizes="(min-width: 70rem) 30rem, (min-width: 60rem) 26rem, 92vw"
+        alt="Sala de tratamientos del centro: la camilla preparada bajo la estantería con los bolsters."
+      />
+    </div>
+  </Section>
+
+  <Section title="¿Te apetece probar?" muted>
+    <p class="intro">
+      Escríbeme por WhatsApp y te cuento qué hay en marcha, cuándo es lo próximo y qué te
+      puede encajar mejor.
+    </p>
+    <WaButton {...CTAS.empezar} />
+  </Section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+  }
+
+  .hero-script {
+    margin: 0;
+    font-family: var(--font-script);
+    font-size: var(--font-size-display);
+    line-height: 1.1;
+    color: var(--oliva);
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5.5vw, 3.25rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    color: var(--tinta);
+  }
+
+  .hero-texto {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+
+  .intro {
+    margin: 0 0 2rem;
+  }
+
+  .individuales {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .individuales-texto {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+  }
+
+  .individuales-texto p {
+    margin: 0;
+  }
+
+  @media (min-width: 60rem) {
+    .individuales {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+  }
+</style>

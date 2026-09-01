@@ -1,19 +1,21 @@
 ---
 import ActividadCard from './ActividadCard.astro';
+import type { Enlace } from './actividad';
 import type { Actividad } from '../data/sheet';
 
 interface Props {
   actividades: Actividad[];
+  enlaces?: Record<string, Enlace>;
 }
 
-const { actividades } = Astro.props;
+const { actividades, enlaces = {} } = Astro.props;
 ---
 
 <ul class="tarjetas" role="list">
   {
     actividades.map((actividad) => (
       <li>
-        <ActividadCard actividad={actividad} />
+        <ActividadCard actividad={actividad} enlace={enlaces[actividad.nombre]} />
       </li>
     ))
   }

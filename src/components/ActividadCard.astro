@@ -1,14 +1,15 @@
 ---
 import Icono from './Icono.astro';
 import WaButton from './WaButton.astro';
-import { actividadCta } from './actividad';
+import { actividadCta, type Enlace } from './actividad';
 import type { Actividad } from '../data/sheet';
 
 interface Props {
   actividad: Actividad;
+  enlace?: Enlace;
 }
 
-const { actividad } = Astro.props;
+const { actividad, enlace } = Astro.props;
 const cta = actividadCta(actividad);
 const etiqueta = actividad.etiqueta.trim();
 const descripcion = actividad.descripcion.trim();
@@ -21,6 +22,7 @@ const descripcion = actividad.descripcion.trim();
   {descripcion && <p class="descripcion">{descripcion}</p>}
   <div class="accion">
     <WaButton {...cta} variant="secondary" />
+    {enlace && <a class="enlace" href={enlace.href}>{enlace.texto}</a>}
   </div>
 </article>
 
@@ -71,7 +73,27 @@ const descripcion = actividad.descripcion.trim();
   }
 
   .accion {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
     margin-top: auto;
     padding-top: 0.75rem;
+  }
+
+  .accion :global(.wa-button) {
+    white-space: normal;
+  }
+
+  .enlace {
+    color: var(--oliva-oscuro);
+    font-size: 0.9375rem;
+    text-decoration-color: var(--salvia);
+    text-underline-offset: 0.25em;
+  }
+
+  .enlace:hover,
+  .enlace:focus-visible {
+    text-decoration-color: currentColor;
   }
 </style>

@@ -3,6 +3,11 @@ import { CTAS, type Cta } from '../data/site';
 
 export const ETIQUETA_EMPRESAS = 'PARA EMPRESAS';
 
+export interface Enlace {
+  href: string;
+  texto: string;
+}
+
 export function actividadesDe(actividades: Actividad[], grupo: Grupo): Actividad[] {
   return actividades.filter((actividad) => actividad.grupo === grupo).sort(porOrden);
 }
