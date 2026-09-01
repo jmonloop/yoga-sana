@@ -196,6 +196,10 @@ export function parseSnapshot(csv: TabCsv): Snapshot | null {
   return { actividades, horarios, ajustes };
 }
 
+export function isUsableSnapshot(snapshot: Snapshot): boolean {
+  return snapshot.actividades.length > 0 && snapshot.horarios.length > 0;
+}
+
 export function resolveColor(actividad: string, snapshot: Snapshot): PaletteColor {
   return (
     pinnedColor(actividad, snapshot.ajustes) ??

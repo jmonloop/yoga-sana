@@ -3,6 +3,10 @@ import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
 import WaButton from '../components/WaButton.astro';
 import { CTAS } from '../data/site';
+import { SNAPSHOT } from '../data/snapshot';
+
+const tagline =
+  SNAPSHOT.ajustes['tagline'] ?? 'Tu espacio para respirar, conectar y reconectar contigo';
 ---
 
 <Base
@@ -11,7 +15,7 @@ import { CTAS } from '../data/site';
 >
   <Section eyebrow="Un lugar para ti" title="Yoga Sana">
     <p class="fade-up">
-      Tu espacio para respirar, conectar y reconectar contigo, en Catarroja (València).
+      {tagline}, en Catarroja (València).
     </p>
     <WaButton {...CTAS.empezar} />
   </Section>

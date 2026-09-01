@@ -93,6 +93,20 @@ describe('onFreshSnapshot', () => {
     expect(apply).not.toHaveBeenCalled();
   });
 
+  it('keeps the baked snapshot when the live Sheet has been emptied of rows', async () => {
+    configureSheet();
+    serve({
+      actividades: 'nombre,grupo,descripcion',
+      horarios: 'dia,hora,actividad',
+      ajustes: 'clave,valor',
+    });
+    const apply = vi.fn();
+
+    await onFreshSnapshot(snapshotOf(BAKED), apply);
+
+    expect(apply).not.toHaveBeenCalled();
+  });
+
   it('keeps the baked snapshot when the live CSV is missing a required column', async () => {
     configureSheet();
     serve({ ...LIVE, horarios: 'dia,actividad\nLunes,Yoga Sana' });

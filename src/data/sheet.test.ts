@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { SNAPSHOT } from './snapshot';
 import {
   DEFAULT_ICONO,
+  isUsableSnapshot,
   parseActividades,
   parseAjustes,
   parseHorarios,
@@ -381,10 +382,36 @@ describe('the real seed CSVs', () => {
   });
 });
 
+describe('isUsableSnapshot', () => {
+  const headerOnly = parseSnapshot({
+    actividades: 'nombre,grupo,descripcion',
+    horarios: 'dia,hora,actividad',
+    ajustes: 'clave,valor',
+  })!;
+
+  it('rejects tabs that parse but carry no rows', () => {
+    expect(headerOnly).not.toBeNull();
+    expect(isUsableSnapshot(headerOnly)).toBe(false);
+  });
+
+  it('rejects a Sheet whose every row was switched off with activo NO', () => {
+    const allHidden = parseSnapshot({
+      actividades: 'nombre,grupo,descripcion,activo\nHatha Yoga,yoga,x,NO',
+      horarios: 'dia,hora,actividad,activo\nLunes,9:30,Yoga Sana,NO',
+      ajustes: 'clave,valor\nmes,Septiembre',
+    })!;
+
+    expect(isUsableSnapshot(allHidden)).toBe(false);
+  });
+
+  it('accepts the seed data', () => {
+    expect(isUsableSnapshot(SEED)).toBe(true);
+  });
+});
+
 describe('the committed snapshot', () => {
   it('is never empty, so no visitor can meet an empty Horarios or Actividades', () => {
-    expect(SNAPSHOT.actividades.length).toBeGreaterThan(0);
-    expect(SNAPSHOT.horarios.length).toBeGreaterThan(0);
+    expect(isUsableSnapshot(SNAPSHOT)).toBe(true);
   });
 
   it('gives every timetable class a palette colour', () => {

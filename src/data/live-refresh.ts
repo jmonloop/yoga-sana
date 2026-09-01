@@ -1,5 +1,5 @@
 import { browserSheetConfig, csvUrl, type SheetConfig } from './sheet-config';
-import { parseSnapshot, type Snapshot, type TabCsv } from './sheet';
+import { isUsableSnapshot, parseSnapshot, type Snapshot, type TabCsv } from './sheet';
 
 export async function onFreshSnapshot(
   baked: Snapshot,
@@ -13,7 +13,8 @@ export async function onFreshSnapshot(
 
 async function readLiveSnapshot(config: SheetConfig): Promise<Snapshot | null> {
   try {
-    return parseSnapshot(await fetchTabs(config));
+    const live = parseSnapshot(await fetchTabs(config));
+    return live && isUsableSnapshot(live) ? live : null;
   } catch {
     return null;
   }
