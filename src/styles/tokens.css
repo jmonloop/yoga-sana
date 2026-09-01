@@ -26,11 +26,13 @@
   --font-script: 'Parisienne', 'Snell Roundhand', cursive;
 
   --tracking-display: 0.12em;
+  --font-size-display: clamp(1.75rem, 4vw, 2.5rem);
 
   --max-width: 1120px;
   --measure: 65ch;
   --space-section: 64px;
   --space-gutter: 16px;
+  --header-height: 78px;
 
   --radius-pill: 999px;
   --radius-card: 18px;

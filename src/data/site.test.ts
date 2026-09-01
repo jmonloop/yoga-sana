@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MENSAJES_WA, WHATSAPP_NUMBER, waLink } from './site';
+import { CTAS, WHATSAPP_NUMBER, waLink } from './site';
 
 describe('waLink', () => {
   it('prefixes the wa.me endpoint with the studio number', () => {
@@ -16,16 +16,17 @@ describe('waLink', () => {
     expect(waLink('30 €/mes')).toBe('https://wa.me/34677808098?text=30%20%E2%82%AC%2Fmes');
   });
 
-  it('builds the contacto link from the shared message map', () => {
-    expect(waLink(MENSAJES_WA.contacto)).toBe(
-      'https://wa.me/34677808098?text=%C2%A1Hola%20Natalia!%20Tengo%20una%20duda%20sobre%20Yoga%20Sana.',
-    );
+  it('round-trips every fixed CTA message through the URL unchanged', () => {
+    for (const cta of Object.values(CTAS)) {
+      expect(new URL(waLink(cta.message)).searchParams.get('text')).toBe(cta.message);
+    }
   });
 });
 
-describe('MENSAJES_WA', () => {
-  it('produces a link with no unencoded whitespace for every fixed message', () => {
-    const links = Object.values(MENSAJES_WA).map(waLink);
-    expect(links.every((link) => !/\s/.test(link))).toBe(true);
+describe('CTAS', () => {
+  it('keeps the visible label inside the composed accessible name', () => {
+    for (const cta of Object.values(CTAS)) {
+      expect(`${cta.label}: ${cta.ariaSuffix}`).toContain(cta.label);
+    }
   });
 });

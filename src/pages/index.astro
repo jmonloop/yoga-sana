@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
 import WaButton from '../components/WaButton.astro';
-import { MENSAJES_WA } from '../data/site';
+import { CTAS } from '../data/site';
 ---
 
 <Base
@@ -13,10 +13,6 @@ import { MENSAJES_WA } from '../data/site';
     <p class="fade-up">
       Tu espacio para respirar, conectar y reconectar contigo, en Catarroja (València).
     </p>
-    <WaButton
-      message={MENSAJES_WA.empezar}
-      label="Quiero empezar"
-      ariaLabel="Escribir por WhatsApp para empezar en Yoga Sana"
-    />
+    <WaButton {...CTAS.empezar} />
   </Section>
 </Base>

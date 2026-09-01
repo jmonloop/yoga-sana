@@ -4,17 +4,18 @@ import { waLink } from '../data/site';
 interface Props {
   message: string;
   label: string;
-  ariaLabel: string;
+  ariaSuffix: string;
   variant?: 'primary' | 'secondary';
+  compact?: boolean;
 }
 
-const { message, label, ariaLabel, variant = 'primary' } = Astro.props;
+const { message, label, ariaSuffix, variant = 'primary', compact = false } = Astro.props;
 ---
 
 <a
-  class:list={['wa-button', variant]}
+  class:list={['wa-button', variant, { compact }]}
   href={waLink(message)}
-  aria-label={ariaLabel}
+  aria-label={`${label}: ${ariaSuffix}`}
   target="_blank"
   rel="noopener"
 >
@@ -39,6 +40,12 @@ const { message, label, ariaLabel, variant = 'primary' } = Astro.props;
     white-space: nowrap;
     cursor: pointer;
     transition: background-color 160ms ease, color 160ms ease;
+  }
+
+  .compact {
+    padding: 0.7em 0.9em;
+    font-size: clamp(0.625rem, 2.2vw, 0.8125rem);
+    letter-spacing: 0.02em;
   }
 
   .primary {
