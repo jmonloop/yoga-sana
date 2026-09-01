@@ -22,7 +22,10 @@ const markup = renderHorario(SNAPSHOT);
         import('../data/live-refresh'),
         import('../data/snapshot'),
       ]);
-      await onFreshSnapshot(SNAPSHOT, (fresh) => paint(renderHorario(fresh)));
+      await onFreshSnapshot(SNAPSHOT, (fresh) => {
+        paint(renderHorario(fresh));
+        document.dispatchEvent(new CustomEvent('horario:actualizado', { detail: fresh }));
+      });
     } catch {
       return;
     }

@@ -407,8 +407,18 @@ stacked list.
 - Logo inlined as a same-origin image so the canvas does not taint
 - Offscreen node positioned `fixed; left: -9999px` — **not** `display:none`, which
   would remove layout
-- `aria-hidden` on the offscreen node
+- `aria-hidden` plus `inert` on the offscreen node — `aria-hidden` alone would leave the
+  cloned chip links tab-reachable at `left:-9999px` while it is mounted
 - Downloads as `horario-septiembre-yoga-sana.png`
+
+The exported header also carries a **`Catarroja · València`** line under the wordmark,
+which is not in the list above. Deliberate: the image travels as a WhatsApp status with
+no page around it, so it has to say where the studio is.
+
+The chrome is baked from the snapshot at build time while the grid is live-refreshed, so
+`Horario.astro` dispatches a `horario:actualizado` CustomEvent carrying the fresh snapshot
+and the export component updates `data-mes` and the chrome text from it. Without that she
+could export a current grid under last month's script title.
 
 Net effect: she edits the Sheet, opens `/clases-de-yoga`, taps *Descargar horario*,
 and has the WhatsApp-status image she used to build in Canva.
@@ -735,6 +745,7 @@ themeable, no image weight.
 | `&_=${Date.now()}` defeats that cache | **Unverified.** Test during implementation |
 | `catalog_management` requires App Review | Per Meta's permission reference; not tested end-to-end |
 | `html-to-image` renders correctly on her device | Android Chrome assumed. **Test on her actual phone** |
+| `blob:` downloads work in the Instagram in-app browser | **Unverified belief**, not measured. Android WebView's `DownloadListener` reportedly cannot resolve `blob:`, in which case `<a download>` would silently do nothing. Mitigated blind: embedded-browser UA opens the blob in a new tab, and the success wording tells her to long-press the image. **Test on her actual phone** |
 | Chip contrast ratios | Estimated from sampled hex. Re-measure the final tokens |
 
 Additional risks: Google could change the publish-to-web feature (mitigated by the

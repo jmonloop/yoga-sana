@@ -3,12 +3,10 @@ import logoFigura from '../../assets/logo/logo-figura.svg?raw';
 import logoTexto from '../../assets/logo/logo-texto.svg?raw';
 import { SNAPSHOT } from '../data/snapshot';
 
-const mes = SNAPSHOT.ajustes['mes'];
-const tagline = SNAPSHOT.ajustes['tagline'];
-const notaPie = SNAPSHOT.ajustes['nota_pie'];
+const ajuste = (clave: string): string => (SNAPSHOT.ajustes[clave] ?? '').trim();
 ---
 
-<div class="descarga" data-descarga-horario data-mes={mes}>
+<div class="descarga" data-descarga-horario data-mes={ajuste('mes')}>
   <button class="boton" type="button">Descargar horario</button>
   <p class="estado" role="status" data-estado></p>
 
@@ -19,21 +17,21 @@ const notaPie = SNAPSHOT.ajustes['nota_pie'];
         <span class="lamina-marca" set:html={logoTexto} />
         <p class="lamina-lugar">Catarroja · València</p>
         <h2 class="lamina-titulo">Horario</h2>
-        {mes && <p class="lamina-mes">{mes}</p>}
-        {tagline && <p class="lamina-tagline">{tagline}</p>}
+        <p class="lamina-mes" data-campo="mes">{ajuste('mes')}</p>
+        <p class="lamina-tagline" data-campo="tagline">{ajuste('tagline')}</p>
       </header>
 
       <div class="lamina-grid" data-destino></div>
 
-      {notaPie && <p class="lamina-pie">{notaPie}</p>}
+      <p class="lamina-pie" data-campo="nota_pie">{ajuste('nota_pie')}</p>
     </div>
   </template>
 </div>
 
 <script>
-  import { iniciarDescargaHorario } from './horario-png';
+  import { conectarDescarga } from './horario-png';
 
-  iniciarDescargaHorario();
+  conectarDescarga(document.querySelector('[data-descarga-horario]'));
 </script>
 
 <style>
@@ -81,6 +79,8 @@ const notaPie = SNAPSHOT.ajustes['nota_pie'];
   }
 
   .estado {
+    flex-basis: 100%;
+    min-height: 1.5rem;
     margin: 0;
     font-size: 0.875rem;
     color: var(--oliva-oscuro);
@@ -161,6 +161,12 @@ const notaPie = SNAPSHOT.ajustes['nota_pie'];
     border-radius: var(--radius-card);
   }
 
+  .lamina-mes:empty,
+  .lamina-tagline:empty,
+  .lamina-pie:empty {
+    display: none;
+  }
+
   .lamina-pie {
     max-width: none;
     margin: 56px 0 0;
@@ -209,11 +215,5 @@ const notaPie = SNAPSHOT.ajustes['nota_pie'];
 
   .lamina :global(.horario .horario-tabla .horario-banda > *) {
     padding-top: 56px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .boton {
-      transition: none;
-    }
   }
 </style>
