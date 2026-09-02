@@ -1,6 +1,5 @@
 ---
-import Pendiente from './Pendiente.astro';
-import { CTAS, NIF, waLink, WHATSAPP_VISIBLE } from '../data/site';
+import { CTAS, DOMICILIO, NIF, TITULAR, waLink, WHATSAPP_VISIBLE } from '../data/site';
 import { origenDe } from '../data/seo';
 
 const dominio = new URL(origenDe(Astro.site)).host;
@@ -8,23 +7,13 @@ const dominio = new URL(origenDe(Astro.site)).host;
 
 <dl class="datos">
   <dt>Titular</dt>
-  <dd>
-    <Pendiente>
-      aquí van tu nombre y tus apellidos completos, tal y como figuran en tu DNI. La ley
-      obliga a publicarlos.
-    </Pendiente>
-  </dd>
+  <dd>{TITULAR}</dd>
 
   <dt>NIF</dt>
   <dd>{NIF}</dd>
 
   <dt>Domicilio</dt>
-  <dd>
-    <Pendiente>
-      aquí va la dirección completa del centro en Catarroja: calle, número, código postal
-      y población.
-    </Pendiente>
-  </dd>
+  <dd>{DOMICILIO}</dd>
 
   <dt>Contacto</dt>
   <dd>

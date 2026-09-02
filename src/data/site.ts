@@ -1,7 +1,9 @@
 export const WHATSAPP_NUMBER = '34677808098';
 export const INSTAGRAM = '@yoga_sanacatarroja';
 export const INSTAGRAM_URL = 'https://www.instagram.com/yoga_sanacatarroja/';
+export const TITULAR = 'Natalia Gutierrez Muñoz';
 export const NIF = '26759918Q';
+export const DOMICILIO = 'Calle San Antonio 40, 46470 Catarroja, Valencia, España';
 
 export const WHATSAPP_VISIBLE = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(
   2,
