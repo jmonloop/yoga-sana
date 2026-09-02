@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import Banda from '../components/Banda.astro';
 import Section from '../components/Section.astro';
 import Foto from '../components/Foto.astro';
-import Pendiente from '../components/Pendiente.astro';
 import WaButton from '../components/WaButton.astro';
 import { CTAS } from '../data/site';
 ---
@@ -72,12 +71,17 @@ import { CTAS } from '../data/site';
 
   <Section title="Espacio Raíz" animar>
     <Banda columnas="1fr 24rem">
-      <p>Espacio Raíz es el acompañamiento individual de Yoga Sana.</p>
-      <Pendiente>
-        aquí va la descripción de Espacio Raíz (en qué consiste el acompañamiento, cómo se
-        organiza y a quién va dirigido). No existe texto original de partida y no se ha
-        escrito nada inventado.
-      </Pendiente>
+      <p class="lead">Consciencia corporal y autorregulación emocional.</p>
+      <p>
+        Espacio Raíz es el acompañamiento individual de Yoga Sana: vuelve a habitar tu
+        cuerpo.
+      </p>
+      <p class="nota">
+        <strong>Nota importante:</strong> este espacio se enfoca exclusivamente en el
+        bienestar, la educación corporal y el desarrollo personal. No constituye un
+        tratamiento médico, psicológico o psicoterapéutico, ni sustituye la atención de
+        profesionales sanitarios.
+      </p>
       <WaButton {...CTAS.espacioRaiz} />
       <Foto
         slot="foto"
@@ -127,6 +131,16 @@ import { CTAS } from '../data/site';
   .perfiles li {
     position: relative;
     padding-left: 1.75rem;
+  }
+
+  .nota {
+    max-width: var(--measure);
+    margin: 2rem 0;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--salvia);
+    background-color: var(--marfil);
+    font-size: 0.9375rem;
+    line-height: 1.6;
   }
 
   .perfiles li::before {
