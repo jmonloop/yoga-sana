@@ -3,6 +3,11 @@ export const INSTAGRAM = '@yoga_sanacatarroja';
 export const INSTAGRAM_URL = 'https://www.instagram.com/yoga_sanacatarroja/';
 export const NIF = '26759918Q';
 
+export const WHATSAPP_VISIBLE = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(
+  2,
+  5,
+)} ${WHATSAPP_NUMBER.slice(5, 8)} ${WHATSAPP_NUMBER.slice(8)}`;
+
 export function waLink(mensaje: string): string {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CTAS, WHATSAPP_NUMBER, waLink } from './site';
+import { CTAS, WHATSAPP_NUMBER, WHATSAPP_VISIBLE, waLink } from './site';
 
 describe('waLink', () => {
   it('prefixes the wa.me endpoint with the studio number', () => {
@@ -20,6 +20,16 @@ describe('waLink', () => {
     for (const cta of Object.values(CTAS)) {
       expect(new URL(waLink(cta.message)).searchParams.get('text')).toBe(cta.message);
     }
+  });
+});
+
+describe('WHATSAPP_VISIBLE', () => {
+  it('is the dialling number itself, grouped for reading', () => {
+    expect(WHATSAPP_VISIBLE).toBe('+34 677 808 098');
+  });
+
+  it('cannot drift from the number the links use', () => {
+    expect(WHATSAPP_VISIBLE.replace(/[+ ]/g, '')).toBe(WHATSAPP_NUMBER);
   });
 });
 

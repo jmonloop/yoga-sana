@@ -15,7 +15,14 @@ const markup = renderHorario(SNAPSHOT);
   };
 
   const refresh = async (): Promise<void> => {
-    if (!import.meta.env.PUBLIC_SHEET_ID) return;
+    if (
+      !import.meta.env.PUBLIC_SHEET_ID ||
+      !import.meta.env.PUBLIC_SHEET_GID_ACTIVIDADES ||
+      !import.meta.env.PUBLIC_SHEET_GID_HORARIOS ||
+      !import.meta.env.PUBLIC_SHEET_GID_AJUSTES
+    ) {
+      return;
+    }
     try {
       const [{ renderHorario }, { onFreshSnapshot }, { SNAPSHOT }] = await Promise.all([
         import('./horario-markup'),

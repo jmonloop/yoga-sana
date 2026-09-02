@@ -71,6 +71,10 @@ h1 {
   color: var(--oliva-oscuro);
 }
 
+.alternativa {
+  margin: 1.5rem 0 0;
+}
+
 .rejilla {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--min, 16rem), 1fr));

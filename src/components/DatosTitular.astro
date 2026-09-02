@@ -1,6 +1,9 @@
 ---
 import Pendiente from './Pendiente.astro';
-import { CTAS, NIF, waLink } from '../data/site';
+import { CTAS, NIF, waLink, WHATSAPP_VISIBLE } from '../data/site';
+import { origenDe } from '../data/seo';
+
+const dominio = new URL(origenDe(Astro.site)).host;
 ---
 
 <dl class="datos">
@@ -29,12 +32,12 @@ import { CTAS, NIF, waLink } from '../data/site';
       href={waLink(CTAS.contacto.message)}
       aria-label={`WhatsApp: ${CTAS.contacto.ariaSuffix}`}
       target="_blank"
-      rel="noopener">WhatsApp +34 677 808 098</a
+      rel="noopener">WhatsApp {WHATSAPP_VISIBLE}</a
     >
   </dd>
 
   <dt>Sitio web</dt>
-  <dd>yogasana.es</dd>
+  <dd>{dominio}</dd>
 </dl>
 
 <style>

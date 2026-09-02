@@ -2,9 +2,9 @@
 import Base from '../layouts/Base.astro';
 import Legal from '../components/Legal.astro';
 import DatosTitular from '../components/DatosTitular.astro';
+import Pendiente from '../components/Pendiente.astro';
 import { toSheetConfig } from '../data/sheet-config';
 
-const ACTUALIZADO = '2 de septiembre de 2026';
 const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
 ---
 
@@ -14,9 +14,12 @@ const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
 >
   <Legal titulo="Política de privacidad">
     <p class="lead">
-      Esta web no recoge ningún dato tuyo, no usa cookies y no lleva analítica. Lo único que
-      sale de aquí hacia un tercero es una consulta a Google para comprobar si los horarios
-      han cambiado, y eso se explica abajo con detalle.
+      Esta web no recoge ningún dato tuyo: no hay formularios, ni cookies, ni analítica. Lo
+      que sí ocurre, como en cualquier web, es que tu navegador tiene que pedirle las
+      páginas y las imágenes a un servidor —aquí, GitHub Pages—, que así recibe tu dirección
+      IP. Y la página de horarios puede además consultar una hoja de cálculo de Google, lo
+      que también le da tu IP a Google. Las dos cosas están explicadas abajo sin rodeos,
+      incluido si la segunda está ocurriendo ahora mismo o no.
     </p>
 
     <h2>Quién es la responsable</h2>
@@ -43,25 +46,30 @@ const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
     <h2>Google Sheets y tu dirección IP</h2>
     <p>
       Los horarios y las actividades de esta web se editan en una hoja de cálculo de Google
-      publicada como CSV. Es la única conexión automática con un tercero que puede hacer tu
-      navegador mientras la miras, así que conviene explicarla entera.
+      publicada como CSV. Conviene explicar entera esa parte, porque es la única en la que
+      tu navegador habla con Google.
     </p>
     <p>
-      La página se pinta con una copia de esa hoja guardada dentro del propio sitio: la ves
-      completa sin pedirle nada a nadie. Después, si la hoja está configurada, tu navegador
-      pide ese CSV directamente a <code>docs.google.com</code> para comprobar si hay algún
-      cambio de última hora, y solo entonces vuelve a dibujar el horario.
+      Las páginas que muestran horarios o actividades se pintan con una copia de esa hoja
+      guardada dentro del propio sitio: las ves completas sin pedirle nada a Google. Solo la
+      página de
+      <a href="/clases-de-yoga">clases y horarios</a> lleva además un pequeño programa que,
+      cuando la abres, pide ese CSV directamente a <code>docs.google.com</code> por si ha
+      habido algún cambio de última hora. Es la única página de esta web que ejecuta algo
+      que hable con Google; en el resto no ocurre nada de esto.
     </p>
     <p>
       Esa petición la hace tu navegador, no un servidor mío. Eso significa que
-      <strong>Google recibe tu dirección IP</strong>, la fecha y la hora, y los datos que tu
-      navegador manda en cualquier petición: el tipo de navegador y el idioma. No recibe
-      ningún dato que yo le envíe sobre ti, porque yo no tengo ninguno.
+      <strong>Google recibe tu dirección IP</strong>, la fecha y la hora, el sitio desde el
+      que se pide (las cabeceras <code>Referer</code> y <code>Origin</code>, que identifican
+      a esta web) y los datos que tu navegador manda en cualquier petición, como el tipo de
+      navegador y el idioma. No recibe ningún dato que yo le envíe sobre ti, porque yo no tengo ninguno.
     </p>
     <p>
-      La petición se hace sin credenciales, de modo que tu navegador no envía a Google las
-      cookies que puedas tener de tu propia sesión de Google, ni Google puede guardar cookies
-      a través de ella. Aun así, esa dirección IP la trata Google conforme a su propia
+      La petición se hace expresamente sin credenciales, de modo que tu navegador no envía a
+      Google las cookies que puedas tener de tu propia sesión de Google, ni Google puede
+      guardar cookies a través de ella. Aun así, esa dirección IP la trata Google conforme a
+      su propia
       <a href="https://policies.google.com/privacy" target="_blank" rel="noopener"
         >política de privacidad</a
       >, sobre la que no tengo ningún control.
@@ -69,16 +77,17 @@ const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
     {
       hojaConfigurada ? (
         <p>
-          <strong>Estado actual:</strong> en la versión publicada de esta web la hoja sí está
-          configurada, así que esa petición a Google se realiza en cada visita.
+          <strong>Estado actual:</strong> la hoja sí está configurada en la versión publicada
+          de esta web, así que esa petición se hace cada vez que alguien abre la página de
+          clases y horarios. En las demás páginas no se hace.
         </p>
       ) : (
         <p>
           <strong>Estado actual:</strong> la hoja todavía no está configurada en la versión
-          publicada de esta web. El código que haría esa petición ni siquiera se incluye en
-          la página, así que <strong>ahora mismo no se hace ninguna petición a Google</strong>.
-          Este apartado sigue aquí porque en cuanto se configure la hoja la petición pasará a
-          hacerse, y esta misma página lo dirá.
+          publicada de esta web. El código que haría esa petición ni siquiera llega a tu
+          navegador, así que <strong>ahora mismo no se hace ninguna petición a Google</strong>
+          desde ninguna página. Este apartado sigue aquí porque en cuanto se configure la
+          hoja la petición pasará a hacerse, y esta misma página lo dirá.
         </p>
       )
     }
@@ -89,52 +98,66 @@ const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
 
     <h2>Alojamiento</h2>
     <p>
-      Esta web está alojada en GitHub Pages (GitHub, Inc.). Como cualquier servidor web, su
-      infraestructura recibe tu dirección IP al servirte cada página e imagen, y la trata
-      conforme a la
+      Esta web está alojada en GitHub Pages (GitHub, Inc., Estados Unidos). Como con
+      cualquier web, tu navegador le pide a ese servidor cada página, cada imagen y cada
+      tipografía, y en esas peticiones le llega tu dirección IP. GitHub las trata conforme a
+      su
       <a
         href="https://docs.github.com/es/site-policy/privacy-policies/github-privacy-statement"
         target="_blank"
-        rel="noopener">declaración de privacidad de GitHub</a
-      >. No tengo acceso a esos registros.
+        rel="noopener">declaración de privacidad</a
+      >. Yo no tengo acceso a esos registros ni recibo ninguna estadística de ellos.
     </p>
 
     <h2>WhatsApp e Instagram</h2>
     <p>
-      Todos los botones de esta web abren una conversación de WhatsApp con un mensaje ya
-      escrito. Nada se envía hasta que tú lo envías. Cuando me escribes, veo tu número de
-      teléfono y lo que me cuentes, y la conversación queda en mi teléfono como cualquier
-      otra conversación de WhatsApp. La uso únicamente para atenderte: informarte, organizar
-      tu plaza y responderte. La base para tratar esos datos es tu propia petición.
+      Los botones de WhatsApp de esta web abren una conversación con un mensaje ya escrito.
+      Nada se envía hasta que lo envías tú, y esta web no recibe ni guarda copia de nada:
+      son enlaces normales a <code>wa.me</code>. Con Instagram ocurre lo mismo, es solo un
+      enlace: esta web no incrusta nada suyo ni carga nada desde sus servidores.
     </p>
     <p>
-      Esa conversación se rige además por las condiciones y la política de privacidad de
-      WhatsApp, y lo mismo ocurre con Instagram si decides escribirme por ahí. Son servicios
-      de terceros: esta web solo enlaza a ellos, no incrusta nada suyo ni carga nada desde
-      sus servidores.
+      A partir de ahí, la conversación se rige por las condiciones y la política de
+      privacidad de WhatsApp o de Instagram, que son servicios de terceros.
     </p>
+    <Pendiente>
+      aquí falta lo que haces tú con esas conversaciones, que es lo único que esta web no
+      puede saber: qué datos ves de quien te escribe, para qué los usas, con qué base
+      jurídica y si los usas para algo más que responder. No se ha escrito nada inventado
+      sobre tu forma de trabajar.
+    </Pendiente>
 
-    <h2>Cuánto tiempo conservo tus datos</h2>
-    <p>
-      Las conversaciones de WhatsApp se conservan mientras dure la relación y mientras
-      puedan hacer falta para atenderte. Si me pides que borre la conversación, la borro.
-    </p>
+    <h2>Cuánto tiempo se conservan tus datos</h2>
+    <p>Esta web no guarda nada, así que por su parte no hay ningún plazo que aplicar.</p>
+    <Pendiente>
+      aquí falta cuánto tiempo conservas las conversaciones de WhatsApp y qué haces si
+      alguien te pide que las borre.
+    </Pendiente>
 
-    <h2>Con quién comparto tus datos</h2>
+    <h2>Con quién se comparten tus datos</h2>
     <p>
-      Con nadie. No cedo, vendo ni comparto datos con terceros, y no se hacen
-      transferencias internacionales por mi parte. Las únicas empresas implicadas son las
-      que prestan los servicios descritos arriba —GitHub como alojamiento, Google en la
-      consulta del horario y WhatsApp en la conversación—, cada una con su propia política.
+      Esta web no le envía a nadie ningún dato sobre ti, sencillamente porque no tiene
+      ninguno.
     </p>
+    <p>
+      Sí conviene que sepas que, al navegar, tu navegador se comunica con GitHub (Estados
+      Unidos) para cargar la web y, en la página de clases y horarios, con Google (Estados
+      Unidos) para consultar la hoja. Esas comunicaciones las hace tu navegador
+      directamente, y cada empresa trata lo que recibe conforme a su propia política.
+    </p>
+    <Pendiente>
+      aquí falta si compartes con alguien —gestoría, seguro, alguna aplicación— los datos
+      que te llegan por WhatsApp, y si usas para gestionarlos alguna herramienta alojada
+      fuera de la Unión Europea.
+    </Pendiente>
 
     <h2>Tus derechos</h2>
     <p>
       Como esta web no guarda datos tuyos, no hay nada aquí que consultar, rectificar ni
       suprimir. Sobre lo que sí me hayas dado tú al escribirme, tienes derecho de acceso,
-      rectificación, supresión, oposición, limitación del tratamiento y portabilidad:
-      escríbeme por WhatsApp y lo resolvemos. Si crees que no lo he hecho bien, puedes
-      reclamar ante la
+      rectificación, supresión, oposición, limitación del tratamiento y portabilidad, y
+      puedes ejercerlos en el WhatsApp que aparece más arriba. Si crees que no se han
+      atendido bien, puedes reclamar ante la
       <a href="https://www.aepd.es" target="_blank" rel="noopener"
         >Agencia Española de Protección de Datos</a
       >.
@@ -145,7 +168,5 @@ const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
       Si cambia algo de lo anterior —por ejemplo, si algún día se añade una herramienta de
       analítica— se actualizará esta página y cambiará la fecha de abajo.
     </p>
-
-    <p class="actualizado apunte">Última actualización: {ACTUALIZADO}.</p>
   </Legal>
 </Base>

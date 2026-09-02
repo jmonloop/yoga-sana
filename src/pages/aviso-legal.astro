@@ -3,8 +3,9 @@ import Base from '../layouts/Base.astro';
 import Legal from '../components/Legal.astro';
 import DatosTitular from '../components/DatosTitular.astro';
 import { INSTAGRAM, INSTAGRAM_URL } from '../data/site';
+import { origenDe } from '../data/seo';
 
-const ACTUALIZADO = '2 de septiembre de 2026';
+const dominio = new URL(origenDe(Astro.site)).host;
 ---
 
 <Base
@@ -15,7 +16,7 @@ const ACTUALIZADO = '2 de septiembre de 2026';
     <p class="lead">
       Información exigida por la Ley 34/2002, de servicios de la sociedad de la
       información y de comercio electrónico (LSSI-CE), sobre quién está detrás de
-      <strong>yogasana.es</strong> y en qué condiciones se usa este sitio.
+      <strong>{dominio}</strong> y en qué condiciones se usa este sitio.
     </p>
 
     <h2>Datos identificativos</h2>
@@ -23,7 +24,7 @@ const ACTUALIZADO = '2 de septiembre de 2026';
 
     <h2>Objeto de este sitio</h2>
     <p>
-      yogasana.es es una web informativa sobre las clases de yoga, los talleres y las
+      {dominio} es una web informativa sobre las clases de yoga, los talleres y las
       sesiones individuales de Yoga Sana, en Catarroja (València). No se venden productos
       ni servicios a través de la web: no hay carrito, ni pasarela de pago, ni formulario
       de contacto. Las reservas y las consultas se hacen por WhatsApp, hablando
@@ -44,11 +45,11 @@ const ACTUALIZADO = '2 de septiembre de 2026';
 
     <h2>Propiedad intelectual</h2>
     <p>
-      Los contenidos de este sitio —textos, fotografías, ilustraciones, iconos, logotipo y
-      código— están protegidos por la normativa de propiedad intelectual e industrial. No
-      se permite reproducirlos, distribuirlos ni transformarlos sin autorización previa por
-      escrito, salvo el uso personal que permite la ley. Puedes enlazar libremente a
-      cualquier página de este sitio.
+      Los contenidos de este sitio —textos, fotografías, ilustraciones, iconos y logotipo—
+      pueden estar protegidos por derechos de propiedad intelectual, de la titular o de
+      terceros. Que estén publicados aquí no te concede ninguna licencia sobre ellos: si
+      quieres reutilizar alguno, escríbeme antes y vemos si puedo autorizarlo. Enlazar a
+      cualquier página de este sitio es libre y no necesita permiso.
     </p>
 
     <h2>Responsabilidad</h2>
@@ -92,7 +93,6 @@ const ACTUALIZADO = '2 de septiembre de 2026';
       aplicable.
     </p>
 
-    <p class="actualizado apunte">Última actualización: {ACTUALIZADO}.</p>
   </Legal>
 </Base>
 

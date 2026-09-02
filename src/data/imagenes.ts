@@ -96,6 +96,10 @@ export function imagen(nombre: string): Imagen {
   return encontrada;
 }
 
+export function rutaImagen({ name }: Imagen, ancho: number, extension: string): string {
+  return `/img/${name}-${ancho}.${extension}`;
+}
+
 export function altoRenderizado({ fallback, crop }: Imagen): number {
   return Math.round((fallback * crop.height) / crop.width);
 }

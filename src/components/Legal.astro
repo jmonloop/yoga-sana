@@ -6,12 +6,14 @@ interface Props {
 }
 
 const { titulo } = Astro.props;
+const ACTUALIZADO = '2 de septiembre de 2026';
 ---
 
 <Section>
   <div class="legal">
     <h1>{titulo}</h1>
     <slot />
+    <p class="actualizado apunte">Última actualización: {ACTUALIZADO}.</p>
   </div>
 </Section>
 

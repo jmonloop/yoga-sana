@@ -429,7 +429,7 @@ and has the WhatsApp-status image she used to build in Canva.
 
 ```
 .github/workflows/   snapshot.yml (push + daily cron, commits the snapshot)
-                     deploy.yml (build, checks, GitHub Pages)
+                     deploy.yml (push + dispatch: build, checks, Pages)
 seed/                horarios.csv · actividades.csv · ajustes.csv
 sources/             images/ — the untouched original archive (15 files)
 assets/icons/        14 marks: 6 traced poses (hatha, dinamico, suave,
@@ -456,11 +456,14 @@ src/styles/          tokens.css · base.css
 public/img/          62 committed avif/webp/jpg derivatives, 1.16 MB
 ```
 
-**No `@astrojs/sitemap`.** `src/data/seo.ts` builds `sitemap.xml` and `robots.txt`
-from `Object.keys(import.meta.glob('./**/*.astro'))` in two three-line endpoints —
-new pages appear in the sitemap with no config, and it is less code than the
-integration's configuration would have been. Both use `Astro.site`, so
-`https://yogasana.es` is declared once, in `astro.config.mjs`.
+**No `@astrojs/sitemap`.** `src/data/seo.ts` holds a literal `RUTAS` array and builds
+`sitemap.xml` and `robots.txt` from it in two three-line endpoints. A route-derived
+glob was tried first and dropped: it emitted `/foo/index` for a nested `index.astro`,
+indexed `404.astro`, and would have published `/_partial` and a literal `/[slug]` — all
+things a future editor adds without thinking. Eight literal paths cannot 404. Two guard
+tests fail if `src/pages` and `RUTAS` ever disagree, or if a page shape appears that a
+literal list cannot describe. Both endpoints read `Astro.site`, so `https://yogasana.es`
+is declared once, in `astro.config.mjs`.
 
 **Open Graph image:** `/img/centro-sala-960.jpg`, the primary "nuestro centro" shot —
 960×612, below the 1200×630 that Facebook recommends but well over its 200×200 floor.
@@ -483,10 +486,18 @@ purpose** — `/sanergia`, `/sobre-mi`, `/aviso-legal` and `/privacidad` all car
 placeholders waiting on the owner.
 
 **The two workflows are not chained.** A push made by `GITHUB_TOKEN` does not trigger
-another workflow, so the snapshot commit cannot itself trigger a deploy. Instead both
-run on their own cron — snapshot at 04:17 UTC, deploy at 06:17 UTC — so a snapshot
-change goes live on the same night. Visitors get fresh content from the live fetch
-regardless; the committed snapshot only governs the instant paint.
+another workflow, so the snapshot commit cannot itself trigger a deploy. `snapshot.yml`
+runs on push and on a daily cron; **`deploy.yml` deliberately has no cron** — while the
+`check:pendiente` gate is red by design it would fail and email a red run every single
+morning. So a cron-committed snapshot reaches the site on the next push or manual
+`workflow_dispatch`, not that night.
+
+That lag is only about the *baked* snapshot. It is not covered by the live fetch: only
+`/clases-de-yoga` ships any refresh code at all — `/` renders its horario summary from
+the baked snapshot at build time with no client JS, as do the other six pages. So a
+Sheet edit shows up immediately on `/clases-de-yoga` and everywhere else only after the
+next deploy. **Re-enable a `deploy.yml` cron once `check:pendiente` goes green**, if
+keeping the rest of the site in step with the Sheet turns out to matter.
 
 **Hosting: €0** on GitHub Pages.
 
@@ -781,8 +792,15 @@ no cookies — `fetch()` defaults to `credentials: 'same-origin'`, so a cross-or
 request sends none and stores none. The Google-Sheets section renders one of two
 states, decided at build time by whether `PUBLIC_SHEET_*` is configured: today it says
 plainly that no request to Google is made at all, because the live-refresh module is
-dead-code-eliminated out of the bundle. It flips to "this request happens on every
-visit" the moment the Sheet is wired up, with no edit.
+dead-code-eliminated out of the bundle. It flips to "this happens when someone opens
+the clases-y-horarios page" the moment the Sheet is wired up, with no edit — **not** "on
+every visit": `/clases-de-yoga` is the only page that carries the refresh code, verified
+by walking the built module graph. `live-refresh.ts` also passes `credentials: 'omit'`
+explicitly, so the policy's no-cookies sentence is enforced by the code rather than by
+the Fetch spec's default, and `Horario.astro` gates on all four `PUBLIC_SHEET_*`
+literals, so a half-configured repo ships byte-identical JS to an unconfigured one
+(17 904 bytes, measured) and the policy's "the code never reaches your browser" stays
+true.
 
 ---
 
@@ -830,34 +848,48 @@ All eight pages are built and the CI is wired. What remains is not code.
    but §10 still flags "confirm this is Natalia", so the page carries an image
    placeholder instead. An unconfirmed photograph of a person under the words "soy yo"
    is not a risk worth taking.
-4. **Image provenance.** §10 reads `yoga2` and `consciencia-corporal` as stock or AI.
+4. **How she actually handles WhatsApp conversations.** `/privacidad` carries three
+   more placeholders, because nothing in this repo implements or can observe any of it:
+   what data she sees and what she uses it for, and under which lawful basis; how long
+   she keeps the conversations and what she does on an erasure request; and whether she
+   passes any of it to anyone —gestoría, insurer, an app— or manages it with a tool
+   hosted outside the EU. A first draft asserted all three on her behalf; that was
+   fabricated and has been removed. The page now states only what the code does.
+5. **Image provenance.** §10 reads `yoga2` and `consciencia-corporal` as stock or AI.
    If either is licensed stock, the licence needs checking before publishing; if their
-   origin is unknown, replace them. The aviso legal deliberately makes no claim about
-   who owns which image.
+   origin is unknown, replace them. The aviso legal deliberately makes no ownership
+   claim and no "propiedad industrial" claim, and says only that reuse needs asking
+   first — she may not be able to authorise every image on the page.
 
-Until 1–3 are answered, `pnpm check:pendiente` fails and **the deploy is blocked by
-design** — placeholder copy cannot reach `yogasana.es`.
+Until 1–4 are answered, `pnpm check:pendiente` fails and **the deploy is blocked by
+design** — placeholder copy cannot reach `yogasana.es`. It currently reports 11
+placeholder blocks across four pages.
 
 ### Blocking — infrastructure
 
-5. **Register `yogasana.es`** (confirmed available on 2026-09-01) and point DNS at
+6. **Register `yogasana.es`** (confirmed available on 2026-09-01) and point DNS at
    GitHub Pages per §9. Set the custom domain in *Settings → Pages* — **not** a
    `public/CNAME` file, which this deployment style ignores — then tick Enforce HTTPS
    once the certificate provisions.
-6. **Enable GitHub Pages with source = GitHub Actions** in *Settings → Pages*, before
+7. **Enable GitHub Pages with source = GitHub Actions** in *Settings → Pages*, before
    the first `deploy.yml` run.
-7. **Create the Google Sheet** from `seed/*.csv`, publish each of the three tabs as
+8. **Create the Google Sheet** from `seed/*.csv`, publish each of the three tabs as
    CSV, and set `PUBLIC_SHEET_ID` + the three `PUBLIC_SHEET_GID_*` as repository
    variables. Then re-verify the CORS claim in §12 against the real URLs, and confirm
-   `pnpm snapshot` does not 404. Until this is done the site runs entirely off the
-   committed snapshot and makes no request to Google at all — which `/privacidad`
-   states, and stops stating automatically once the variables are set.
+   `pnpm snapshot` does not 404. **Set all four or none:** with only some set, both
+   the build and the browser treat the Sheet as absent, and `deploy.yml` says so with a
+   `::warning::` rather than passing silently. Until this is done the site runs entirely
+   off the committed snapshot and makes no request to Google at all — which
+   `/privacidad` states, and stops stating automatically once the variables are set.
 
 ### Then
 
-8. **Test the PNG export on her actual Android phone**, including from the Instagram
+9. **Test the PNG export on her actual Android phone**, including from the Instagram
    in-app browser — §12 lists that as an unverified belief, not a measurement.
-9. Ask whether class durations should be shown (`hora_fin`, §8).
-10. Optional: a purpose-made 1200×630 Open Graph card, and a daylight reshoot of two
+10. Ask whether class durations should be shown (`hora_fin`, §8).
+11. Re-enable a daily cron on `deploy.yml` once `check:pendiente` is green, so a
+    cron-committed snapshot reaches the seven pages that render it at build time
+    without waiting for a push (§9).
+12. Optional: a purpose-made 1200×630 Open Graph card, and a daylight reshoot of two
     of the "nuestro centro" photos — §10 calls that the single highest-value thing she
     could do for the site's look.

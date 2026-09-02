@@ -30,7 +30,7 @@ async function fetchTabs(config: SheetConfig): Promise<TabCsv> {
 }
 
 async function fetchCsv(url: string): Promise<string> {
-  const response = await fetch(url, { cache: 'no-store' });
+  const response = await fetch(url, { cache: 'no-store', credentials: 'omit' });
   if (!response.ok) throw new Error(`${response.status} ${url}`);
   return response.text();
 }

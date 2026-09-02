@@ -1,9 +1,13 @@
-export function rutasDe(archivos: string[]): string[] {
-  return archivos
-    .map((archivo) => archivo.replace(/^\.\//, '').replace(/\.astro$/, ''))
-    .map((slug) => (slug === 'index' ? '/' : `/${slug}`))
-    .sort();
-}
+export const RUTAS = [
+  '/',
+  '/clases-de-yoga',
+  '/talleres-y-experiencias',
+  '/sanergia',
+  '/online',
+  '/sobre-mi',
+  '/aviso-legal',
+  '/privacidad',
+];
 
 export function origenDe(site: URL | undefined): string {
   if (!site) {

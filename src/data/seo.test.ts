@@ -1,27 +1,25 @@
+import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { origenDe, robotsTxt, rutasDe, sitemapXml } from './seo';
+import { origenDe, robotsTxt, RUTAS, sitemapXml } from './seo';
 
 const ORIGEN = 'https://yogasana.es/';
 
-describe('rutasDe', () => {
-  it('turns index into the site root', () => {
-    expect(rutasDe(['./index.astro'])).toEqual(['/']);
+const rutaDe = (archivo: string): string =>
+  archivo === 'index.astro' ? '/' : `/${archivo.replace('.astro', '')}`;
+
+describe('RUTAS', () => {
+  it('lists exactly the pages that exist in src/pages', () => {
+    const paginas = readdirSync('src/pages')
+      .filter((archivo) => archivo.endsWith('.astro'))
+      .map(rutaDe);
+    expect([...RUTAS].sort()).toEqual(paginas.sort());
   });
 
-  it('turns a page file into its path', () => {
-    expect(rutasDe(['./sobre-mi.astro'])).toEqual(['/sobre-mi']);
-  });
-
-  it('keeps nested pages under their folder', () => {
-    expect(rutasDe(['./legal/aviso.astro'])).toEqual(['/legal/aviso']);
-  });
-
-  it('sorts the paths so the sitemap is stable', () => {
-    expect(rutasDe(['./online.astro', './index.astro', './aviso-legal.astro'])).toEqual([
-      '/',
-      '/aviso-legal',
-      '/online',
-    ]);
+  it('fails when a page shape appears that a literal list cannot describe', () => {
+    const raras = readdirSync('src/pages', { withFileTypes: true })
+      .filter((entrada) => entrada.isDirectory() || /^_|\[/.test(entrada.name))
+      .map((entrada) => entrada.name);
+    expect(raras).toEqual([]);
   });
 });
 
@@ -49,8 +47,8 @@ describe('sitemapXml', () => {
   });
 
   it('emits one url element per path', () => {
-    const xml = sitemapXml(ORIGEN, ['/', '/online', '/privacidad']);
-    expect(xml.match(/<url>/g)).toHaveLength(3);
+    const xml = sitemapXml(ORIGEN, [...RUTAS]);
+    expect(xml.match(/<url>/g)).toHaveLength(RUTAS.length);
   });
 });
 

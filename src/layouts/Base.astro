@@ -2,7 +2,7 @@
 import logoFigura from '../../assets/logo/logo-figura.svg?raw';
 import logoTexto from '../../assets/logo/logo-texto.svg?raw';
 import WaButton from '../components/WaButton.astro';
-import { altoRenderizado, imagen } from '../data/imagenes';
+import { altoRenderizado, imagen, rutaImagen } from '../data/imagenes';
 import { CTAS, INSTAGRAM, INSTAGRAM_URL, waLink } from '../data/site';
 import '../styles/tokens.css';
 import '../styles/base.css';
@@ -18,7 +18,7 @@ const canonical = new URL(path, Astro.site).href;
 const year = new Date().getFullYear();
 
 const portada = imagen('centro-sala');
-const OG_IMAGEN = new URL(`/img/${portada.name}-${portada.fallback}.jpg`, Astro.site).href;
+const OG_IMAGEN = new URL(rutaImagen(portada, portada.fallback, 'jpg'), Astro.site).href;
 const OG_ALT =
   'La sala de Yoga Sana en Catarroja, con esterillas verdes extendidas sobre el suelo.';
 

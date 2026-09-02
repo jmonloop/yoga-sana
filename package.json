@@ -9,6 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "types": "astro sync && tsc --noEmit",
     "check:pendiente": "node scripts/check-pendiente.mjs",
     "snapshot": "node --env-file-if-exists=.env scripts/fetch-snapshot.mjs",
     "images": "node scripts/process-images.mjs",
