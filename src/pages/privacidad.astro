@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import Legal from '../components/Legal.astro';
 import DatosTitular from '../components/DatosTitular.astro';
-import Pendiente from '../components/Pendiente.astro';
 import { toSheetConfig } from '../data/sheet-config';
 
 const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
@@ -127,19 +126,30 @@ const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
       relacionadas con ella.
     </p>
     <p>No uso esos datos para enviarte publicidad ni comunicaciones comerciales.</p>
-    <Pendiente>
-      aquí falta la base jurídica de ese tratamiento, que la ley obliga a nombrar. Por lo
-      que cuentas sería la ejecución de un contrato o las medidas precontractuales que pides
-      tú al reservar, pero no lo has dicho y no se da por escrito nada que no hayas
-      confirmado.
-    </Pendiente>
+    <p>
+      La base jurídica de ese tratamiento es la ejecución de un contrato y las medidas
+      precontractuales que pides tú al escribirme (artículo 6.1.b del RGPD): sin tus datos no
+      puedo gestionar la reserva que me estás pidiendo.
+    </p>
+    <p>
+      Si al escribirme me cuentas por tu cuenta algo sobre tu salud —una lesión, un embarazo,
+      una molestia—, lo trato únicamente para adaptar la práctica a lo que necesitas, con tu
+      consentimiento explícito (artículo 9.2.a del RGPD). No hace falta que me lo cuentes
+      para reservar, y puedes retirar ese consentimiento cuando quieras.
+    </p>
 
     <h2>Cuánto tiempo se conservan tus datos</h2>
     <p>Esta web no guarda nada, así que por su parte no hay ningún plazo que aplicar.</p>
-    <Pendiente>
-      aquí falta cuánto tiempo conservas las conversaciones de WhatsApp y qué haces si
-      alguien te pide que las borre.
-    </Pendiente>
+    <p>
+      Las conversaciones de WhatsApp se quedan en mi teléfono mientras siga habiendo relación
+      entre nosotras y, después, el tiempo que necesite para responder de mis obligaciones
+      legales, sobre todo las fiscales y contables cuando ha habido un pago de por medio.
+      Pasado ese tiempo las borro.
+    </p>
+    <p>
+      Si en cualquier momento quieres que borre tu conversación, dímelo por ese mismo
+      WhatsApp y la borro, salvo lo que la ley me obligue a conservar.
+    </p>
 
     <h2>Con quién se comparten tus datos</h2>
     <p>
@@ -152,11 +162,16 @@ const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
       Unidos) para consultar la hoja. Esas comunicaciones las hace tu navegador
       directamente, y cada empresa trata lo que recibe conforme a su propia política.
     </p>
-    <Pendiente>
-      aquí falta si compartes con alguien —gestoría, seguro, alguna aplicación— los datos
-      que te llegan por WhatsApp, y si usas para gestionarlos alguna herramienta alojada
-      fuera de la Unión Europea.
-    </Pendiente>
+    <p>
+      No cedo tus datos a nadie. La única excepción son mis obligaciones legales —por
+      ejemplo, las fiscales y contables cuando emito una factura—, y en ese caso solo se
+      comparte lo imprescindible con quien la ley exige.
+    </p>
+    <p>
+      Tampoco uso ninguna herramienta de gestión, agenda o facturación para tratar lo que me
+      llega por WhatsApp: la conversación se queda donde está, en la propia aplicación, que
+      es de Meta y la trata conforme a su política.
+    </p>
 
     <h2>Tus derechos</h2>
     <p>

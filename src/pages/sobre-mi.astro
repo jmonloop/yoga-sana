@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Banda from '../components/Banda.astro';
 import Section from '../components/Section.astro';
-import Pendiente from '../components/Pendiente.astro';
+import Foto from '../components/Foto.astro';
 import WaButton from '../components/WaButton.astro';
 import { CTAS } from '../data/site';
 ---
@@ -45,11 +45,12 @@ import { CTAS } from '../data/site';
         Si te apetece que caminemos juntas este proceso de vuelta a ti, será un placer
         recibirte.
       </p>
-      <Pendiente slot="foto">
-        aquí va tu foto. La única candidata del archivo de imágenes está sin confirmar y no
-        se publica en una página que dice «soy yo» una fotografía de una persona sin tener
-        la certeza de quién es. Envía la foto que quieras usar.
-      </Pendiente>
+      <Foto
+        slot="foto"
+        nombre="meditacion-sentada"
+        sizes="(min-width: 60rem) 22rem, 92vw"
+        alt="Natalia sentada con las piernas cruzadas y los ojos cerrados, meditando en una sala de paredes claras."
+      />
     </Banda>
   </Section>
 
