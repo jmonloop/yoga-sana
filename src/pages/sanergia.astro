@@ -28,11 +28,46 @@ import { CTAS } from '../data/site';
   </Section>
 
   <Section title="Qué es la Sanergía" muted animar>
-    <Pendiente>
-      aquí va tu explicación larga de la Sanergía (qué es, en qué consiste una sesión, cómo
-      se desarrolla, para quién es y tu formación en la técnica). No existe texto original de
-      partida y no se ha escrito nada inventado.
-    </Pendiente>
+    <p class="lead">Un espacio para volver a conectar contigo.</p>
+    <p>
+      Sanergía es una experiencia de bienestar y crecimiento personal que invita a conectar
+      con uno mismo desde una mirada de percepción y consciencia personal.
+    </p>
+    <p>
+      Es una experiencia única para quienes sienten que están preparados para dar un paso
+      hacia dentro, explorar nuevas sensaciones y profundizar en su relación consigo mismos y
+      con la vida.
+    </p>
+    <p class="triada">
+      Una experiencia.<br />Una apertura.<br />Una nueva forma de sentir.
+    </p>
+
+    <h3 class="titulo">¿Para quién puede ser?</h3>
+    <p>Puede ser especialmente interesante para personas que:</p>
+    <ul class="perfiles" role="list">
+      <li>Sienten la necesidad de hacer una pausa y reconectar consigo mismas.</li>
+      <li>Están atravesando una etapa de cambios.</li>
+      <li>Buscan conocerse y comprenderse desde otra perspectiva.</li>
+      <li>Tienen interés por el mundo energético y el crecimiento personal.</li>
+      <li>Sienten curiosidad por experimentar algo diferente.</li>
+      <li>Quieren dedicar un espacio a su bienestar interior.</li>
+    </ul>
+    <p>
+      No necesitas saber nada previamente. Solo venir con curiosidad, presencia y disposición
+      a vivir tu propia experiencia.
+    </p>
+
+    <h3 class="titulo">Un espacio para ti</h3>
+    <p>
+      No se trata de buscar respuestas fuera, sino de crear un espacio donde puedas
+      escucharte, sentir y conectar.
+    </p>
+    <p class="triada">
+      Cada experiencia es personal.<br />Cada proceso tiene su momento.<br />Y cada persona
+      encuentra su propia manera de vivirlo.
+    </p>
+    <p class="intro">¿Sientes que es tu momento de conectar? Estoy aquí para acompañarte.</p>
+    <WaButton {...CTAS.reservarSanergia} />
   </Section>
 
   <Section title="Espacio Raíz" animar>
@@ -66,5 +101,42 @@ import { CTAS } from '../data/site';
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem 1rem;
+  }
+
+  .triada {
+    margin: 2rem 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+    line-height: 1.5;
+    color: var(--oliva-oscuro);
+  }
+
+  .titulo {
+    margin: 3rem 0 1rem;
+  }
+
+  .perfiles {
+    display: grid;
+    gap: 0.75rem;
+    max-width: var(--measure);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .perfiles li {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  .perfiles li::before {
+    content: '';
+    position: absolute;
+    left: 0.25rem;
+    top: 0.62em;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--salvia);
+    border-radius: var(--radius-circle);
   }
 </style>
