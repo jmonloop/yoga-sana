@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import Banda from '../components/Banda.astro';
+import Section from '../components/Section.astro';
+import Foto from '../components/Foto.astro';
+import WaButton from '../components/WaButton.astro';
+import { CTAS } from '../data/site';
+---
+
+<Base
+  title="Movimiento somático en Catarroja (València): Espacio Raíz — Yoga Sana"
+  description="Espacio Raíz: yoga somático y movimiento libre para ganar conciencia corporal, soltar tensiones y volver a habitar tu cuerpo. Talleres, sesiones individuales y propuestas para empresas en Catarroja."
+>
+  <Section eyebrow="Yoga somático y movimiento libre">
+    <div class="columna">
+      <h1>Movimiento Somático</h1>
+      <p class="lead">
+        Espacio Raíz: un espacio para volver a ti, habitar tu cuerpo y moverte desde la
+        escucha y la libertad.
+      </p>
+      <p>
+        El movimiento somático, combinado con el movimiento libre, permite explorar el
+        cuerpo sin exigencias, desde la curiosidad, la presencia y la libertad.
+      </p>
+      <WaButton {...CTAS.espacioRaiz} />
+    </div>
+  </Section>
+
+  <Section title="En Espacio Raíz trabajamos para" muted animar>
+    <ul class="perfiles" role="list">
+      <li>Aumentar la conciencia corporal.</li>
+      <li>Reconocer y liberar tensiones acumuladas.</li>
+      <li>Mejorar la conexión cuerpo-mente.</li>
+      <li>Favorecer una mayor movilidad y flexibilidad.</li>
+      <li>Reducir el estrés y favorecer la relajación.</li>
+      <li>Recuperar el placer de moverse.</li>
+      <li>Desarrollar una relación más amable con el propio cuerpo.</li>
+      <li>Promover el bienestar, la vitalidad y la presencia.</li>
+    </ul>
+    <p class="nota">
+      <strong>Nota importante:</strong> este espacio se enfoca exclusivamente en el
+      bienestar, la educación corporal y el desarrollo personal. No constituye un
+      tratamiento médico, psicológico o psicoterapéutico, ni sustituye la atención de
+      profesionales sanitarios.
+    </p>
+  </Section>
+
+  <Section title="¿Para quién es?" animar>
+    <Banda columnas="1fr 24rem">
+      <p class="lead">Para ti, tengas o no experiencia.</p>
+      <p>
+        No necesitas saber yoga, ser flexible ni tener una determinada condición física.
+      </p>
+      <p>Espacio Raíz puede ser especialmente interesante para personas que:</p>
+      <ul class="perfiles" role="list">
+        <li>Sienten estrés o necesitan encontrar momentos de calma.</li>
+        <li>Pasan muchas horas sentadas o frente al ordenador.</li>
+        <li>Sienten su cuerpo rígido, desconectado o cargado.</li>
+        <li>Quieren mejorar su movilidad.</li>
+      </ul>
+      <p class="triada">
+        Espacio Raíz te invita a hacer una pausa.<br />A bajar el ritmo.<br />A sentir.<br
+        />A respirar.<br />A moverte.<br />Y, sobre todo, a volver a ti.
+      </p>
+      <Foto
+        slot="foto"
+        nombre="consciencia-corporal"
+        sizes="(min-width: 60rem) 24rem, 92vw"
+        alt="Mujer bailando con los brazos abiertos en una sala luminosa, captada en movimiento."
+      />
+    </Banda>
+  </Section>
+
+  <Section title="Espacio Raíz para empresas" muted animar>
+    <p class="lead">Bienestar corporal para equipos y organizaciones.</p>
+    <p>El bienestar de las personas también forma parte del bienestar de una empresa.</p>
+    <p>
+      Por eso, Espacio Raíz puede llevarse a empresas, equipos de trabajo, asociaciones,
+      centros educativos y otros colectivos, adaptando la propuesta a las necesidades del
+      grupo. Las sesiones pueden plantearse como una actividad puntual, un taller especial
+      o formar parte de un programa de bienestar corporativo.
+    </p>
+
+    <h3 class="titulo">¿Qué puede aportar a un equipo?</h3>
+    <ul class="perfiles" role="list">
+      <li>Reducir la tensión acumulada durante la jornada.</li>
+      <li>Crear un espacio de desconexión y descanso mental.</li>
+      <li>Favorecer la conciencia corporal.</li>
+      <li>Incorporar movimiento a jornadas sedentarias.</li>
+      <li>Promover hábitos de autocuidado.</li>
+      <li>Mejorar la conexión con el propio cuerpo.</li>
+      <li>Generar un momento compartido fuera de las dinámicas habituales de trabajo.</li>
+      <li>Favorecer un ambiente de bienestar y cuidado dentro del equipo.</li>
+    </ul>
+
+    <p class="triada">Una pausa que también es productividad.</p>
+    <p>
+      Un equipo que dispone de espacios para parar, respirar y cuidar su cuerpo puede
+      incorporar nuevas herramientas para afrontar el día a día con mayor presencia.
+    </p>
+    <p class="intro">
+      Diseñamos los talleres según las características, necesidades y duración que necesite
+      cada empresa. Si quieres llevar Espacio Raíz a tu empresa, podemos crear una propuesta
+      personalizada.
+    </p>
+    <WaButton {...CTAS.espacioRaizEmpresas} />
+  </Section>
+
+  <Section title="Sesiones individuales" animar>
+    <p class="lead">Un espacio solo para ti.</p>
+    <p>
+      Además de los talleres grupales, Espacio Raíz también puede realizarse en formato
+      individual. Las sesiones individuales permiten adaptar la práctica a tu momento
+      actual, a tus necesidades y a la manera particular en la que habitas tu cuerpo.
+    </p>
+    <p>
+      Es un espacio para ir más despacio, profundizar en la escucha corporal y explorar el
+      movimiento de una manera totalmente personalizada.
+    </p>
+
+    <h3 class="titulo">Una sesión individual puede ayudarte a</h3>
+    <ul class="perfiles" role="list">
+      <li>Conocer mejor tu cuerpo.</li>
+      <li>Detectar dónde acumulas tensión.</li>
+      <li>Explorar movimientos que te resulten agradables y accesibles.</li>
+      <li>Mejorar tu conciencia corporal.</li>
+      <li>Crear momentos de pausa y presencia.</li>
+      <li>Recuperar confianza y libertad en el movimiento.</li>
+      <li>Encontrar una práctica que puedas integrar en tu vida cotidiana.</li>
+    </ul>
+
+    <p class="triada">No tienes que adaptarte tú a una clase.<br />La sesión se adapta a ti.</p>
+    <WaButton {...CTAS.espacioRaiz} />
+  </Section>
+
+  <Section title="Más que hacer yoga: aprender a escucharte" muted animar>
+    <p>
+      En Espacio Raíz no buscamos que tu cuerpo se adapte a una postura perfecta. Buscamos
+      que puedas sentirlo. Que puedas preguntarte:
+    </p>
+    <p class="triada">
+      ¿Cómo estoy hoy?<br />¿Qué necesito?<br />¿Dónde siento tensión?<br />¿Qué movimiento
+      me hace bien?<br />¿Puedo moverme sin exigirme?
+    </p>
+    <p>
+      Porque cuando aprendemos a escuchar nuestro cuerpo, el movimiento deja de ser una
+      obligación y puede convertirse en una herramienta de bienestar y conexión.
+    </p>
+  </Section>
+
+  <Section title="Tu cuerpo es tu raíz" animar>
+    <p>
+      Vivimos muchas veces desde la cabeza, pendientes de lo que tenemos que hacer,
+      resolver y conseguir. Espacio Raíz te propone volver al cuerpo.
+    </p>
+    <p class="triada">
+      A la respiración.<br />A las sensaciones.<br />Al movimiento.<br />A la presencia.
+    </p>
+    <p>Un lugar para habitarte con más calma, conciencia y libertad.</p>
+    <p class="triada">
+      No necesitas experiencia.<br />No necesitas ser flexible.<br />No necesitas hacerlo
+      perfecto.
+    </p>
+    <p class="intro">Solo necesitas venir con curiosidad y ganas de escucharte.</p>
+  </Section>
+
+  <Section title="¿Quieres probar Espacio Raíz?" muted animar>
+    <p class="intro">
+      Puedes participar en <a href="/talleres-y-experiencias">nuestros talleres</a>,
+      organizar una experiencia para tu empresa o grupo, o reservar una sesión individual.
+    </p>
+    <div class="acciones">
+      <WaButton {...CTAS.espacioRaiz} />
+      <WaButton {...CTAS.espacioRaizEmpresas} variant="secondary" />
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+  }
+
+  .titulo {
+    margin: 3rem 0 1rem;
+  }
+</style>

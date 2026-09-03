@@ -2,6 +2,7 @@ export const RUTAS = [
   '/',
   '/clases-de-yoga',
   '/talleres-y-experiencias',
+  '/movimiento-somatico',
   '/sanergia',
   '/online',
   '/sobre-mi',

@@ -73,16 +73,10 @@ import { CTAS } from '../data/site';
     <Banda columnas="1fr 24rem">
       <p class="lead">Consciencia corporal y autorregulación emocional.</p>
       <p>
-        Espacio Raíz es el acompañamiento individual de Yoga Sana: vuelve a habitar tu
-        cuerpo.
+        Espacio Raíz es el movimiento somático de Yoga Sana: explorar el cuerpo sin
+        exigencias, en sesión individual o con tu equipo, para volver a habitarlo.
       </p>
-      <p class="nota">
-        <strong>Nota importante:</strong> este espacio se enfoca exclusivamente en el
-        bienestar, la educación corporal y el desarrollo personal. No constituye un
-        tratamiento médico, psicológico o psicoterapéutico, ni sustituye la atención de
-        profesionales sanitarios.
-      </p>
-      <WaButton {...CTAS.espacioRaiz} />
+      <a class="boton" href="/movimiento-somatico">Ver Movimiento Somático</a>
       <Foto
         slot="foto"
         nombre="consciencia-corporal"
@@ -107,50 +101,7 @@ import { CTAS } from '../data/site';
     gap: 0.75rem 1rem;
   }
 
-  .triada {
-    margin: 2rem 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.375rem, 3vw, 1.75rem);
-    line-height: 1.5;
-    color: var(--oliva-oscuro);
-  }
-
   .titulo {
     margin: 3rem 0 1rem;
-  }
-
-  .perfiles {
-    display: grid;
-    gap: 0.75rem;
-    max-width: var(--measure);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .perfiles li {
-    position: relative;
-    padding-left: 1.75rem;
-  }
-
-  .nota {
-    max-width: var(--measure);
-    margin: 2rem 0;
-    padding: 1rem 1.25rem;
-    border-left: 3px solid var(--salvia);
-    background-color: var(--marfil);
-    font-size: 0.9375rem;
-    line-height: 1.6;
-  }
-
-  .perfiles li::before {
-    content: '';
-    position: absolute;
-    left: 0.25rem;
-    top: 0.62em;
-    width: 0.5rem;
-    height: 0.5rem;
-    background-color: var(--salvia);
-    border-radius: var(--radius-circle);
   }
 </style>

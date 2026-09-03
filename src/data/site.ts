@@ -43,9 +43,16 @@ export const CTAS = {
   },
   espacioRaiz: {
     message:
-      '¡Hola Natalia! Me interesa Espacio Raíz, el acompañamiento individual. ¿Me cuentas más?',
-    label: 'Saber más sobre Espacio Raíz',
-    ariaSuffix: 'escribir por WhatsApp sobre Espacio Raíz, el acompañamiento individual',
+      '¡Hola Natalia! Me interesa Espacio Raíz, la sesión individual de movimiento somático. ¿Me cuentas más?',
+    label: 'Reservar sesión individual',
+    ariaSuffix:
+      'escribir por WhatsApp sobre Espacio Raíz, la sesión individual de movimiento somático',
+  },
+  espacioRaizEmpresas: {
+    message:
+      '¡Hola Natalia! Me gustaría llevar Espacio Raíz a mi empresa o grupo. ¿Me cuentas cómo funciona?',
+    label: 'Espacio Raíz para empresas',
+    ariaSuffix: 'escribir por WhatsApp sobre Espacio Raíz para empresas, equipos y grupos',
   },
   unirmeOnline: {
     message: '¡Hola Natalia! Quiero unirme a Yoga Sana Online (30 €/mes). ¿Cómo lo hacemos?',
