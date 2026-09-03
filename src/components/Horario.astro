@@ -8,6 +8,8 @@ const markup = renderHorario(SNAPSHOT);
 <div class="horario" data-horario set:html={markup} />
 
 <script>
+  import { hasSheet } from '../data/sheet-config';
+
   const paint = (markup: string): void => {
     document.querySelectorAll('[data-horario]').forEach((mount) => {
       mount.innerHTML = markup;
@@ -15,14 +17,7 @@ const markup = renderHorario(SNAPSHOT);
   };
 
   const refresh = async (): Promise<void> => {
-    if (
-      !import.meta.env.PUBLIC_SHEET_ID ||
-      !import.meta.env.PUBLIC_SHEET_GID_ACTIVIDADES ||
-      !import.meta.env.PUBLIC_SHEET_GID_HORARIOS ||
-      !import.meta.env.PUBLIC_SHEET_GID_AJUSTES
-    ) {
-      return;
-    }
+    if (!hasSheet()) return;
     try {
       const [{ renderHorario }, { onFreshSnapshot }, { SNAPSHOT }] = await Promise.all([
         import('./horario-markup'),

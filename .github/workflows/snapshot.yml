@@ -35,11 +35,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Descargar el snapshot
-        env:
-          PUBLIC_SHEET_ID: ${{ vars.PUBLIC_SHEET_ID }}
-          PUBLIC_SHEET_GID_ACTIVIDADES: ${{ vars.PUBLIC_SHEET_GID_ACTIVIDADES }}
-          PUBLIC_SHEET_GID_HORARIOS: ${{ vars.PUBLIC_SHEET_GID_HORARIOS }}
-          PUBLIC_SHEET_GID_AJUSTES: ${{ vars.PUBLIC_SHEET_GID_AJUSTES }}
         run: pnpm snapshot
 
       - name: Comprometer el snapshot si ha cambiado

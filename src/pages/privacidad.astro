@@ -2,9 +2,9 @@
 import Base from '../layouts/Base.astro';
 import Legal from '../components/Legal.astro';
 import DatosTitular from '../components/DatosTitular.astro';
-import { toSheetConfig } from '../data/sheet-config';
+import { hasSheet } from '../data/sheet-config';
 
-const hojaConfigurada = toSheetConfig(import.meta.env) !== null;
+const hojaConfigurada = hasSheet();
 ---
 
 <Base

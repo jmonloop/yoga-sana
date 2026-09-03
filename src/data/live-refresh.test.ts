@@ -2,6 +2,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { onFreshSnapshot } from './live-refresh';
 import { parseSnapshot, type Snapshot, type TabCsv } from './sheet';
 
+const sheet = vi.hoisted(() => ({ id: '' }));
+
+vi.mock('./sheet-config', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./sheet-config')>()),
+  hasSheet: () => sheet.id !== '',
+  csvUrl: (tab: string) => `https://sheet.test/${tab}`,
+}));
+
 const BAKED: TabCsv = {
   actividades: 'nombre,grupo,descripcion\nHatha Yoga,yoga,Equilibrio.',
   horarios: 'dia,hora,actividad\nLunes,9:30,Yoga Sana',
@@ -17,22 +25,13 @@ function snapshotOf(csv: TabCsv): Snapshot {
 }
 
 function configureSheet(): void {
-  vi.stubEnv('PUBLIC_SHEET_ID', '2PACX-abc');
-  vi.stubEnv('PUBLIC_SHEET_GID_ACTIVIDADES', '0');
-  vi.stubEnv('PUBLIC_SHEET_GID_HORARIOS', '1');
-  vi.stubEnv('PUBLIC_SHEET_GID_AJUSTES', '2');
+  sheet.id = '1AbCdEf';
 }
-
-const TAB_BY_GID: Record<string, keyof TabCsv> = {
-  '0': 'actividades',
-  '1': 'horarios',
-  '2': 'ajustes',
-};
 
 function serve(tabs: Partial<TabCsv>) {
   const fetcher = vi.fn((url: string) => {
-    const tab = TAB_BY_GID[new URL(url).searchParams.get('gid') ?? ''];
-    const body = tab === undefined ? undefined : tabs[tab];
+    const tab = new URL(url).pathname.slice(1) as keyof TabCsv;
+    const body = tabs[tab];
     return Promise.resolve(new Response(body ?? '', { status: body === undefined ? 404 : 200 }));
   });
   vi.stubGlobal('fetch', fetcher);
@@ -40,12 +39,12 @@ function serve(tabs: Partial<TabCsv>) {
 }
 
 afterEach(() => {
-  vi.unstubAllEnvs();
+  sheet.id = '';
   vi.unstubAllGlobals();
 });
 
 describe('onFreshSnapshot', () => {
-  it('does nothing and never touches the network when no Sheet is configured', async () => {
+  it('does nothing and never touches the network when no Sheet id is committed', async () => {
     const fetcher = serve(LIVE);
     const apply = vi.fn();
 

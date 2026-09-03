@@ -12,11 +12,9 @@ interface Run {
   stderr: string;
 }
 
-function runScript(sheetEnv: Record<string, string>): Promise<Run> {
-  const inherited = Object.entries(process.env).filter(([key]) => !key.startsWith('PUBLIC_SHEET'));
-  const env = { ...Object.fromEntries(inherited), ...sheetEnv };
+function runScript(...args: string[]): Promise<Run> {
   return new Promise((resolve) => {
-    execFile(process.execPath, [SCRIPT], { env }, (error, stdout, stderr) =>
+    execFile(process.execPath, [SCRIPT, ...args], (error, stdout, stderr) =>
       resolve({ code: exitCode(error), stdout, stderr }),
     );
   });
@@ -28,27 +26,25 @@ function exitCode(error: ExecException | null): number {
 }
 
 describe('scripts/fetch-snapshot.mjs', () => {
-  it('refuses a half-configured Sheet instead of quietly shipping seed data', async () => {
-    const before = readFileSync(SNAPSHOT);
-
-    const { code, stderr } = await runScript({ PUBLIC_SHEET_ID: '2PACX-abc' });
-
-    expect(code).toBe(1);
-    expect(stderr).toContain('only half configured');
-    expect(stderr).toContain('PUBLIC_SHEET_GID_ACTIVIDADES');
-    expect(readFileSync(SNAPSHOT).equals(before)).toBe(true);
-  });
-
-  it('writes a usable snapshot from the seed CSVs when no Sheet is configured', async () => {
+  it('writes a usable snapshot from the seed CSVs when asked for --seed', async () => {
     const committed = readFileSync(SNAPSHOT);
 
-    const { code, stdout } = await runScript({});
+    const { code, stdout } = await runScript('--seed');
     const written = JSON.parse(readFileSync(SNAPSHOT, 'utf8'));
     writeFileSync(SNAPSHOT, committed);
 
     expect(code).toBe(0);
-    expect(stdout).toContain('falling back to the seed/ CSVs');
+    expect(stdout).toContain('Reading the seed/ CSVs');
     expect(written.actividades).toHaveLength(13);
     expect(written.horarios).toHaveLength(17);
+  });
+
+  it('never reaches the network for --seed, so a fresh clone can always build', async () => {
+    const committed = readFileSync(SNAPSHOT);
+
+    const { stdout } = await runScript('--seed');
+    writeFileSync(SNAPSHOT, committed);
+
+    expect(stdout).not.toContain('Fetching');
   });
 });

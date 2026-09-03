@@ -1,12 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { isUsableSnapshot, parseSnapshot } from '../src/data/sheet.ts';
-import {
-  csvUrl,
-  missingSheetEnvKeys,
-  SHEET_ENV_KEYS,
-  TABS,
-  toSheetConfig,
-} from '../src/data/sheet-config.ts';
+import { csvUrl, hasSheet, SHEET_ID, TABS } from '../src/data/sheet-config.ts';
 
 const SNAPSHOT = new URL('../src/data/snapshot.json', import.meta.url);
 
@@ -17,7 +11,7 @@ main().catch((error) => {
 });
 
 async function main() {
-  const csv = await readSource(process.env);
+  const csv = await readSource(process.argv.slice(2));
   const snapshot = parseSnapshot(csv);
   if (!snapshot) throw new Error('a tab is missing a required column, so the Sheet was rejected');
   if (!isUsableSnapshot(snapshot)) throw new Error('the source has no actividades or no horarios');
@@ -28,19 +22,18 @@ async function main() {
   );
 }
 
-async function fetchTabs(config) {
-  console.log(`Fetching the published Sheet ${config.sheetId}`);
-  return readTabs((tab) => fetchCsv(csvUrl(config, tab)));
+async function fetchTabs() {
+  console.log(`Fetching the shared Sheet ${SHEET_ID}`);
+  return readTabs((tab) => fetchCsv(csvUrl(tab)));
 }
 
-async function readSource(env) {
-  const config = toSheetConfig(env);
-  if (config) return fetchTabs(config);
-  const missing = missingSheetEnvKeys(env);
-  if (missing.length < SHEET_ENV_KEYS.length) {
-    throw new Error(`the Sheet is only half configured, missing ${missing.join(', ')}`);
-  }
-  console.log('No published Sheet configured, falling back to the seed/ CSVs');
+async function readSource(argv) {
+  if (argv.includes('--seed') || !hasSheet()) return readSeed();
+  return fetchTabs();
+}
+
+async function readSeed() {
+  console.log('Reading the seed/ CSVs');
   return readTabs((tab) => readFile(new URL(`../seed/${tab}.csv`, import.meta.url), 'utf8'));
 }
 

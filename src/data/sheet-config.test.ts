@@ -1,49 +1,32 @@
 import { describe, expect, it } from 'vitest';
-import { csvUrl, missingSheetEnvKeys, toSheetConfig, type SheetConfig } from './sheet-config';
+import { csvUrl, hasSheet, SHEET_ID, TABS } from './sheet-config';
 
-const FULL = {
-  PUBLIC_SHEET_ID: '2PACX-abc',
-  PUBLIC_SHEET_GID_ACTIVIDADES: '0',
-  PUBLIC_SHEET_GID_HORARIOS: '111',
-  PUBLIC_SHEET_GID_AJUSTES: '222',
-};
-
-describe('missingSheetEnvKeys', () => {
-  it('names every variable that is absent or blank', () => {
-    expect(missingSheetEnvKeys({ ...FULL, PUBLIC_SHEET_GID_AJUSTES: '  ' })).toEqual([
-      'PUBLIC_SHEET_GID_AJUSTES',
-    ]);
-    expect(missingSheetEnvKeys({})).toHaveLength(4);
-  });
-
-  it('names nothing when the Sheet is fully configured', () => {
-    expect(missingSheetEnvKeys(FULL)).toEqual([]);
-  });
-});
-
-describe('toSheetConfig', () => {
-  it('refuses a half-configured Sheet rather than building a broken URL', () => {
-    expect(toSheetConfig({ PUBLIC_SHEET_ID: '2PACX-abc' })).toBeNull();
-  });
-
-  it('trims the values it reads', () => {
-    expect(toSheetConfig({ ...FULL, PUBLIC_SHEET_ID: ' 2PACX-abc ' })?.sheetId).toBe('2PACX-abc');
+describe('hasSheet', () => {
+  it('agrees with whether a Sheet id is committed', () => {
+    expect(hasSheet()).toBe(SHEET_ID.trim() !== '');
   });
 });
 
 describe('csvUrl', () => {
-  it('points at the published CSV endpoint for the requested tab', () => {
-    const config: SheetConfig = {
-      sheetId: '2PACX-abc',
-      gids: { actividades: '0', horarios: '111', ajustes: '222' },
-    };
+  it('asks the gviz endpoint for the tab by name, not by gid', () => {
+    const url = new URL(csvUrl('horarios'));
 
-    const url = new URL(csvUrl(config, 'horarios'));
+    expect(url.pathname.endsWith('/gviz/tq')).toBe(true);
+    expect(url.searchParams.get('tqx')).toBe('out:csv');
+    expect(url.searchParams.get('headers')).toBe('1');
+    expect(url.searchParams.get('sheet')).toBe('horarios');
+    expect(url.searchParams.has('gid')).toBe(false);
+  });
 
-    expect(url.origin + url.pathname).toBe(
-      'https://docs.google.com/spreadsheets/d/2PACX-abc/pub',
-    );
-    expect(url.searchParams.get('output')).toBe('csv');
-    expect(url.searchParams.get('gid')).toBe('111');
+  it('busts the cache so an edit shows up on the next page load', () => {
+    expect(new URL(csvUrl('ajustes')).searchParams.get('_')).toMatch(/^\d+$/);
+  });
+
+  it('names every tab the snapshot needs', () => {
+    expect(TABS.map((tab) => new URL(csvUrl(tab)).searchParams.get('sheet'))).toEqual([
+      'actividades',
+      'horarios',
+      'ajustes',
+    ]);
   });
 });

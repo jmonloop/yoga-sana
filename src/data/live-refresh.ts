@@ -1,30 +1,29 @@
-import { csvUrl, toSheetConfig, type SheetConfig } from './sheet-config';
+import { csvUrl, hasSheet } from './sheet-config';
 import { isUsableSnapshot, parseSnapshot, type Snapshot, type TabCsv } from './sheet';
 
 export async function onFreshSnapshot(
   baked: Snapshot,
   apply: (snapshot: Snapshot) => void,
 ): Promise<void> {
-  const config = toSheetConfig(import.meta.env ?? {});
-  if (!config) return;
+  if (!hasSheet()) return;
   try {
-    const fresh = await readLiveSnapshot(config);
+    const fresh = await readLiveSnapshot();
     if (fresh && differs(fresh, baked)) apply(fresh);
   } catch {
     return;
   }
 }
 
-async function readLiveSnapshot(config: SheetConfig): Promise<Snapshot | null> {
-  const live = parseSnapshot(await fetchTabs(config));
+async function readLiveSnapshot(): Promise<Snapshot | null> {
+  const live = parseSnapshot(await fetchTabs());
   return live && isUsableSnapshot(live) ? live : null;
 }
 
-async function fetchTabs(config: SheetConfig): Promise<TabCsv> {
+async function fetchTabs(): Promise<TabCsv> {
   const [actividades, horarios, ajustes] = await Promise.all([
-    fetchCsv(csvUrl(config, 'actividades')),
-    fetchCsv(csvUrl(config, 'horarios')),
-    fetchCsv(csvUrl(config, 'ajustes')),
+    fetchCsv(csvUrl('actividades')),
+    fetchCsv(csvUrl('horarios')),
+    fetchCsv(csvUrl('ajustes')),
   ]);
   return { actividades, horarios, ajustes };
 }
