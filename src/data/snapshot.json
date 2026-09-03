@@ -158,7 +158,7 @@
     },
     {
       "dia": "Viernes",
-      "hora": "10:00",
+      "hora": "9:30",
       "actividad": "Yoga Relajante",
       "nota": ""
     },
@@ -187,21 +187,69 @@
       "nota": ""
     },
     {
+      "dia": "Viernes",
+      "hora": "11:00",
+      "actividad": "Yoga Somático",
+      "nota": ""
+    },
+    {
+      "dia": "Lunes",
+      "hora": "12:15",
+      "actividad": "Pilates",
+      "nota": ""
+    },
+    {
+      "dia": "Martes",
+      "hora": "12:15",
+      "actividad": "Pilates",
+      "nota": ""
+    },
+    {
+      "dia": "Miércoles",
+      "hora": "12:15",
+      "actividad": "Pilates",
+      "nota": ""
+    },
+    {
+      "dia": "Jueves",
+      "hora": "12:15",
+      "actividad": "Pilates",
+      "nota": ""
+    },
+    {
+      "dia": "Lunes",
+      "hora": "16:00",
+      "actividad": "Yoga Funcional",
+      "nota": ""
+    },
+    {
+      "dia": "Miércoles",
+      "hora": "16:00",
+      "actividad": "Yoga Funcional",
+      "nota": ""
+    },
+    {
+      "dia": "Jueves",
+      "hora": "17:00",
+      "actividad": "Rebirthing",
+      "nota": ""
+    },
+    {
       "dia": "Lunes",
       "hora": "17:30",
       "actividad": "Yoga Sana",
       "nota": ""
     },
     {
-      "dia": "Miércoles",
+      "dia": "Martes",
       "hora": "17:30",
-      "actividad": "Yoga Sana",
+      "actividad": "Yoga Infantil",
       "nota": ""
     },
     {
-      "dia": "Jueves",
+      "dia": "Miércoles",
       "hora": "17:30",
-      "actividad": "Yoga Infantil",
+      "actividad": "Yoga Sana",
       "nota": ""
     },
     {
@@ -223,16 +271,28 @@
       "nota": ""
     },
     {
+      "dia": "Jueves",
+      "hora": "19:00",
+      "actividad": "Biodanza",
+      "nota": ""
+    },
+    {
+      "dia": "Viernes",
+      "hora": "19:30",
+      "actividad": "Meditación",
+      "nota": ""
+    },
+    {
       "dia": "Martes",
       "hora": "20:00",
       "actividad": "Yoga Relajante",
       "nota": ""
     },
     {
-      "dia": "Viernes",
-      "hora": "20:00",
-      "actividad": "Meditación guiada",
-      "nota": "Reserva anticipada"
+      "dia": "Jueves",
+      "hora": "21:00",
+      "actividad": "Yin Yoga",
+      "nota": ""
     }
   ],
   "ajustes": {

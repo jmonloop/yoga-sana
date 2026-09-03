@@ -36,7 +36,7 @@ describe('scripts/fetch-snapshot.mjs', () => {
     expect(code).toBe(0);
     expect(stdout).toContain('Reading the seed/ CSVs');
     expect(written.actividades).toHaveLength(13);
-    expect(written.horarios).toHaveLength(17);
+    expect(written.horarios).toHaveLength(27);
   });
 
   it('never reaches the network for --seed, so a fresh clone can always build', async () => {

@@ -350,13 +350,13 @@ describe('the real seed CSVs', () => {
     );
   });
 
-  it('keeps 17 timetable entries over 7 times and 5 days', () => {
-    expect(SEED.horarios).toHaveLength(17);
-    expect(new Set(SEED.horarios.map((row) => row.hora)).size).toBe(7);
+  it('keeps 27 timetable entries over 11 times and 5 days', () => {
+    expect(SEED.horarios).toHaveLength(27);
+    expect(new Set(SEED.horarios.map((row) => row.hora)).size).toBe(11);
     expect(new Set(SEED.horarios.map((row) => row.dia)).size).toBe(5);
   });
 
-  it('opens on Monday at 9:30 and closes on Friday at 20:00 with its note', () => {
+  it('opens on Monday at 9:30 and closes on Thursday at 21:00', () => {
     expect(SEED.horarios[0]).toEqual({
       dia: 'Lunes',
       hora: '9:30',
@@ -364,10 +364,10 @@ describe('the real seed CSVs', () => {
       nota: '',
     });
     expect(SEED.horarios.at(-1)).toEqual({
-      dia: 'Viernes',
-      hora: '20:00',
-      actividad: 'Meditación guiada',
-      nota: 'Reserva anticipada',
+      dia: 'Jueves',
+      hora: '21:00',
+      actividad: 'Yin Yoga',
+      nota: '',
     });
   });
 
@@ -378,7 +378,7 @@ describe('the real seed CSVs', () => {
     );
   });
 
-  it('reproduces the owner Canva colour for every timetable class', () => {
+  it('honours the four pinned colours and cycles the palette for the rest', () => {
     const colours = new Map(
       SEED.horarios.map((row) => [row.actividad, resolveColor(row.actividad, SEED)]),
     );
@@ -388,7 +388,13 @@ describe('the real seed CSVs', () => {
       'Yoga Suave': 'lavanda',
       'Yoga Relajante': 'pizarra',
       'Yoga Infantil': 'melocoton',
-      'Meditación guiada': 'rosa',
+      'Yoga Somático': 'salvia',
+      Pilates: 'lavanda',
+      'Yoga Funcional': 'pizarra',
+      Rebirthing: 'melocoton',
+      Biodanza: 'rosa',
+      Meditación: 'salvia',
+      'Yin Yoga': 'lavanda',
     });
   });
 });
