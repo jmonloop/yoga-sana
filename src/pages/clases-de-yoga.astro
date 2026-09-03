@@ -65,13 +65,15 @@ const mes = ajuste('mes');
     )
   }
 
-  <Section id="horario" title="Horario semanal" eyebrow={mes} animar>
+  <Section id="horario" title="Horario semanal" eyebrow={mes} animar campo="mes">
     <p class="intro">
       Toca cualquier clase para escribirme por WhatsApp y reservar tu plaza. Si prefieres
       guardártelo, descarga el horario como imagen.
     </p>
     <Horario />
-    <p class="nota apunte">{notaPie}</p>
+    <p class="nota apunte" data-campo="nota_pie" data-defecto={NOTA_PIE_POR_DEFECTO}>
+      {notaPie}
+    </p>
     <DescargarHorario />
   </Section>
 
@@ -118,3 +120,9 @@ const mes = ajuste('mes');
     margin-top: 1.5rem;
   }
 </style>
+
+<script>
+  import { conectarCampos } from '../components/campos-ajustes';
+
+  conectarCampos(document);
+</script>

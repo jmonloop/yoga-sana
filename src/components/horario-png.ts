@@ -1,10 +1,5 @@
-import type { Ajustes, Snapshot } from '../data/sheet';
-
-declare global {
-  interface DocumentEventMap {
-    'horario:actualizado': CustomEvent<Snapshot>;
-  }
-}
+import { pintarCampos } from './campos-ajustes';
+import type { Ajustes } from '../data/sheet';
 
 const MENSAJES = {
   trabajando: 'Preparando la imagen…',
@@ -61,9 +56,7 @@ function actualizarChrome(
   ajustes: Ajustes,
 ): void {
   raiz.dataset['mes'] = limpio(ajustes['mes']);
-  plantilla.content.querySelectorAll<HTMLElement>('[data-campo]').forEach((campo) => {
-    campo.textContent = limpio(ajustes[campo.dataset['campo'] ?? '']);
-  });
+  pintarCampos(plantilla.content, ajustes);
 }
 
 function limpio(valor: string | undefined): string {

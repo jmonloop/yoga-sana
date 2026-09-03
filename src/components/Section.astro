@@ -5,14 +5,15 @@ interface Props {
   id?: string;
   muted?: boolean;
   animar?: boolean;
+  campo?: string;
 }
 
-const { title, eyebrow, id, muted = false, animar = false } = Astro.props;
+const { title, eyebrow, id, muted = false, animar = false, campo } = Astro.props;
 ---
 
 <section class:list={['section', { muted }]} id={id}>
   <div class:list={['inner', { 'fade-up': animar }]}>
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    {eyebrow && <p class="eyebrow" data-campo={campo}>{eyebrow}</p>}
     {title && <h2 class="title">{title}</h2>}
     <slot />
   </div>
