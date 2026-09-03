@@ -3,6 +3,8 @@ import { isUsableSnapshot, parseSnapshot } from '../src/data/sheet.ts';
 import { csvUrl, hasSheet, SHEET_ID, TABS } from '../src/data/sheet-config.ts';
 
 const SNAPSHOT = new URL('../src/data/snapshot.json', import.meta.url);
+const REINTENTOS = 2;
+const ESPERA_MS = 1000;
 
 main().catch((error) => {
   console.error(`✖ No snapshot written: ${error.message}`);
@@ -42,8 +44,23 @@ async function readTabs(readTab) {
   return Object.fromEntries(TABS.map((tab, index) => [tab, texts[index]]));
 }
 
-async function fetchCsv(url) {
+async function fetchCsv(url, reintentos = REINTENTOS) {
+  try {
+    return await readCsv(url);
+  } catch (error) {
+    if (reintentos === 0) throw error;
+    console.log(`  ${error.message}, reintentando en ${ESPERA_MS} ms`);
+    await pausa(ESPERA_MS);
+    return fetchCsv(url, reintentos - 1);
+  }
+}
+
+async function readCsv(url) {
   const response = await fetch(url, { redirect: 'follow' });
   if (!response.ok) throw new Error(`${response.status} ${response.statusText} for ${url}`);
   return response.text();
+}
+
+function pausa(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
