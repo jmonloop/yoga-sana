@@ -101,16 +101,6 @@
       "mensajeWa": null
     },
     {
-      "nombre": "Gimnasia Pasiva en Camilla",
-      "grupo": "taller",
-      "descripcion": "Relajación profunda a través del movimiento pasivo. Libera tensiones y restaura tu energía.",
-      "etiqueta": "",
-      "icono": "camilla",
-      "orden": 5,
-      "color": null,
-      "mensajeWa": null
-    },
-    {
       "nombre": "Baño de Cuencos",
       "grupo": "taller",
       "descripcion": "Relajación profunda con sonido y vibración que armonizan cuerpo y mente.",
@@ -121,12 +111,32 @@
       "mensajeWa": null
     },
     {
+      "nombre": "Gimnasia Pasiva en Camilla",
+      "grupo": "otras",
+      "descripcion": "Relajación profunda a través del movimiento pasivo. Libera tensiones y restaura tu energía.",
+      "etiqueta": "",
+      "icono": "camilla",
+      "orden": 5,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
       "nombre": "Sanergía",
-      "grupo": "taller",
+      "grupo": "otras",
       "descripcion": "Técnica energética que armoniza cuerpo, mente y emociones a través de la imposición de manos y la canalización de energía universal.",
       "etiqueta": "",
       "icono": "loto-manos",
       "orden": 7,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
+      "nombre": "Movimiento Somático",
+      "grupo": "otras",
+      "descripcion": "",
+      "etiqueta": "",
+      "icono": "loto",
+      "orden": 9007199254740991,
       "color": null,
       "mensajeWa": null
     }
