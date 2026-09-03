@@ -1,7 +1,7 @@
 export const TABS = ['actividades', 'horarios', 'ajustes'] as const;
 export type Tab = (typeof TABS)[number];
 
-export const SHEET_ID = '';
+export const SHEET_ID = '1X0vlEYxP-MB8iZEqeZOD3jjmAyUlJ6d8j4wtUZZ7oeo';
 
 export function hasSheet(): boolean {
   return SHEET_ID.trim() !== '';
