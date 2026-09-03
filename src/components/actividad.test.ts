@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
   actividadCta,
   actividadesDe,
-  enlacesDe,
   ETIQUETA_EMPRESAS,
   nombresEnumerados,
 } from './actividad';
@@ -69,39 +68,6 @@ describe('actividadesDe', () => {
     actividadesDe(LISTA, 'yoga');
 
     expect(LISTA).toEqual(original);
-  });
-});
-
-describe('enlacesDe', () => {
-  const sanergia = { href: '/sanergia', texto: 'Saber más sobre Sanergía' };
-
-  it('resolves the link for the activity it names and nothing else', () => {
-    const lista = [actividad({ nombre: 'Sanergía' }), actividad({ nombre: 'Breathwork' })];
-
-    const enlaces = enlacesDe(lista, { Sanergía: sanergia });
-
-    expect(enlaces['Sanergía']).toEqual(sanergia);
-    expect(enlaces['Breathwork']).toBeUndefined();
-  });
-
-  it('accepts an empty map without touching the activities', () => {
-    expect(enlacesDe(LISTA, {})).toEqual({});
-  });
-
-  it('throws when a key matches no activity, so a rename cannot silently drop the link', () => {
-    const lista = [actividad({ nombre: 'Sanergia' })];
-
-    expect(() => enlacesDe(lista, { Sanergía: sanergia })).toThrow(/Sanergía/);
-  });
-
-  it('returns nothing to link when there is nothing to render, so hiding every row in the Sheet does not break the build', () => {
-    expect(enlacesDe([], { Sanergía: sanergia })).toEqual({});
-  });
-
-  it('still throws when the list has rows but none of them is the one named', () => {
-    const lista = [actividad({ nombre: 'Breathwork' })];
-
-    expect(() => enlacesDe(lista, { Sanergía: sanergia })).toThrow(/ninguna actividad/);
   });
 });
 

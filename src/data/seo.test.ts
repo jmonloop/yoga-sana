@@ -1,6 +1,8 @@
 import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { origenDe, robotsTxt, RUTAS, sitemapXml } from './seo';
+import { origenDe, robotsTxt, RUTAS, rutasDelSitio, sitemapXml } from './seo';
+import { paginasDeTalleres } from './talleres';
+import { SNAPSHOT } from './snapshot';
 
 const ORIGEN = 'https://yogasana.es/';
 
@@ -15,11 +17,24 @@ describe('RUTAS', () => {
     expect([...RUTAS].sort()).toEqual(paginas.sort());
   });
 
-  it('fails when a page shape appears that a literal list cannot describe', () => {
-    const raras = readdirSync('src/pages', { withFileTypes: true })
-      .filter((entrada) => entrada.isDirectory() || /^_|\[/.test(entrada.name))
+  it('leaves the dynamic taller pages to rutasDelSitio, so only that folder may exist', () => {
+    const carpetas = readdirSync('src/pages', { withFileTypes: true })
+      .filter((entrada) => entrada.isDirectory())
       .map((entrada) => entrada.name);
-    expect(raras).toEqual([]);
+    expect(carpetas).toEqual(['talleres']);
+  });
+});
+
+describe('rutasDelSitio', () => {
+  it('appends one route per taller page after the static ones', () => {
+    const paginas = paginasDeTalleres(SNAPSHOT.actividades);
+    const rutas = rutasDelSitio(paginas);
+    expect(rutas.slice(0, RUTAS.length)).toEqual(RUTAS);
+    expect(rutas.slice(RUTAS.length)).toEqual(paginas.map(({ ruta }) => ruta));
+  });
+
+  it('returns only the static routes when the Sheet has no taller with copy', () => {
+    expect(rutasDelSitio([])).toEqual(RUTAS);
   });
 });
 

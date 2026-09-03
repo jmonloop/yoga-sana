@@ -1,9 +1,17 @@
 export const WHATSAPP_NUMBER = '34677808098';
 export const INSTAGRAM = '@yoga_sanacatarroja';
 export const INSTAGRAM_URL = 'https://www.instagram.com/yoga_sanacatarroja/';
+export const GOOGLE_MAPS_URL = 'https://maps.google.com/?cid=14038268165342406311';
+export const NOMBRE_GOOGLE = 'YOGA SANA CATARROJA';
+export const CALLE = 'Carrer Sant Antoni, 40';
+export const CODIGO_POSTAL = '46470';
+export const LOCALIDAD = 'Catarroja';
+export const PROVINCIA = 'València';
+export const COORDENADAS = { latitud: 39.4043685, longitud: -0.4048543 };
+export const HORARIO_APERTURA = { desde: '09:00', hasta: '21:30' };
 export const TITULAR = 'Natalia Gutiérrez Muñoz';
 export const NIF = '26759918Q';
-export const DOMICILIO = 'Calle San Antonio, 40, 46470 Catarroja, Valencia, España';
+export const DOMICILIO = `${CALLE}, ${CODIGO_POSTAL} ${LOCALIDAD}, ${PROVINCIA}, España`;
 
 export const WHATSAPP_VISIBLE = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(
   2,

@@ -1,0 +1,40 @@
+---
+import type { Pregunta } from '../data/talleres';
+
+interface Props {
+  preguntas: Pregunta[];
+}
+
+const { preguntas } = Astro.props;
+---
+
+<dl class="preguntas">
+  {
+    preguntas.map(({ pregunta, respuesta }) => (
+      <div class="pregunta">
+        <dt>
+          <h3 class="titulo">{pregunta}</h3>
+        </dt>
+        <dd>{respuesta}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .preguntas {
+    display: grid;
+    gap: 1.75rem;
+    max-width: var(--measure);
+    margin: 0;
+  }
+
+  .pregunta dt .titulo {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .pregunta dd {
+    margin: 0;
+  }
+</style>

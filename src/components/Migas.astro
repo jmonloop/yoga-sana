@@ -1,0 +1,46 @@
+---
+import type { Tramo } from '../data/schema';
+
+interface Props {
+  tramos: Tramo[];
+}
+
+const { tramos } = Astro.props;
+const anteriores = tramos.slice(0, -1);
+const actual = tramos.at(-1);
+---
+
+<nav class="migas" aria-label="Migas de pan">
+  <ol>
+    {
+      anteriores.map(({ nombre, ruta }) => (
+        <li>
+          <a href={ruta}>{nombre}</a>
+        </li>
+      ))
+    }
+    {actual && <li aria-current="page">{actual.nombre}</li>}
+  </ol>
+</nav>
+
+<style>
+  .migas ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    color: var(--oliva-oscuro);
+  }
+
+  .migas li + li::before {
+    content: '›';
+    margin-right: 0.5rem;
+  }
+
+  .migas a {
+    color: inherit;
+  }
+</style>

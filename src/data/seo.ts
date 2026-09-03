@@ -1,3 +1,5 @@
+import type { PaginaTaller } from './talleres';
+
 export const RUTAS = [
   '/',
   '/clases-de-yoga',
@@ -9,6 +11,10 @@ export const RUTAS = [
   '/aviso-legal',
   '/privacidad',
 ];
+
+export function rutasDelSitio(paginas: PaginaTaller[]): string[] {
+  return [...RUTAS, ...paginas.map(({ ruta }) => ruta)];
+}
 
 export function origenDe(site: URL | undefined): string {
   if (!site) {

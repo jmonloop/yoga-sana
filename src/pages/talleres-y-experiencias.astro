@@ -5,15 +5,13 @@ import Section from '../components/Section.astro';
 import Foto from '../components/Foto.astro';
 import Tarjetas from '../components/Tarjetas.astro';
 import WaButton from '../components/WaButton.astro';
-import { actividadesDe, enlacesDe } from '../components/actividad';
+import { actividadesDe } from '../components/actividad';
 import { CTAS } from '../data/site';
 import { SNAPSHOT } from '../data/snapshot';
+import { enlacesPara, paginasDeTalleres } from '../data/talleres';
 
 const talleres = actividadesDe(SNAPSHOT.actividades, 'taller');
-
-const enlaces = enlacesDe(talleres, {
-  Sanergía: { href: '/sanergia', texto: 'Saber más sobre Sanergía' },
-});
+const enlaces = enlacesPara(talleres, paginasDeTalleres(talleres));
 ---
 
 <Base
@@ -22,10 +20,11 @@ const enlaces = enlacesDe(talleres, {
 >
   <Section eyebrow="Date un espacio">
     <div class="columna">
-      <h1>Talleres y experiencias</h1>
+      <h1>Talleres de breathwork y experiencias en Catarroja</h1>
       <p class="lead">
-        Encuentros puntuales para respirar hondo, mirar hacia dentro y soltar lo que pesa,
-        en Catarroja (València).
+        Breathwork, rebirthing, constelaciones familiares, baño de cuencos y más: encuentros
+        puntuales para respirar hondo, mirar hacia dentro y soltar lo que pesa, en Catarroja
+        (València) y algunos también online.
       </p>
       <WaButton {...CTAS.empezar} />
     </div>
@@ -38,7 +37,8 @@ const enlaces = enlacesDe(talleres, {
           Cada propuesta tiene su propio ritmo: algunas se repiten una vez al mes, otras son
           un grupo fijo cada quince días y otras se convocan puntualmente. Por eso no están
           en el horario semanal. Las que tienen una frecuencia fija lo dicen en su tarjeta;
-          para el resto, escríbeme y te aviso de la próxima.
+          para el resto, escríbeme y te aviso de la próxima. En cada tarjeta tienes un enlace
+          para leer más sobre el taller.
         </p>
         <Tarjetas actividades={talleres} enlaces={enlaces} />
       </Section>

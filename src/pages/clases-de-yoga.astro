@@ -9,6 +9,7 @@ import Tarjetas from '../components/Tarjetas.astro';
 import WaButton from '../components/WaButton.astro';
 import { actividadesDe } from '../components/actividad';
 import { CTAS } from '../data/site';
+import { enlacesPara, paginasDeTalleres } from '../data/talleres';
 import {
   ajuste,
   NOTA_PIE_POR_DEFECTO,
@@ -19,6 +20,7 @@ import {
 
 const clases = actividadesDe(SNAPSHOT.actividades, 'yoga');
 const otras = actividadesDe(SNAPSHOT.actividades, 'otras');
+const enlacesOtras = enlacesPara(otras, paginasDeTalleres(otras));
 
 const tagline = sinPuntoFinal(ajuste('tagline', TAGLINE_POR_DEFECTO));
 const notaPie = ajuste('nota_pie', NOTA_PIE_POR_DEFECTO);
@@ -60,7 +62,7 @@ const mes = ajuste('mes');
     otras.length > 0 && (
       <Section title="Otras actividades" animar>
         <p class="intro">Más propuestas que también puedes encontrar en Yoga Sana.</p>
-        <Tarjetas actividades={otras} />
+        <Tarjetas actividades={otras} enlaces={enlacesOtras} />
       </Section>
     )
   }

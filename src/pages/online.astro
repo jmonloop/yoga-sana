@@ -3,17 +3,69 @@ import Base from '../layouts/Base.astro';
 import Banda from '../components/Banda.astro';
 import Section from '../components/Section.astro';
 import Foto from '../components/Foto.astro';
+import Preguntas from '../components/Preguntas.astro';
 import WaButton from '../components/WaButton.astro';
+import { preguntasFrecuentes, servicio } from '../data/schema';
+import { origenDe } from '../data/seo';
 import { CTAS } from '../data/site';
+import { SNAPSHOT } from '../data/snapshot';
+import { nombresEnumerados } from '../components/actividad';
+import { paginasDeTalleres, talleresOnline, type Pregunta } from '../data/talleres';
+
+const DESCRIPCION =
+  'Yoga online desde cualquier punto de España: una clase nueva cada semana, cuatro al mes, una hora de práctica más quince minutos de relajación, para repetir cuando quieras. 30 € al mes. Talleres y sesiones online en directo.';
+
+const origen = origenDe(Astro.site);
+const online = talleresOnline(paginasDeTalleres(SNAPSHOT.actividades));
+const sanergia = SNAPSHOT.actividades.filter(({ nombre }) => nombre === 'Sanergía');
+const enDirecto = nombresEnumerados([...online.map(({ actividad }) => actividad), ...sanergia]);
+
+const PREGUNTAS: Pregunta[] = [
+  {
+    pregunta: '¿Las clases de yoga online son en directo?',
+    respuesta:
+      'No. Cada semana te hago llegar una clase nueva para que la hagas cuando quieras y la repitas las veces que necesites. Así no dependes de cuadrar horarios.',
+  },
+  {
+    pregunta: '¿Para qué nivel son las clases?',
+    respuesta:
+      'Para todos los niveles. Cada clase incluye opciones para adaptar la práctica a tu cuerpo y a tu momento.',
+  },
+  {
+    pregunta: '¿Qué necesito para practicar en casa?',
+    respuesta:
+      'Una esterilla, ropa cómoda y un rato tranquilo. Un bloque o una manta ayudan, pero no son imprescindibles.',
+  },
+  {
+    pregunta: '¿Hay talleres o sesiones online en directo?',
+    respuesta: `Sí. También se hacen online en directo: ${enDirecto} Escríbeme y te digo cuándo es lo próximo.`,
+  },
+  {
+    pregunta: '¿Cómo me apunto?',
+    respuesta:
+      'Por WhatsApp. Me escribes, te explico cómo funciona y, si te encaja, empiezas esa misma semana.',
+  },
+];
+
+const schema = [
+  servicio(origen, {
+    nombre: 'Yoga online',
+    descripcion: DESCRIPCION,
+    ruta: '/online',
+    online: true,
+  }),
+  preguntasFrecuentes(PREGUNTAS),
+];
 ---
 
 <Base
   title="Yoga online desde toda España, 30 € al mes — Yoga Sana"
-  description="Yoga online desde cualquier punto de España: una clase nueva cada semana, cuatro al mes, una hora de práctica más quince minutos de relajación, para repetir cuando quieras. 30 € al mes."
+  description={DESCRIPCION}
+  schema={schema}
 >
   <Section eyebrow="Desde donde estés">
     <Banda columnas="1fr 26rem">
-      <h1>Yoga online</h1>
+      <h1>Yoga online desde toda España</h1>
       <p class="lead">
         Una clase nueva cada semana para practicar a tu ritmo, desde cualquier punto de
         España y sin depender de cuadrar horarios.
@@ -39,6 +91,31 @@ import { CTAS } from '../data/site';
     <p class="precio"><strong>30 €</strong> al mes</p>
     <p class="entrega apunte">Cada semana te hago llegar la clase nueva directamente.</p>
     <WaButton {...CTAS.unirmeOnline} />
+  </Section>
+
+  <Section title="Talleres y sesiones online en directo" animar>
+    <p class="intro">
+      Además de las clases, varias de las experiencias de Yoga Sana se hacen también online, en
+      directo y desde casa.
+    </p>
+    <ul class="online" role="list">
+      {
+        online.map(({ actividad, ruta }) => (
+          <li>
+            <a href={ruta}>{actividad.nombre} online</a>
+            <p>{actividad.descripcion}</p>
+          </li>
+        ))
+      }
+      <li>
+        <a href="/sanergia">Sanergía online</a>
+        <p>Técnica energética que armoniza cuerpo, mente y emociones. Sesión individual, a distancia.</p>
+      </li>
+    </ul>
+  </Section>
+
+  <Section title="Preguntas frecuentes" muted animar>
+    <Preguntas preguntas={PREGUNTAS} />
   </Section>
 
   <Section title="¿Te queda alguna duda?" animar>
@@ -85,5 +162,26 @@ import { CTAS } from '../data/site';
 
   .entrega {
     margin: 0.25rem 0 2rem;
+  }
+
+  .online {
+    display: grid;
+    gap: 1.25rem;
+    max-width: var(--measure);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .online a {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--tinta);
+  }
+
+  .online p {
+    margin: 0.25rem 0 0;
   }
 </style>

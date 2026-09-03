@@ -3,18 +3,32 @@ import logoFigura from '../../assets/logo/logo-figura.svg?raw';
 import logoTexto from '../../assets/logo/logo-texto.svg?raw';
 import WaButton from '../components/WaButton.astro';
 import { altoRenderizado, imagen, rutaImagen } from '../data/imagenes';
-import { CTAS, INSTAGRAM, INSTAGRAM_URL, waLink } from '../data/site';
+import { grafoJsonLd, negocio, persona, type Nodo } from '../data/schema';
+import { origenDe } from '../data/seo';
+import {
+  CTAS,
+  DOMICILIO,
+  GOOGLE_MAPS_URL,
+  INSTAGRAM,
+  INSTAGRAM_URL,
+  waLink,
+  WHATSAPP_VISIBLE,
+} from '../data/site';
+import { SNAPSHOT } from '../data/snapshot';
 import '../styles/tokens.css';
 import '../styles/base.css';
 
 interface Props {
   title: string;
   description: string;
+  schema?: Nodo[];
 }
 
-const { title, description } = Astro.props;
+const { title, description, schema = [] } = Astro.props;
 const path = Astro.originPathname;
-const canonical = new URL(path, Astro.site).href;
+const origen = origenDe(Astro.site);
+const canonical = new URL(path, origen).href;
+const jsonLd = grafoJsonLd([negocio(origen, SNAPSHOT.actividades), persona(origen), ...schema]);
 const year = new Date().getFullYear();
 
 const portada = imagen('centro-sala');
@@ -57,6 +71,7 @@ const NAV_ITEMS = [
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={OG_IMAGEN} />
     <meta name="twitter:image:alt" content={OG_ALT} />
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
     <script is:inline>
       document.documentElement.classList.add('js');
     </script>
@@ -114,6 +129,15 @@ const NAV_ITEMS = [
     <footer class="site-footer">
       <div class="footer-inner">
         <p class="footer-brand">Yoga Sana · Catarroja (València)</p>
+        <address class="footer-nap">
+          <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener">{DOMICILIO}</a><br />
+          <a
+            href={waLink(CTAS.contacto.message)}
+            aria-label={`${WHATSAPP_VISIBLE}: ${CTAS.contacto.ariaSuffix}`}
+            target="_blank"
+            rel="noopener">{WHATSAPP_VISIBLE}</a
+          >
+        </address>
         <ul class="footer-contact">
           <li>
             <a
@@ -130,6 +154,9 @@ const NAV_ITEMS = [
               target="_blank"
               rel="noopener">{INSTAGRAM}</a
             >
+          </li>
+          <li>
+            <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener">Cómo llegar</a>
           </li>
         </ul>
         <ul class="footer-legal">
@@ -369,6 +396,12 @@ const NAV_ITEMS = [
         font-family: var(--font-display);
         letter-spacing: var(--tracking-display);
         text-transform: uppercase;
+      }
+
+      .footer-nap {
+        margin: 0;
+        font-style: normal;
+        line-height: 1.9;
       }
 
       .footer-copy {

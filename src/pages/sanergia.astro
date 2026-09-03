@@ -4,16 +4,29 @@ import Banda from '../components/Banda.astro';
 import Section from '../components/Section.astro';
 import Foto from '../components/Foto.astro';
 import WaButton from '../components/WaButton.astro';
+import { origenDe } from '../data/seo';
+import { servicio } from '../data/schema';
 import { CTAS } from '../data/site';
+
+const schema = [
+  servicio(origenDe(Astro.site), {
+    nombre: 'Sanergía',
+    descripcion:
+      'Técnica energética que armoniza cuerpo, mente y emociones a través de la imposición de manos. Sesiones presenciales en Catarroja u online.',
+    ruta: '/sanergia',
+    online: true,
+  }),
+];
 ---
 
 <Base
   title="Sanergía en Catarroja (València), presencial y online — Yoga Sana"
   description="Sanergía: técnica energética que armoniza cuerpo, mente y emociones a través de la imposición de manos. Sesiones presenciales en Catarroja u online."
+  schema={schema}
 >
   <Section eyebrow="Energía que equilibra">
     <div class="columna">
-      <h1>Sanergía</h1>
+      <h1>Sanergía en Catarroja, presencial y online</h1>
       <p class="lead">
         Técnica energética que armoniza cuerpo, mente y emociones a través de la imposición
         de manos y la canalización de energía universal.

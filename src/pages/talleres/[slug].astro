@@ -1,0 +1,121 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icono from '../../components/Icono.astro';
+import Migas from '../../components/Migas.astro';
+import Preguntas from '../../components/Preguntas.astro';
+import Section from '../../components/Section.astro';
+import WaButton from '../../components/WaButton.astro';
+import { actividadCta } from '../../components/actividad';
+import { migas, preguntasFrecuentes, servicio } from '../../data/schema';
+import { origenDe } from '../../data/seo';
+import { CTAS } from '../../data/site';
+import { SNAPSHOT } from '../../data/snapshot';
+import { paginasDeTalleres, tituloDe, type PaginaTaller } from '../../data/talleres';
+
+export function getStaticPaths() {
+  return paginasDeTalleres(SNAPSHOT.actividades).map((pagina) => ({
+    params: { slug: pagina.slug },
+    props: { pagina },
+  }));
+}
+
+interface Props {
+  pagina: PaginaTaller;
+}
+
+const { pagina } = Astro.props;
+const { actividad, copia, ruta } = pagina;
+const origen = origenDe(Astro.site);
+const cta = actividadCta(actividad);
+const etiqueta = actividad.etiqueta.trim();
+const tramos = [
+  { nombre: 'Inicio', ruta: '/' },
+  { nombre: 'Talleres y experiencias', ruta: '/talleres-y-experiencias' },
+  { nombre: actividad.nombre, ruta },
+];
+const schema = [
+  servicio(origen, {
+    nombre: actividad.nombre,
+    descripcion: copia.descripcion,
+    ruta,
+    online: copia.online,
+  }),
+  preguntasFrecuentes(copia.preguntas),
+  migas(origen, tramos),
+];
+---
+
+<Base title={tituloDe(copia)} description={copia.descripcion} schema={schema}>
+  <Section eyebrow={copia.eyebrow}>
+    <div class="columna">
+      <Migas tramos={tramos} />
+      <Icono icono={actividad.icono} size={72} />
+      <h1>{copia.titulo}</h1>
+      <p class="lead">{actividad.descripcion}</p>
+      {etiqueta && <p class="etiqueta">{etiqueta}</p>}
+      <p class="modalidad apunte">
+        {copia.online ? 'Presencial en Catarroja (València) u online.' : 'Presencial en Catarroja (València).'}
+      </p>
+      <WaButton {...cta} />
+    </div>
+  </Section>
+
+  <Section title={`Qué es ${actividad.nombre.toLocaleLowerCase('es')}`} muted animar>
+    {copia.queEs.map((parrafo) => <p>{parrafo}</p>)}
+  </Section>
+
+  <Section title="¿Para quién es?" animar>
+    <p>Puede encajarte especialmente si:</p>
+    <ul class="perfiles" role="list">
+      {copia.paraQuien.map((perfil) => <li>{perfil}</li>)}
+    </ul>
+  </Section>
+
+  <Section title="Cómo es una sesión" muted animar>
+    {copia.comoEs.map((parrafo) => <p>{parrafo}</p>)}
+    <WaButton {...cta} />
+  </Section>
+
+  <Section title="Preguntas frecuentes" animar>
+    <Preguntas preguntas={copia.preguntas} />
+  </Section>
+
+  <Section title="¿Te apetece probar?" muted animar>
+    <p class="intro">
+      Escríbeme por WhatsApp y te cuento cuándo es lo próximo, cómo funciona y si te puede
+      encajar. Sin compromiso.
+    </p>
+    <div class="acciones">
+      <WaButton {...cta} />
+      <a class="boton" href="/talleres-y-experiencias">Ver todos los talleres</a>
+    </div>
+    <p class="alternativa apunte">
+      ¿Tienes otra duda? <WaButton {...CTAS.contacto} variant="secondary" compact />
+    </p>
+  </Section>
+</Base>
+
+<style>
+  .etiqueta {
+    padding: 0.35em 0.9em;
+    background-color: var(--salvia-tint);
+    border-radius: var(--radius-pill);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+  }
+
+  .alternativa {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+</style>
