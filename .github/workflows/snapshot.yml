@@ -34,13 +34,6 @@ jobs:
       - name: Instalar dependencias
         run: pnpm install --frozen-lockfile
 
-      - name: Estado de la hoja de Google
-        env:
-          SHEET_ID: ${{ vars.PUBLIC_SHEET_ID }}
-        run: |
-          [ -n "$SHEET_ID" ] ||
-            echo "::warning::Sin la variable PUBLIC_SHEET_ID: el snapshot se regenera desde seed/*.csv."
-
       - name: Descargar el snapshot
         env:
           PUBLIC_SHEET_ID: ${{ vars.PUBLIC_SHEET_ID }}
