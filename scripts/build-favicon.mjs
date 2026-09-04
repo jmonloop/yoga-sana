@@ -17,7 +17,7 @@ const PNGS = [
   { name: 'favicon-96.png', size: 96 },
   { name: 'apple-touch-icon.png', size: 180 },
 ];
-const ICO = { name: 'favicon.ico', size: 32 };
+const ICO = { name: 'favicon.ico', size: 48 };
 
 function figura(svg) {
   const medidas = svg.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);
