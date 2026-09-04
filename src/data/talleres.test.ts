@@ -65,7 +65,7 @@ describe('paginasDeTalleres', () => {
       .filter(({ nombre }) => !(slugDe(nombre) in COPIAS))
       .map(({ nombre }) => nombre);
 
-    expect(sinPagina).toEqual(['Sanergía', 'Movimiento Somático']);
+    expect(sinPagina.toSorted()).toEqual(['Movimiento Somático', 'Sanergía']);
   });
 });
 
