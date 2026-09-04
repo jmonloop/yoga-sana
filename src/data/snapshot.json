@@ -61,6 +61,16 @@
       "mensajeWa": null
     },
     {
+      "nombre": "Yoga somático",
+      "grupo": "yoga",
+      "descripcion": "Práctica la consciencia corporal explorando y realizando movimientos conscientes en las asanas prestando total atención a las sensaciones internas del cuerpo",
+      "etiqueta": "",
+      "icono": "loto",
+      "orden": 9007199254740991,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
       "nombre": "Gestión Emocional",
       "grupo": "taller",
       "descripcion": "Talleres y sesiones individuales para comprender y gestionar tus emociones.",
@@ -111,6 +121,16 @@
       "mensajeWa": null
     },
     {
+      "nombre": "Movimiento Somático",
+      "grupo": "taller",
+      "descripcion": "Práctica la consciencia corporal explorando y realizando movimientos conscientes prestando total atención a las sensaciones internas del cuerpo",
+      "etiqueta": "",
+      "icono": "loto",
+      "orden": 9007199254740991,
+      "color": null,
+      "mensajeWa": null
+    },
+    {
       "nombre": "Gimnasia Pasiva en Camilla",
       "grupo": "otras",
       "descripcion": "Relajación profunda a través del movimiento pasivo. Libera tensiones y restaura tu energía.",
@@ -127,16 +147,6 @@
       "etiqueta": "",
       "icono": "loto-manos",
       "orden": 7,
-      "color": null,
-      "mensajeWa": null
-    },
-    {
-      "nombre": "Movimiento Somático",
-      "grupo": "otras",
-      "descripcion": "",
-      "etiqueta": "",
-      "icono": "loto",
-      "orden": 9007199254740991,
       "color": null,
       "mensajeWa": null
     }
@@ -313,6 +323,10 @@
     "color.Yoga Suave": "lavanda",
     "color.Yoga Relajante": "pizarra",
     "color.Yoga Infantil": "melocoton",
-    "color.Meditación guiada": "rosa"
+    "color.Meditación guiada": "rosa",
+    "color.Pilates": "azul pitufo",
+    "color.Yoga funcional": "aguamarina",
+    "color.Yin yoga": "marrón claro",
+    "color.Yoga somático": "amarillo pastel"
   }
 }
