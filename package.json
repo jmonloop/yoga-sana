@@ -14,6 +14,7 @@
     "snapshot": "node scripts/fetch-snapshot.mjs",
     "images": "node scripts/process-images.mjs",
     "logo": "node scripts/trace-logo.mjs",
+    "favicon": "node scripts/build-favicon.mjs",
     "test": "vitest run"
   },
   "dependencies": {
